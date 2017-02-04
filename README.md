@@ -46,13 +46,11 @@ TBD
 
 ## Credits
 
-Created by [**@jerkoch**](https://twitter.com/jerkoch).
+Created and maintained by [**@jerkoch**](https://twitter.com/jerkoch).
 
 ## License
 
 `SwipeCellKit` is released under an [MIT License][mitLink]. See `LICENSE` for details.
-
->**Copyright &copy; 2017-present Jeremy Koch**
 
 *Please provide attribution, it is greatly appreciated.*
 
