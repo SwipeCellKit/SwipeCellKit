@@ -152,8 +152,6 @@ open class SwipeTableViewCell: UITableViewCell {
             let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
 
             if state == .center || state == .animatingToCenter {
-                clipsToBounds = false
-                
                 originalLayoutMargins = super.layoutMargins
                 
                 // Remove highlight and deselect any selected cells
@@ -331,7 +329,7 @@ open class SwipeTableViewCell: UITableViewCell {
     }
     
     /// Override so we can accept touches anywhere within the cell's minY/maxY.
-    /// This is requires to detect touch on the `SwipeActionsView` sitting alongside the 
+    /// This is required to detect touches on the `SwipeActionsView` sitting alongside the
     /// `SwipeTableCell`.
     override open func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         let point = convert(point, to: superview!)

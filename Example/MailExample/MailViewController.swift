@@ -52,7 +52,7 @@ class MailViewController: UITableViewController {
     // MARK: - Actions
     
     @IBAction func moreTapped(_ sender: Any) {
-        let controller = UIAlertController(title: "Transition Style", message: nil, preferredStyle: .actionSheet)
+        let controller = UIAlertController(title: "Swipe Transition Style", message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: "Border", style: .default, handler: { _ in self.defaultOptions.transitionStyle = .border }))
         controller.addAction(UIAlertAction(title: "Drag", style: .default, handler: { _ in self.defaultOptions.transitionStyle = .drag }))
         controller.addAction(UIAlertAction(title: "Reveal", style: .default, handler: { _ in self.defaultOptions.transitionStyle = .reveal }))
