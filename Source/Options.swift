@@ -7,9 +7,7 @@
 
 import Foundation
 
-/**
- The `SwipeTableOptions` class provides options for transistion and expansion behavior for swiped cell.
- */
+/// The `SwipeTableOptions` class provides options for transistion and expansion behavior for swiped cell.
 public struct SwipeTableOptions {
     /// The expansion style. Expansion is the behavior when the cell is swiped past a defined threshold.
     public var expansionStyle: SwipeExpansionStyle = .none
@@ -17,6 +15,7 @@ public struct SwipeTableOptions {
     /// The transition style. Transition is the style of how the action buttons are exposed during the swipe.
     public var transitionStyle: SwipeTransitionStyle = .border
     
+    /// Constructs a new `SwipeTableOptions` instance with default options.
     public init() {}
 }
 

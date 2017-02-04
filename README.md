@@ -42,7 +42,7 @@ github "jerkoch/SwipeCellKit"
 
 ## Documentation
 
-TBD
+Read the [docs][docsLink]. Generated with [jazzy](https://github.com/realm/jazzy). Hosted by [GitHub Pages](https://pages.github.com).
 
 ## Credits
 

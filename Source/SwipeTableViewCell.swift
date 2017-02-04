@@ -7,8 +7,36 @@
 
 import UIKit
 
+/**
+ The `SwipeTableViewCellDelegate` protocol is adopted by an object that manages the display of action buttons when the cell is swiped.
+ */
 public protocol SwipeTableViewCellDelegate: class {
+    /**
+     Asks the delegate for the actions to display in response to a swipe in the specified row.
+     
+     - parameter tableView: The table view object which owns the cell requesting this information.
+     
+     - parameter indexPath: The index path of the row.
+     
+     - parameter orientation: The side of the cell requesting this information.
+     
+     - returns: An array of `SwipeAction` objects representing the actions for the row. Each action you provide is used to create a button that the user can tap.
+    */
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]
+    
+    /**
+     Asks the delegate for the display options to be used while presenting the action buttons.
+     
+     - parameter tableView: The table view object which owns the cell requesting this information.
+     
+     - parameter indexPath: The index path of the row.
+     
+     - parameter orientation: The side of the cell requesting this information.
+     
+     - returns: A `SwipeTableOptions` instance which configures the behavior of the action buttons.
+     
+     - note: If not implemented, a default `SwipeTableOptions` instance is used.
+    */
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions
 }
 
@@ -60,6 +88,7 @@ open class SwipeTableViewCell: UITableViewCell {
     
     var scrollRatio: CGFloat = 1.0
     
+    /// :nodoc:
     override open var center: CGPoint {
         didSet {
             actionsView?.visibleWidth = abs(frame.minX)
@@ -72,6 +101,7 @@ open class SwipeTableViewCell: UITableViewCell {
         configure()
     }
     
+    /// :nodoc:
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -85,12 +115,14 @@ open class SwipeTableViewCell: UITableViewCell {
         addGestureRecognizer(panGestureRecognizer)
     }
     
+    /// :nodoc:
     override open func prepareForReuse() {
         super.prepareForReuse()
         
         reset()
     }
-        
+    
+    /// :nodoc:
     override open func didMoveToSuperview() {
         var view: UIView = self
         while let superview = view.superview {
@@ -106,6 +138,7 @@ open class SwipeTableViewCell: UITableViewCell {
         }
     }
     
+    /// :nodoc:
     override open func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
@@ -307,9 +340,10 @@ open class SwipeTableViewCell: UITableViewCell {
         }
     }
     
-    /// Override so we can accept touches anywhere within the cell's minY/maxY.
-    /// This is required to detect touches on the `SwipeActionsView` sitting alongside the
-    /// `SwipeTableCell`.
+    // Override so we can accept touches anywhere within the cell's minY/maxY.
+    // This is required to detect touches on the `SwipeActionsView` sitting alongside the
+    // `SwipeTableCell`.
+    /// :nodoc:
     override open func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         let point = convert(point, to: superview!)
 
@@ -327,12 +361,14 @@ open class SwipeTableViewCell: UITableViewCell {
         return point.y > frame.minY && point.y < frame.maxY
     }
     
+    /// :nodoc:
     override open func setHighlighted(_ highlighted: Bool, animated: Bool) {
         if state == .center {
             super.setHighlighted(highlighted, animated: animated)
         }
     }
     
+    /// :nodoc:
     override open var layoutMargins: UIEdgeInsets {
         get {
             return frame.origin.x != 0 ? originalLayoutMargins : super.layoutMargins
@@ -420,6 +456,7 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
 }
 
 extension SwipeTableViewCell {
+    /// :nodoc:
     override open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer == tapGestureRecognizer {
             if let cells = tableView?.visibleCells as? [SwipeTableViewCell] {
