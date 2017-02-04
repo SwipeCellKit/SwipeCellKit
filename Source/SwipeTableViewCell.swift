@@ -1,0 +1,463 @@
+//
+//  SwipeTableViewCell.swift
+//
+//  Created by Jeremy Koch
+//  Copyright © 2017 Jeremy Koch. All rights reserved.
+//
+
+import UIKit
+
+public struct SwipeTableOptions {
+    public enum ExpansionStyle {
+        case none
+        case selection
+        case destructive
+    }
+    
+    public enum TransitionStyle {
+        case border
+        case drag
+        case reveal
+    }
+    
+    public var expansionStyle: ExpansionStyle = .none
+    public var transitionStyle: TransitionStyle = .border
+    
+    public init() {}
+}
+
+public enum SwipeActionsOrientation: CGFloat {
+    case left = -1
+    case right = 1
+    
+    var scale: CGFloat {
+        return rawValue
+    }
+}
+
+public protocol SwipeTableViewCellDelegate: class {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions
+}
+
+extension SwipeTableViewCellDelegate {
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
+        return SwipeTableOptions()
+    }
+}
+
+open class SwipeTableViewCell: UITableViewCell {
+    enum SwipeState: Int {
+        case center = 0
+        case left
+        case right
+        case animatingToCenter
+    }
+    
+    public weak var delegate: SwipeTableViewCellDelegate?
+
+    var feedbackGenerator: UIImpactFeedbackGenerator?
+    var animator: UIViewPropertyAnimator?
+
+    var state = SwipeState.center
+    var originalCenter: CGFloat = 0
+    
+    var tableView: UITableView?
+    var actionsView: SwipeActionsView?
+
+    var originalLayoutMargins: UIEdgeInsets = .zero
+    
+    lazy var panGestureRecognizer: UIPanGestureRecognizer = {
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(gesture:)))
+        gesture.delegate = self
+        return gesture
+    }()
+    
+    lazy var tapGestureRecognizer: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(gesture:)))
+        gesture.delegate = self
+        return gesture
+    }()
+    
+    var scrollRatio: CGFloat = 1.0
+    
+    override open var center: CGPoint {
+        didSet {
+            actionsView?.visibleWidth = abs(frame.minX)
+        }
+    }
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        configure()
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        configure()
+    }
+    
+    func configure() {
+        clipsToBounds = false
+        
+        addGestureRecognizer(tapGestureRecognizer)
+        addGestureRecognizer(panGestureRecognizer)
+    }
+    
+    override open func prepareForReuse() {
+        super.prepareForReuse()
+        
+        reset()
+    }
+        
+    override open func didMoveToSuperview() {
+        var view: UIView = self
+        while let superview = view.superview {
+            view = superview
+            
+            if let tableView = view as? UITableView {
+                self.tableView = tableView
+                
+                tableView.panGestureRecognizer.removeTarget(self, action: nil)
+                tableView.panGestureRecognizer.addTarget(self, action: #selector(handleTablePan(gesture:)))
+                return
+            }            
+        }
+    }
+    
+    override open func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        
+        if editing {
+            hideSwipe(animated: false)
+        }
+    }
+    
+    func handlePan(gesture: UIPanGestureRecognizer) {
+        guard isEditing == false else { return }
+        guard let target = gesture.view else { return }
+        
+        switch gesture.state {
+        case .began:
+            stopAnimatorIfNeeded()
+            
+            originalCenter = center.x
+            
+            feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+            feedbackGenerator?.prepare()
+
+            let velocity = gesture.velocity(in: target)
+            let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
+
+            if state == .center || state == .animatingToCenter {
+                clipsToBounds = false
+                
+                originalLayoutMargins = super.layoutMargins
+                
+                // Remove highlight and deselect any selected cells
+                isHighlighted = false
+                let selectedIndexPaths = tableView?.indexPathsForSelectedRows
+                selectedIndexPaths?.forEach { tableView?.deselectRow(at: $0, animated: false) }
+
+                // Temporarily remove table gestures
+                tableView?.setGestureEnabled(false)
+                
+                configureActionView(for: orientation)
+            }
+            
+        case .changed:
+            guard let actionsView = actionsView else { return }
+            
+            let translation = gesture.translation(in: target).x
+            scrollRatio = 1.0
+            
+            // Check if dragging past the center of the opposite direction of action view, if so
+            // then we need to apply elasticity
+            if (translation + originalCenter - bounds.midX) * actionsView.orientation.scale > 0 {
+                target.center.x = gesture.elasticTranslation(in: target,
+                                                             withLimit: .zero,
+                                                             fromOriginalCenter: CGPoint(x: originalCenter, y: 0)).x
+                return
+            }
+            
+            let expanded: Bool
+            switch actionsView.options.expansionStyle {
+            case .selection:
+                target.center.x = gesture.elasticTranslation(in: target,
+                                                             withLimit: CGSize(width: bounds.width / 2, height: 0),
+                                                             fromOriginalCenter: CGPoint(x: originalCenter, y: 0)).x
+                expanded = abs(frame.minX) >= bounds.midX
+            case .destructive:
+                let distance = abs(translation)
+                let location = gesture.location(in: superview!).x
+                expanded = (actionsView.orientation == .right ? location < 80 : location > bounds.width - 80) && (state != .center || distance > actionsView.preferredWidth)
+                
+                let limit: CGFloat = bounds.width - 30
+                if expanded && !actionsView.expanded {
+                    let centerForTranslationToEdge = bounds.midX - limit * actionsView.orientation.scale
+                    let delta = centerForTranslationToEdge - originalCenter
+                    
+                    animate(toOffset: centerForTranslationToEdge)
+                    gesture.setTranslation(CGPoint(x: delta, y: 0), in: superview!)
+                } else {
+                    target.center.x = gesture.elasticTranslation(in: target,
+                                                                 withLimit: CGSize(width: limit, height: 0),
+                                                                 fromOriginalCenter: CGPoint(x: originalCenter, y: 0)).x
+                }
+                break
+            default:
+                let ratio: CGFloat = 0.4
+                target.center.x = gesture.elasticTranslation(in: target,
+                                                             withLimit: CGSize(width: actionsView.preferredWidth, height: 0),
+                                                             fromOriginalCenter: CGPoint(x: originalCenter, y: 0),
+                                                             applyingRatio: ratio).x
+                if (target.center.x - originalCenter) / translation != 1.0 {
+                    scrollRatio = ratio
+                }
+                
+                expanded = false
+                break
+            }
+            
+            if expanded != actionsView.expanded {
+                feedbackGenerator?.impactOccurred()
+                feedbackGenerator?.prepare()
+            }
+            
+            actionsView.expanded = expanded
+            
+        case .ended:
+            let velocity = gesture.velocity(in: target)
+            state = targetState(forVelocity: velocity)
+            
+            feedbackGenerator = nil
+
+            if actionsView?.expanded == true, let expandedAction = actionsView?.expandableAction  {
+                perform(action: expandedAction)
+            } else {
+                let targetOffset = state != .center ? targetCenter(active: true) : bounds.midX
+                let distance = targetOffset - center.x
+                let normalizedVelocity = velocity.x * scrollRatio / distance
+                
+                animate(toOffset: targetOffset, withInitialVelocity: normalizedVelocity) { _ in
+                    if self.state == .center {
+                        self.reset()
+                    }
+                }
+            }
+
+        default: break
+        }
+    }
+    
+    func configureActionView(for orientation: SwipeActionsOrientation) {
+        guard let tableView = tableView,
+            let indexPath = tableView.indexPath(for: self) else { return }
+        
+        let actions = delegate?.tableView(tableView, editActionsForRowAt: indexPath, for: orientation) ?? []
+        let options = delegate?.tableView(tableView, editActionsOptionsForRowAt: indexPath, for: orientation) ?? SwipeTableOptions()
+        
+        self.actionsView?.removeFromSuperview()
+        self.actionsView = nil
+        
+        let actionsView = SwipeActionsView(maxSize: bounds.size,
+                                           options: options,
+                                           orientation: orientation,
+                                           actions: actions)
+        
+        actionsView.delegate = self
+        
+        addSubview(actionsView)
+
+        actionsView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        actionsView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 2).isActive = true
+        actionsView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        
+        if orientation == .left {
+            actionsView.rightAnchor.constraint(equalTo: leftAnchor).isActive = true
+        } else {
+            actionsView.leftAnchor.constraint(equalTo: rightAnchor).isActive = true
+        }
+        
+        self.actionsView = actionsView
+    }
+    
+    func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((UIViewAnimatingPosition) -> Void)? = nil) {
+        stopAnimatorIfNeeded()
+        
+        layoutIfNeeded()
+        
+        let animator: UIViewPropertyAnimator = {
+            if velocity != 0 {
+                let velocity = CGVector(dx: velocity, dy: velocity)
+                let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
+                return UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
+            } else {
+                return UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1.0)
+            }
+        }()
+
+        animator.addAnimations({
+            self.center = CGPoint(x: offset, y: self.center.y)
+            
+            self.layoutIfNeeded()
+        })
+        
+        if let completion = completion {
+            animator.addCompletion(completion)
+        }
+        
+        self.animator = animator
+
+        animator.startAnimation()
+    }
+    
+    func stopAnimatorIfNeeded() {
+        if animator?.isRunning == true {
+            animator?.stopAnimation(true)
+        }
+    }
+
+    func handleTap(gesture: UITapGestureRecognizer) {
+        hideSwipe(animated: true)
+    }
+    
+    func handleTablePan(gesture: UIPanGestureRecognizer) {
+        if gesture.state == .began {
+            hideSwipe(animated: true)
+        }
+    }
+    
+    /// Override so we can accept touches anywhere within the cell's minY/maxY.
+    /// This is requires to detect touch on the `SwipeActionsView` sitting alongside the 
+    /// `SwipeTableCell`.
+    override open func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let point = convert(point, to: superview!)
+
+        for cell in tableView?.swipeCells ?? [] {
+            if (cell.state == .left || cell.state == .right) && !cell.contains(point: point) {
+                tableView?.hideSwipeCell()
+                return false
+            }
+        }
+        
+        return contains(point: point)
+    }
+    
+    func contains(point: CGPoint) -> Bool {
+        return point.y > frame.minY && point.y < frame.maxY
+    }
+    
+    override open func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        if state == .center {
+            super.setHighlighted(highlighted, animated: animated)
+        }
+    }
+    
+    override open var layoutMargins: UIEdgeInsets {
+        get {
+            return frame.origin.x != 0 ? originalLayoutMargins : super.layoutMargins
+        }
+        set {
+            super.layoutMargins = newValue
+        }
+    }
+}
+
+extension SwipeTableViewCell {
+    func targetState(forVelocity velocity: CGPoint) -> SwipeState {
+        guard let actionsView = actionsView else { return .center }
+        
+        switch actionsView.orientation {
+        case .left:
+            return (velocity.x < 0 && !actionsView.expanded) ? .center : .left
+        case .right:
+            return (velocity.x > 0 && !actionsView.expanded) ? .center : .right
+        }
+    }
+    
+    func targetCenter(active: Bool) -> CGFloat {
+        guard let actionsView = actionsView, active == true else { return bounds.midX }
+
+        return bounds.midX - actionsView.preferredWidth * actionsView.orientation.scale
+    }
+
+    func reset() {
+        state = .center
+        
+        tableView?.setGestureEnabled(true)
+        actionsView?.removeFromSuperview()
+    }
+    
+    func hideSwipe(animated: Bool) {
+        guard state == .left || state == .right else { return }
+
+        state = .animatingToCenter
+        
+        tableView?.setGestureEnabled(true)
+
+        let targetCenter = self.targetCenter(active: false)
+        
+        if animated {
+            animate(toOffset: targetCenter) { _ in
+                self.reset()
+            }
+        } else {
+            center = CGPoint(x: targetCenter, y: self.center.y)
+            reset()
+        }
+    }
+}
+
+extension SwipeTableViewCell: SwipeActionsViewDelegate {
+    func swipeActionsView(_ swipeActionsView: SwipeActionsView, didSelect action: SwipeAction) {
+        perform(action: action)
+    }
+    
+    func perform(action: SwipeAction) {
+        guard let actionsView = actionsView,
+            let tableView = tableView,
+            let indexPath = tableView.indexPath(for: self) else { return }
+        
+        if actionsView.options.expansionStyle == .destructive && action == actionsView.expandableAction {
+            // Trigger the expansion (may already be expanded from drag)
+            actionsView.expanded = true
+            
+            action.handler?(action, indexPath)
+            tableView.deleteRows(at: [indexPath], with: .none)
+            
+            UIView.animate(withDuration: 0.3, animations: {
+                self.center.x = self.bounds.midX - (self.bounds.width + 100) * actionsView.orientation.scale
+            })
+
+        } else {
+            if actionsView.options.expansionStyle == .selection || action.hidesWhenSelected {
+                hideSwipe(animated: true)
+            }
+
+            action.handler?(action, indexPath)
+        }
+    }    
+}
+
+extension SwipeTableViewCell {
+    override open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer == tapGestureRecognizer {
+            if let cells = tableView?.visibleCells as? [SwipeTableViewCell] {
+                let cell = cells.first(where: { $0.state != .center })
+                return cell == nil ? false : true
+            }
+        }
+        
+        if gestureRecognizer == panGestureRecognizer,
+            let view = gestureRecognizer.view,
+            let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
+            let translation = gestureRecognizer.translation(in: view)
+            return abs(translation.y) <= abs(translation.x)
+        }
+
+        return true
+    }
+}
