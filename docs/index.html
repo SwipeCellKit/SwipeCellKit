@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SwipeCellKit  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="SwipeCellKit  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">SwipeCellKit Docs</a> (2% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">SwipeCellKit Reference</a>
+        <img id="carat" src="img/carat.png" />
+        SwipeCellKit  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/SwipeAction.html">SwipeAction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/SwipeTableViewCell.html">SwipeTableViewCell</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/SwipeActionStyle.html">SwipeActionStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/SwipeActionsOrientation.html">SwipeActionsOrientation</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/SwipeTableViewCellDelegate.html">SwipeTableViewCellDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/SwipeTableOptions.html">SwipeTableOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/SwipeTableOptions/ExpansionStyle.html">– ExpansionStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/SwipeTableOptions/TransitionStyle.html">– TransitionStyle</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <a href='#swipecellkit' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='swipecellkit'>SwipeCellKit</h1>
+
+<p><a href="https://travis-ci.org/jerkoch/SwipeCellKit"><img src="https://travis-ci.org/jerkoch/SwipeCellKit.svg" alt="Build Status"></a> 
+<a href="https://cocoapods.org/pods/SwipeCellKit"><img src="https://img.shields.io/cocoapods/v/SwipeCellKit.svg" alt="Version Status"></a> 
+<a href="https://developer.apple.com/swift/"><img src="https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat" alt="Swift 3.0"></a>
+<a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/cocoapods/l/SwipeCellKit.svg" alt="license MIT"></a> 
+<a href="http://www.jerkoch.com/SwipeCellKit"><img src="https://img.shields.io/cocoapods/p/SwipeCellKit.svg" alt="Platform"></a> 
+<a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible"></a>
+<a href="https://twitter.com/jerkoch"><img src="https://img.shields.io/badge/twitter-@jerkoch-blue.svg?style=flat" alt="Twitter"></a></p>
+
+<p><em>Swipeable UITableViewCell based on the stock Mail.app, implemented in Swift.</em></p>
+<a href='#about' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='about'>About</h2>
+
+<p>TBD</p>
+<a href='#requirements' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='requirements'>Requirements</h2>
+
+<ul>
+<li>Swift 3.0</li>
+<li>Xcode 8</li>
+<li>iOS 10.0+</li>
+</ul>
+<a href='#installation' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='installation'>Installation</h2>
+<a href='#a-href-http-cocoapods-org-cocoapods-a-recommended' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='a-href-http-cocoapods-org-cocoapods-a-recommended'><a href="http://cocoapods.org">CocoaPods</a> (recommended)</h4>
+<pre class="highlight ruby"><code><span class="n">use_frameworks!</span>
+
+<span class="c1"># Latest release in CocoaPods</span>
+<span class="n">pod</span> <span class="s1">'SwipeCellKit'</span>
+
+<span class="c1"># Get the latest on develop</span>
+<span class="n">pod</span> <span class="s1">'SwipeCellKit'</span><span class="p">,</span> <span class="ss">:git</span> <span class="o">=&gt;</span> <span class="s1">'https://github.com/jerkoch/SwipeCellKit.git'</span><span class="p">,</span> <span class="ss">:branch</span> <span class="o">=&gt;</span> <span class="s1">'develop'</span>
+</code></pre>
+<a href='#a-href-https-github-com-carthage-carthage-carthage-a' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='a-href-https-github-com-carthage-carthage-carthage-a'><a href="https://github.com/Carthage/Carthage">Carthage</a></h4>
+<pre class="highlight shell"><code>github <span class="s2">"jerkoch/SwipeCellKit"</span>
+</code></pre>
+<a href='#documentation' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='documentation'>Documentation</h2>
+
+<p>TBD</p>
+<a href='#credits' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='credits'>Credits</h2>
+
+<p>Created and maintained by <a href="https://twitter.com/jerkoch"><strong>@jerkoch</strong></a>.</p>
+<a href='#license' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='license'>License</h2>
+
+<p><code>SwipeCellKit</code> is released under an <a href="http://opensource.org/licenses/MIT">MIT License</a>. See <code>LICENSE</code> for details.</p>
+
+<p><em>Please provide attribution, it is greatly appreciated.</em></p>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2017 <a class="link" href="https://github.com/jerkoch/SwipeCellKit" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-02-04)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
