@@ -104,7 +104,7 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="W67-Cg-GPa"/>
-                        <barButtonItem title="Item" systemItem="compose" id="JKa-4y-qF4"/>
+                        <barButtonItem systemItem="compose" id="JKa-4y-qF4"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Inbox" id="OxT-d4-BSj">
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="dHC-AY-Bdd"/>
