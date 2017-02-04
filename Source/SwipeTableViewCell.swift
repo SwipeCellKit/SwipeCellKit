@@ -46,6 +46,12 @@ extension SwipeTableViewCellDelegate {
     }
 }
 
+/**
+ The `SwipeTableViewCell` class extends `UITableViewCell` and provides more flexible options for cell swiping behavior.
+ 
+ 
+ The default behavior closely matches the stock Mail.app. If you want to customize the transition style (ie. how the action buttons are exposed), or the expansion style (the behavior when the row is swiped passes a defined threshold), you can return the appropriately configured `SwipeTableOptions` via the `SwipeTableViewCellDelegate` delegate.
+ */
 open class SwipeTableViewCell: UITableViewCell {
     enum SwipeState: Int {
         case center = 0
@@ -54,6 +60,7 @@ open class SwipeTableViewCell: UITableViewCell {
         case animatingToCenter
     }
     
+    /// The object that acts as the delegate of the `SwipeTableViewCell`.
     public weak var delegate: SwipeTableViewCellDelegate?
 
     var feedbackGenerator: UIImpactFeedbackGenerator?
