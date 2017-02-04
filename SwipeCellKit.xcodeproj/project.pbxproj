@@ -12,6 +12,7 @@
 		3F234AD71E44A94F00E22A38 /* SwipeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F234AD31E44A94F00E22A38 /* SwipeAction.swift */; };
 		3F234AD81E44A94F00E22A38 /* SwipeActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F234AD41E44A94F00E22A38 /* SwipeActionsView.swift */; };
 		3F234AD91E44A94F00E22A38 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F234AD51E44A94F00E22A38 /* Extensions.swift */; };
+		3F51DA071E462F9B005467BD /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F51DA061E462F9B005467BD /* Options.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		3F234AD31E44A94F00E22A38 /* SwipeAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAction.swift; sourceTree = "<group>"; };
 		3F234AD41E44A94F00E22A38 /* SwipeActionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeActionsView.swift; sourceTree = "<group>"; };
 		3F234AD51E44A94F00E22A38 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		3F51DA061E462F9B005467BD /* Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 				3F234AD21E44A94F00E22A38 /* SwipeTableViewCell.swift */,
 				3F234AD31E44A94F00E22A38 /* SwipeAction.swift */,
 				3F234AD41E44A94F00E22A38 /* SwipeActionsView.swift */,
+				3F51DA061E462F9B005467BD /* Options.swift */,
 				3F234AD51E44A94F00E22A38 /* Extensions.swift */,
 				3F234AD01E44A8F200E22A38 /* Supporting Files */,
 			);
@@ -155,6 +158,7 @@
 				3F234AD81E44A94F00E22A38 /* SwipeActionsView.swift in Sources */,
 				3F234AD71E44A94F00E22A38 /* SwipeAction.swift in Sources */,
 				3F234AD61E44A94F00E22A38 /* SwipeTableViewCell.swift in Sources */,
+				3F51DA071E462F9B005467BD /* Options.swift in Sources */,
 				3F234AD91E44A94F00E22A38 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

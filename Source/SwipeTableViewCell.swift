@@ -7,34 +7,6 @@
 
 import UIKit
 
-public struct SwipeTableOptions {
-    public enum ExpansionStyle {
-        case none
-        case selection
-        case destructive
-    }
-    
-    public enum TransitionStyle {
-        case border
-        case drag
-        case reveal
-    }
-    
-    public var expansionStyle: ExpansionStyle = .none
-    public var transitionStyle: TransitionStyle = .border
-    
-    public init() {}
-}
-
-public enum SwipeActionsOrientation: CGFloat {
-    case left = -1
-    case right = 1
-    
-    var scale: CGFloat {
-        return rawValue
-    }
-}
-
 public protocol SwipeTableViewCellDelegate: class {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions

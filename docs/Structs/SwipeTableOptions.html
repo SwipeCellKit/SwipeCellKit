@@ -14,7 +14,7 @@
     <a title="SwipeTableOptions Struct Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SwipeCellKit Docs</a> (9% documented)</p>
+        <p><a href="../index.html">SwipeCellKit Docs</a> (40% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -47,6 +47,12 @@
               <li class="nav-group-task">
                 <a href="../Enums/SwipeActionsOrientation.html">SwipeActionsOrientation</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SwipeExpansionStyle.html">SwipeExpansionStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SwipeTransitionStyle.html">SwipeTransitionStyle</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -63,12 +69,6 @@
               <li class="nav-group-task">
                 <a href="../Structs/SwipeTableOptions.html">SwipeTableOptions</a>
               </li>
-              <li class="nav-group-task">
-                <a href="../Structs/SwipeTableOptions/ExpansionStyle.html">– ExpansionStyle</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/SwipeTableOptions/TransitionStyle.html">– TransitionStyle</a>
-              </li>
             </ul>
           </li>
         </ul>
@@ -77,7 +77,13 @@
         <section>
           <section class="section">
             <h1>SwipeTableOptions</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SwipeTableOptions</span></code></pre>
+
+                </div>
+              </div>
+            <p>The <code>SwipeTableOptions</code> class provides options for transistion and expansion behavior for swiped cell.</p>
 
           </section>
           <section class="section task-group-section">
@@ -86,49 +92,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:OV12SwipeCellKit17SwipeTableOptions14ExpansionStyle"></a>
-                    <a name="//apple_ref/swift/Enum/ExpansionStyle" class="dashAnchor"></a>
-                    <a class="token" href="#/s:OV12SwipeCellKit17SwipeTableOptions14ExpansionStyle">ExpansionStyle</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                        <a href="../Structs/SwipeTableOptions/ExpansionStyle.html" class="slightly-smaller">See more</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:OV12SwipeCellKit17SwipeTableOptions15TransitionStyle"></a>
-                    <a name="//apple_ref/swift/Enum/TransitionStyle" class="dashAnchor"></a>
-                    <a class="token" href="#/s:OV12SwipeCellKit17SwipeTableOptions15TransitionStyle">TransitionStyle</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                        <a href="../Structs/SwipeTableOptions/TransitionStyle.html" class="slightly-smaller">See more</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwipeCellKit17SwipeTableOptions14expansionStyleOS0_14ExpansionStyle"></a>
+                    <a name="/s:vV12SwipeCellKit17SwipeTableOptions14expansionStyleOS_19SwipeExpansionStyle"></a>
                     <a name="//apple_ref/swift/Property/expansionStyle" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwipeCellKit17SwipeTableOptions14expansionStyleOS0_14ExpansionStyle">expansionStyle</a>
+                    <a class="token" href="#/s:vV12SwipeCellKit17SwipeTableOptions14expansionStyleOS_19SwipeExpansionStyle">expansionStyle</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -136,8 +102,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The expansion style. Expansion is the behavior when the cell is swiped past a defined threshold.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">expansionStyle</span><span class="p">:</span> <span class="kt"><a href="../Enums/SwipeExpansionStyle.html">SwipeExpansionStyle</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -145,9 +119,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwipeCellKit17SwipeTableOptions15transitionStyleOS0_15TransitionStyle"></a>
+                    <a name="/s:vV12SwipeCellKit17SwipeTableOptions15transitionStyleOS_20SwipeTransitionStyle"></a>
                     <a name="//apple_ref/swift/Property/transitionStyle" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwipeCellKit17SwipeTableOptions15transitionStyleOS0_15TransitionStyle">transitionStyle</a>
+                    <a class="token" href="#/s:vV12SwipeCellKit17SwipeTableOptions15transitionStyleOS_20SwipeTransitionStyle">transitionStyle</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -155,8 +129,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The transition style. Transition is the style of how the action buttons are exposed during the swipe.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">transitionStyle</span><span class="p">:</span> <span class="kt"><a href="../Enums/SwipeTransitionStyle.html">SwipeTransitionStyle</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">border</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -176,6 +158,14 @@
                       <div class="abstract">
                         <p>Undocumented</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SwipeTableOptions</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>SwipeActionsOrientation Enum Reference</title>
+    <title>SwipeExpansionStyle Enum Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Enum/SwipeActionsOrientation" class="dashAnchor"></a>
-    <a title="SwipeActionsOrientation Enum Reference"></a>
+    <a name="//apple_ref/swift/Enum/SwipeExpansionStyle" class="dashAnchor"></a>
+    <a title="SwipeExpansionStyle Enum Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">SwipeCellKit Docs</a> (40% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">SwipeCellKit Reference</a>
         <img id="carat" src="../img/carat.png" />
-        SwipeActionsOrientation Enum Reference
+        SwipeExpansionStyle Enum Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -76,14 +76,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>SwipeActionsOrientation</h1>
+            <h1>SwipeExpansionStyle</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">SwipeActionsOrientation</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">SwipeExpansionStyle</span></code></pre>
 
                 </div>
               </div>
-            <p>Describes which side of the cell that the action buttons will be displayed.</p>
+            <p>Describes the expansion style.  Expansion is the behavior when the cell is swiped past a defined threshold.</p>
 
           </section>
           <section class="section task-group-section">
@@ -92,9 +92,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwipeCellKit23SwipeActionsOrientation4leftFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/left" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwipeCellKit23SwipeActionsOrientation4leftFMS0_S0_">left</a>
+                    <a name="/s:FO12SwipeCellKit19SwipeExpansionStyle4noneFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/none" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwipeCellKit19SwipeExpansionStyle4noneFMS0_S0_">none</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -102,14 +102,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The left side of the cell.</p>
+                        <p>No expansion. Elasticity is applied once all action buttons have been exposed.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="k">left</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="k">none</span></code></pre>
 
                         </div>
                       </div>
@@ -123,9 +123,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwipeCellKit23SwipeActionsOrientation5rightFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/right" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwipeCellKit23SwipeActionsOrientation5rightFMS0_S0_">right</a>
+                    <a name="/s:FO12SwipeCellKit19SwipeExpansionStyle9selectionFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/selection" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwipeCellKit19SwipeExpansionStyle9selectionFMS0_S0_">selection</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -133,14 +133,51 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The right side of the cell.</p>
+                        <p>The default action performs a selection-type behavior. The cell bounces back to its unopened state upon selection and the row remains in the table view.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="k">right</span> <span class="o">=</span> <span class="mi">1</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">selection</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FO12SwipeCellKit19SwipeExpansionStyle11destructiveFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/destructive" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwipeCellKit19SwipeExpansionStyle11destructiveFMS0_S0_">destructive</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The default action performs a destructive behavior. The cell is removed from the table view in an animated fashion.</p>
+
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    The <code><a href="../Classes/SwipeAction.html">SwipeAction</a></code> handler must update the table view&rsquo;s backing data model to remove the item respresenting the row.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">destructive</span></code></pre>
 
                         </div>
                       </div>

@@ -1,6 +1,13 @@
 {
   "warnings": [
     {
+      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/Options.swift",
+      "line": 20,
+      "symbol": "SwipeTableOptions.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeAction.swift",
       "line": 10,
       "symbol": "SwipeActionStyle",
@@ -101,181 +108,76 @@
     {
       "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
       "line": 10,
-      "symbol": "SwipeTableOptions",
-      "symbol_kind": "source.lang.swift.decl.struct",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 11,
-      "symbol": "SwipeTableOptions.ExpansionStyle",
-      "symbol_kind": "source.lang.swift.decl.enum",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 12,
-      "symbol": "SwipeTableOptions.ExpansionStyle.none",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 13,
-      "symbol": "SwipeTableOptions.ExpansionStyle.selection",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 14,
-      "symbol": "SwipeTableOptions.ExpansionStyle.destructive",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 17,
-      "symbol": "SwipeTableOptions.TransitionStyle",
-      "symbol_kind": "source.lang.swift.decl.enum",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 18,
-      "symbol": "SwipeTableOptions.TransitionStyle.border",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 19,
-      "symbol": "SwipeTableOptions.TransitionStyle.drag",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 20,
-      "symbol": "SwipeTableOptions.TransitionStyle.reveal",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 23,
-      "symbol": "SwipeTableOptions.expansionStyle",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 24,
-      "symbol": "SwipeTableOptions.transitionStyle",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 26,
-      "symbol": "SwipeTableOptions.init()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 29,
-      "symbol": "SwipeActionsOrientation",
-      "symbol_kind": "source.lang.swift.decl.enum",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 30,
-      "symbol": "SwipeActionsOrientation.left",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 31,
-      "symbol": "SwipeActionsOrientation.right",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 38,
       "symbol": "SwipeTableViewCellDelegate",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 39,
+      "line": 11,
       "symbol": "SwipeTableViewCellDelegate.tableView(_:editActionsForRowAt:for:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 40,
+      "line": 12,
       "symbol": "SwipeTableViewCellDelegate.tableView(_:editActionsOptionsForRowAt:for:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 91,
+      "line": 63,
       "symbol": "SwipeTableViewCell.center",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 103,
+      "line": 75,
       "symbol": "SwipeTableViewCell.init(coder:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 116,
+      "line": 88,
       "symbol": "SwipeTableViewCell.prepareForReuse()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 122,
+      "line": 94,
       "symbol": "SwipeTableViewCell.didMoveToSuperview()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 137,
+      "line": 109,
       "symbol": "SwipeTableViewCell.setEditing(_:animated:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 358,
+      "line": 330,
       "symbol": "SwipeTableViewCell.setHighlighted(_:animated:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 364,
+      "line": 336,
       "symbol": "SwipeTableViewCell.layoutMargins",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/jeremy/Development/personal/SwipeCellKit/Source/SwipeTableViewCell.swift",
-      "line": 451,
+      "line": 423,
       "symbol": "SwipeTableViewCell.gestureRecognizerShouldBegin(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
