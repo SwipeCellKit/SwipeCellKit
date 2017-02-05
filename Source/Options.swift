@@ -15,6 +15,9 @@ public struct SwipeTableOptions {
     /// The transition style. Transition is the style of how the action buttons are exposed during the swipe.
     public var transitionStyle: SwipeTransitionStyle = .border
     
+    /// The background color behind the action buttons.
+    public var backgroundColor: UIColor?
+    
     /// Constructs a new `SwipeTableOptions` instance with default options.
     public init() {}
 }
