@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
    s.social_media_url = 'https://twitter.com/jerkoch'
    s.author = 'Jeremy Koch'
 
-   s.source = { :git => 'https://github.com/jerkoch/CellSwipeKit.git', :tag => s.version }
+   s.source = { :git => 'https://github.com/jerkoch/SwipeCellKit.git', :tag => s.version }
    s.source_files = 'Source/*.swift'
 
    s.ios.deployment_target = '10.0'
