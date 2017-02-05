@@ -7,12 +7,12 @@
 
 import UIKit
 
-/// Describes the behavior of the executed action.
+/// Constants that help define the appearance of action buttons.
 public enum SwipeActionStyle: Int {
-    /// The action handler performs default behavior.
+    /// Apply a style that reflects standard non-destructive actions.
     case `default`
     
-    /// The action handler performs destructive behavior. The cell is removed from the table view in an animated fashion upon completion.
+    /// Apply a style that reflects destructive actions.
     case destructive
 }
 
@@ -27,7 +27,7 @@ public class SwipeAction: NSObject {
     /// - note: You must specify a title or an image.
     public var title: String?
     
-    /// The style of the action button.
+    /// The style applied to the action button.
     public var style: SwipeActionStyle
     
     /// The font to use for the title of the action button.
