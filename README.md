@@ -17,9 +17,10 @@
 A swipeable UITableViewCell with support for:
 
 * Left and right swipe actions
+* Action buttons with: *text only, text + image, image only*
 * Haptic Feedback
 * Customizable transitions: *Border, Drag, and Reveal*
-* Automatic expansion when dragging past threshold
+* Animated expansion when dragging past threshold
 
 ## Requirements
 
