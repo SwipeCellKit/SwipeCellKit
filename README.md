@@ -10,9 +10,16 @@
 
 *Swipeable UITableViewCell based on the stock Mail.app, implemented in Swift.*
 
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Hero.gif" /></p>
+
 ## About
 
-TBD
+A swipeable UITableViewCell with support for:
+
+* Left and right swipe actions
+* Haptic Feedback
+* Customizable transitions: *Border, Drag, and Reveal*
+* Automatic expansion when dragging past threshold
 
 ## Requirements
 
