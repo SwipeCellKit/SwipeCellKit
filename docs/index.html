@@ -100,8 +100,8 @@
 <li>Customizable transitions: <em>Border, Drag, and Reveal</em></li>
 <li>Animated expansion when dragging past threshold</li>
 </ul>
-<a href='#demo' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='demo'>Demo</h1>
-<a href='#transition-styles' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='transition-styles'>Transition Styles</h2>
+<a href='#demo' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='demo'>Demo</h2>
+<a href='#transition-styles' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='transition-styles'>Transition Styles</h3>
 
 <p>The transition style describes how the action buttons are exposed during the swipe.</p>
 <a href='#border' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='border'>Border</h4>
@@ -113,7 +113,7 @@
 <a href='#reveal' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='reveal'>Reveal</h4>
 
 <p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Transition-Reveal.gif" /></p>
-<a href='#expansion-styles' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='expansion-styles'>Expansion Styles</h2>
+<a href='#expansion-styles' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='expansion-styles'>Expansion Styles</h3>
 
 <p>The expansion style describes the behavior when the cell is swiped past a defined threshold.</p>
 <a href='#none' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='none'>None</h4>
@@ -148,6 +148,39 @@
 <a href='#documentation' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='documentation'>Documentation</h2>
 
 <p>Read the <a href="http://www.jerkoch.com/SwipeCellKit">docs</a>. Generated with <a href="https://github.com/realm/jazzy">jazzy</a>. Hosted by <a href="https://pages.github.com">GitHub Pages</a>.</p>
+<a href='#usage' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='usage'>Usage</h2>
+
+<p>Set the <code>delegate</code> property on <code>SwipeTableViewCell</code>:</p>
+<pre class="highlight swift"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">cellForRowAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UITableViewCell</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">cell</span> <span class="o">=</span> <span class="n">tableView</span><span class="o">.</span><span class="nf">dequeueReusableCell</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"Cell"</span><span class="p">)</span> <span class="k">as!</span> <span class="kt">SwipeTableViewCell</span>
+    <span class="n">cell</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="k">self</span>
+    <span class="k">return</span> <span class="n">cell</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Adopt the <code>SwipeTableViewCellDelegate</code> protocol:</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">editActionsForRowAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span> <span class="k">for</span> <span class="nv">orientation</span><span class="p">:</span> <span class="kt">SwipeActionsOrientation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">SwipeAction</span><span class="p">]</span> <span class="p">{</span>
+    <span class="k">guard</span> <span class="n">orientation</span> <span class="o">==</span> <span class="o">.</span><span class="k">right</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+
+    <span class="k">let</span> <span class="nv">deleteAction</span> <span class="o">=</span> <span class="kt">SwipeAction</span><span class="p">(</span><span class="nv">style</span><span class="p">:</span> <span class="o">.</span><span class="n">destructive</span><span class="p">,</span> <span class="nv">title</span><span class="p">:</span> <span class="s">"Delete"</span><span class="p">)</span> <span class="p">{</span> <span class="n">action</span><span class="p">,</span> <span class="n">indexPath</span> <span class="k">in</span>
+        <span class="c1">// handle action by updating model with deletion</span>
+    <span class="p">}</span>
+
+    <span class="c1">// customize the action appearance</span>
+    <span class="n">deleteAction</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"delete"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">deleteAction</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Optionally, you call implement the options method to customize the behavior of the swipe actions:</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">editActionsOptionsForRowAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span> <span class="k">for</span> <span class="nv">orientation</span><span class="p">:</span> <span class="kt">SwipeActionsOrientation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">SwipeTableOptions</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">options</span> <span class="o">=</span> <span class="kt">SwipeTableOptions</span><span class="p">()</span>
+    <span class="n">options</span><span class="o">.</span><span class="n">expansionStyle</span> <span class="o">=</span> <span class="o">.</span><span class="n">destructive</span>
+    <span class="n">options</span><span class="o">.</span><span class="n">transitionStyle</span> <span class="o">=</span> <span class="o">.</span><span class="n">border</span>
+    <span class="k">return</span> <span class="n">options</span>
+<span class="p">}</span>
+</code></pre>
 <a href='#credits' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='credits'>Credits</h2>
 
 <p>Created and maintained by <a href="https://twitter.com/jerkoch"><strong>@jerkoch</strong></a>.</p>

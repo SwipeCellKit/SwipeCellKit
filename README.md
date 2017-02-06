@@ -22,9 +22,9 @@ A swipeable UITableViewCell with support for:
 * Customizable transitions: *Border, Drag, and Reveal*
 * Animated expansion when dragging past threshold
 
-# Demo
+## Demo
 
-## Transition Styles
+### Transition Styles
 
 The transition style describes how the action buttons are exposed during the swipe.
 
@@ -40,7 +40,7 @@ The transition style describes how the action buttons are exposed during the swi
 
 <p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Transition-Reveal.gif" /></p>
 
-## Expansion Styles
+### Expansion Styles
 
 The expansion style describes the behavior when the cell is swiped past a defined threshold.
 
@@ -85,6 +85,46 @@ github "jerkoch/SwipeCellKit"
 ## Documentation
 
 Read the [docs][docsLink]. Generated with [jazzy](https://github.com/realm/jazzy). Hosted by [GitHub Pages](https://pages.github.com).
+
+## Usage
+
+Set the `delegate` property on `SwipeTableViewCell`:
+
+````swift
+override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! SwipeTableViewCell
+    cell.delegate = self
+    return cell
+}
+````
+
+Adopt the `SwipeTableViewCellDelegate` protocol:
+
+````swift
+func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction] {
+    guard orientation == .right else { return }
+
+    let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+        // handle action by updating model with deletion
+    }
+
+    // customize the action appearance
+    deleteAction.image = UIImage(named: "delete")
+
+    return [deleteAction]
+}
+````
+
+Optionally, you call implement the options method to customize the behavior of the swipe actions:
+
+````swift    
+func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
+    var options = SwipeTableOptions()
+    options.expansionStyle = .destructive
+    options.transitionStyle = .border
+    return options
+}
+````
 
 ## Credits
 
