@@ -22,6 +22,40 @@ A swipeable UITableViewCell with support for:
 * Customizable transitions: *Border, Drag, and Reveal*
 * Animated expansion when dragging past threshold
 
+# Demo
+
+## Transition Styles
+
+The transition style describes how the action buttons are exposed during the swipe.
+
+#### Border 
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Transition-Border.gif" /></p>
+
+#### Drag 
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Transition-Drag.gif" /></p>
+
+#### Reveal 
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Transition-Reveal.gif" /></p>
+
+## Expansion Styles
+
+The expansion style describes the behavior when the cell is swiped past a defined threshold.
+
+#### None
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Expansion-None.gif" /></p>
+
+#### Selection
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Expansion-Selection.gif" /></p>
+
+#### Destructive
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Expansion-Destructive.gif" /></p>
+
 ## Requirements
 
 * Swift 3.0
