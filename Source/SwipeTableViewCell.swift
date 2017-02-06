@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 /**
  The `SwipeTableViewCell` class extends `UITableViewCell` and provides more flexible options for cell swiping behavior.
  
