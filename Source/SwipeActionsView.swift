@@ -77,7 +77,7 @@ class SwipeActionsView: UIView {
         
         clipsToBounds = true
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = options.backgroundColor ?? UIColor(colorLiteralRed: 220/255, green: 220/255, blue: 220/255, alpha: 1)
+        backgroundColor = options.backgroundColor ?? #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
         
         addButtons(for: self.actions, withMaximum: maxSize)
     }

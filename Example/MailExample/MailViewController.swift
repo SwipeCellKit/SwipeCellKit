@@ -94,7 +94,7 @@ extension MailViewController: SwipeTableViewCellDelegate {
             return [read]
         } else {
             let flag = SwipeAction(style: .default, title: "Flag", handler: nil)
-            flag.backgroundColor = UIColor(colorLiteralRed: 1, green: 148/255, blue: 0, alpha: 1)
+            flag.backgroundColor = #colorLiteral(red: 1, green: 0.5803921569, blue: 0, alpha: 1)
             flag.hidesWhenSelected = true
             flag.image = #imageLiteral(resourceName: "Flag")
             
