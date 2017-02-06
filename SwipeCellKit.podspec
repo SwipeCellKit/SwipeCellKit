@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
    s.name = 'SwipeCellKit'
-   s.version = '1.0.0'
+   s.version = '1.0.1'
    s.license = 'MIT'
 
    s.summary = 'Swipeable UITableViewCell based on the stock Mail.app, implemented in Swift.'
