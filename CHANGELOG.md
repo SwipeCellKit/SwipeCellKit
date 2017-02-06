@@ -2,9 +2,23 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
-More [release](https://github.com/jerkoch/SwipeCellKit/releases) information can also be found on GitHub. 
+---
 
-1.0.0
------
+## [1.1.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.1.0)
+This release is mainly for Swift Package Manager support and some minor documentation clean up.
+
+#### Added
+
+- Swift Package Manager support.
+- A CHANGELOG to the project documenting each official release.
+- Examples of available transitions and expansions to the README.
+
+#### Fixed
+
+- The `SwipeTableViewCellDelegate` default implementation not exposed as `public`.
+
+---
+
+## [1.0.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.0.0)
 
 Initial release!
