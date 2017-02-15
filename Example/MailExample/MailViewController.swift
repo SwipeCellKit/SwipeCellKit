@@ -78,7 +78,7 @@ class MailViewController: UITableViewController {
 
 extension MailViewController: SwipeTableViewCellDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction] {
-        let email = self.emails[indexPath.row]
+        let email = emails[indexPath.row]
 
         if orientation == .left {
             let read = SwipeAction(style: .default, title: email.unread ? "Read" : "Unread") { action, indexPath in
@@ -137,7 +137,7 @@ class MailCell: SwipeTableViewCell {
     
     var unread = false {
         didSet {
-            self.indicatorView.transform = unread ? CGAffineTransform.identity : CGAffineTransform.init(scaleX: 0.001, y: 0.001)
+            indicatorView.transform = unread ? CGAffineTransform.identity : CGAffineTransform.init(scaleX: 0.001, y: 0.001)
         }
     }
     
