@@ -4,6 +4,14 @@
 
 ---
 
+## [1.1.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.1.1)
+
+#### Fixed
+
+- Memory leak in `SwipeActionsView` holding reference to actions causing a retain cycle.
+
+---
+
 ## [1.1.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.1.0)
 This release is mainly for Swift Package Manager support and some minor documentation clean up.
 
