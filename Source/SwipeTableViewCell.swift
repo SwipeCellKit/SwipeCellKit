@@ -30,7 +30,7 @@ open class SwipeTableViewCell: UITableViewCell {
     var state = SwipeState.center
     var originalCenter: CGFloat = 0
     
-    var tableView: UITableView?
+    weak var tableView: UITableView?
     var actionsView: SwipeActionsView?
 
     var originalLayoutMargins: UIEdgeInsets = .zero
@@ -69,6 +69,10 @@ open class SwipeTableViewCell: UITableViewCell {
         configure()
     }
     
+    deinit {
+        tableView?.panGestureRecognizer.removeTarget(self, action: nil)
+    }
+    
     func configure() {
         clipsToBounds = false
         
@@ -96,6 +100,15 @@ open class SwipeTableViewCell: UITableViewCell {
                 tableView.panGestureRecognizer.addTarget(self, action: #selector(handleTablePan(gesture:)))
                 return
             }            
+        }
+    }
+    
+    /// :nodoc:
+    open override func willMove(toWindow newWindow: UIWindow?) {
+        super.willMove(toWindow: newWindow)
+        
+        if newWindow == nil {
+            reset()
         }
     }
     
@@ -362,7 +375,9 @@ extension SwipeTableViewCell {
         state = .center
         
         tableView?.setGestureEnabled(true)
+        
         actionsView?.removeFromSuperview()
+        actionsView = nil
     }
     
     func hideSwipe(animated: Bool) {
