@@ -7,6 +7,14 @@
 
 import UIKit
 
+class Weak<Element: AnyObject> {
+    weak var value: Element?
+    
+    init(_ value: Element) {
+        self.value = value
+    }
+}
+
 extension UITableView {
     var swipeCells: [SwipeTableViewCell] {
         return visibleCells as? [SwipeTableViewCell] ?? []

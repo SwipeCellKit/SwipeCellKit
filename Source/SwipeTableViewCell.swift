@@ -104,15 +104,6 @@ open class SwipeTableViewCell: UITableViewCell {
     }
     
     /// :nodoc:
-    open override func willMove(toWindow newWindow: UIWindow?) {
-        super.willMove(toWindow: newWindow)
-        
-        if newWindow == nil {
-            reset()
-        }
-    }
-    
-    /// :nodoc:
     override open func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
