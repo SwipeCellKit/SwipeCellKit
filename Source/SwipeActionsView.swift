@@ -17,7 +17,7 @@ class SwipeActionsView: UIView {
     var expansionAnimator: UIViewPropertyAnimator?
 
     let orientation: SwipeActionsOrientation
-    let actions: [Weak<SwipeAction>]
+    let actions: [SwipeAction]
     let options: SwipeTableOptions
     
     var minimumButtonWidth: CGFloat = 74
@@ -65,15 +65,13 @@ class SwipeActionsView: UIView {
     }
     
     var expandableAction: SwipeAction? {
-        return options.expansionStyle != .none ? actions.last?.value : nil
+        return options.expansionStyle != .none ? actions.last : nil
     }
     
     init(maxSize: CGSize, options: SwipeTableOptions, orientation: SwipeActionsOrientation, actions: [SwipeAction]) {
-        let reversedActions: [SwipeAction] = actions.reversed()
-        
         self.options = options
         self.orientation = orientation
-        self.actions = reversedActions.map({ Weak($0) })
+        self.actions = actions.reversed()
         
         super.init(frame: .zero)
         
@@ -81,7 +79,7 @@ class SwipeActionsView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = options.backgroundColor ?? #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
         
-        addButtons(for: reversedActions, withMaximum: maxSize)
+        addButtons(for: self.actions, withMaximum: maxSize)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -103,10 +101,9 @@ class SwipeActionsView: UIView {
     }
     
     func actionTapped(button: SwipeActionButton) {
-        guard let index = subviews.index(of: button),
-            let action = actions[index].value else { return }
+        guard let index = subviews.index(of: button) else { return }
 
-        delegate?.swipeActionsView(self, didSelect: action)
+        delegate?.swipeActionsView(self, didSelect: actions[index])
     }
     
     override func layoutSubviews() {
