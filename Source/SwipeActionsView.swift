@@ -109,18 +109,14 @@ class SwipeActionsView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        switch options.transitionStyle {
-        case .border:
-            for subview in subviews.enumerated() {
+        for subview in subviews.enumerated() {
+            switch options.transitionStyle {
+            case .border:
                 let diff = visibleWidth - contentSize.width
                 subview.element.frame.origin.x = (CGFloat(subview.offset) * contentSize.width / CGFloat(actions.count) + diff) * orientation.scale
-            }
-
-        case .reveal, .drag:
-            for subview in subviews.enumerated() {
+            case .reveal, .drag:
                 subview.element.frame.origin.x = (CGFloat(subview.offset) * minimumButtonWidth) * orientation.scale
             }
-            
         }
         
         if expanded {
