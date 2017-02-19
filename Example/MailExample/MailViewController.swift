@@ -11,6 +11,7 @@ import SwipeCellKit
 class MailViewController: UITableViewController {
     var emails: [Email] = []
     var defaultOptions = SwipeTableOptions()
+    var isSwipeRightEnabled = true
     
     // MARK: - Lifecycle
     
@@ -56,6 +57,7 @@ class MailViewController: UITableViewController {
         controller.addAction(UIAlertAction(title: "Border", style: .default, handler: { _ in self.defaultOptions.transitionStyle = .border }))
         controller.addAction(UIAlertAction(title: "Drag", style: .default, handler: { _ in self.defaultOptions.transitionStyle = .drag }))
         controller.addAction(UIAlertAction(title: "Reveal", style: .default, handler: { _ in self.defaultOptions.transitionStyle = .reveal }))
+        controller.addAction(UIAlertAction(title: "\(isSwipeRightEnabled ? "Disable" : "Enable") Swipe Right", style: .default, handler: { _ in self.isSwipeRightEnabled = !self.isSwipeRightEnabled }))
         controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         controller.addAction(UIAlertAction(title: "Reset", style: .destructive, handler: { _ in self.resetData() }))
         present(controller, animated: true, completion: nil)
@@ -77,10 +79,12 @@ class MailViewController: UITableViewController {
 }
 
 extension MailViewController: SwipeTableViewCellDelegate {
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction] {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         let email = emails[indexPath.row]
 
         if orientation == .left {
+            guard isSwipeRightEnabled else { return nil }
+            
             let read = SwipeAction(style: .default, title: email.unread ? "Read" : "Unread") { action, indexPath in
                 let updatedStatus = !email.unread
                 email.unread = updatedStatus
@@ -103,14 +107,17 @@ extension MailViewController: SwipeTableViewCellDelegate {
             }
             delete.image = #imageLiteral(resourceName: "Trash")
             
+            let cell = tableView.cellForRow(at: indexPath) as! MailCell
+            let closure: (UIAlertAction) -> Void = { _ in cell.hideSwipe(animated: true) }
+                
             let more = SwipeAction(style: .default, title: "More") { action, indexPath in
                 let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-                controller.addAction(UIAlertAction(title: "Reply", style: .default, handler: nil))
-                controller.addAction(UIAlertAction(title: "Forward", style: .default, handler: nil))
-                controller.addAction(UIAlertAction(title: "Mark...", style: .default, handler: nil))
-                controller.addAction(UIAlertAction(title: "Notify Me...", style: .default, handler: nil))
-                controller.addAction(UIAlertAction(title: "Move Message...", style: .default, handler: nil))
-                controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                controller.addAction(UIAlertAction(title: "Reply", style: .default, handler: closure))
+                controller.addAction(UIAlertAction(title: "Forward", style: .default, handler: closure))
+                controller.addAction(UIAlertAction(title: "Mark...", style: .default, handler: closure))
+                controller.addAction(UIAlertAction(title: "Notify Me...", style: .default, handler: closure))
+                controller.addAction(UIAlertAction(title: "Move Message...", style: .default, handler: closure))
+                controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: closure))
                 self.present(controller, animated: true, completion: nil)
             }
             more.image = #imageLiteral(resourceName: "More")
@@ -132,6 +139,8 @@ class MailCell: SwipeTableViewCell {
     @IBOutlet var dateLabel: UILabel!
     @IBOutlet var subjectLabel: UILabel!
     @IBOutlet var bodyLabel: UILabel!
+    
+    var animator: UIViewPropertyAnimator?
     
     var indicatorView = IndicatorView(frame: .zero)
     
@@ -164,9 +173,13 @@ class MailCell: SwipeTableViewCell {
         }
         
         if animated {
+            self.animator?.stopAnimation(true)
+            
             let animator = unread ? UIViewPropertyAnimator(duration: 1.0, dampingRatio: 0.4) : UIViewPropertyAnimator(duration: 0.3, dampingRatio: 1.0)
             animator.addAnimations(closure)
             animator.startAnimation()
+
+            self.animator = animator
         } else {
             closure()
         }

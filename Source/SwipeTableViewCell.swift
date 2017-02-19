@@ -47,6 +47,7 @@ open class SwipeTableViewCell: UITableViewCell {
         return gesture
     }()
     
+    let elasticScrollRation: CGFloat = 0.4
     var scrollRatio: CGFloat = 1.0
     
     /// :nodoc:
@@ -127,33 +128,23 @@ open class SwipeTableViewCell: UITableViewCell {
         
         switch gesture.state {
         case .began:
-            stopAnimatorIfNeeded()
-            
             originalCenter = center.x
             
-            feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-            feedbackGenerator?.prepare()
-
-            let velocity = gesture.velocity(in: target)
-            let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
-
             if state == .center || state == .animatingToCenter {
-                originalLayoutMargins = super.layoutMargins
-                
-                // Remove highlight and deselect any selected cells
-                isHighlighted = false
-                let selectedIndexPaths = tableView?.indexPathsForSelectedRows
-                selectedIndexPaths?.forEach { tableView?.deselectRow(at: $0, animated: false) }
+                stopAnimatorIfNeeded()
+            
+                feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+                feedbackGenerator?.prepare()
 
-                // Temporarily remove table gestures
-                tableView?.setGestureEnabled(false)
-                
-                configureActionView(for: orientation)
+                let velocity = gesture.velocity(in: target)
+                let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
+
+                handleBeginPanIfNecessary(for: orientation)
             }
             
         case .changed:
             guard let actionsView = actionsView else { return }
-            
+
             let translation = gesture.translation(in: target).x
             scrollRatio = 1.0
             
@@ -163,6 +154,7 @@ open class SwipeTableViewCell: UITableViewCell {
                 target.center.x = gesture.elasticTranslation(in: target,
                                                              withLimit: .zero,
                                                              fromOriginalCenter: CGPoint(x: originalCenter, y: 0)).x
+                scrollRatio = elasticScrollRation
                 return
             }
             
@@ -192,13 +184,12 @@ open class SwipeTableViewCell: UITableViewCell {
                 }
                 break
             default:
-                let ratio: CGFloat = 0.4
                 target.center.x = gesture.elasticTranslation(in: target,
                                                              withLimit: CGSize(width: actionsView.preferredWidth, height: 0),
                                                              fromOriginalCenter: CGPoint(x: originalCenter, y: 0),
-                                                             applyingRatio: ratio).x
+                                                             applyingRatio: elasticScrollRation).x
                 if (target.center.x - originalCenter) / translation != 1.0 {
-                    scrollRatio = ratio
+                    scrollRatio = elasticScrollRation
                 }
                 
                 expanded = false
@@ -213,12 +204,14 @@ open class SwipeTableViewCell: UITableViewCell {
             actionsView.expanded = expanded
             
         case .ended:
+            guard let actionsView = actionsView else { return }
+
             let velocity = gesture.velocity(in: target)
             state = targetState(forVelocity: velocity)
             
             feedbackGenerator = nil
 
-            if actionsView?.expanded == true, let expandedAction = actionsView?.expandableAction  {
+            if actionsView.expanded == true, let expandedAction = actionsView.expandableAction  {
                 perform(action: expandedAction)
             } else {
                 let targetOffset = state != .center ? targetCenter(active: true) : bounds.midX
@@ -236,11 +229,32 @@ open class SwipeTableViewCell: UITableViewCell {
         }
     }
     
-    func configureActionView(for orientation: SwipeActionsOrientation) {
+    func handleBeginPanIfNecessary(for orientation: SwipeActionsOrientation) {
+        guard let tableView = tableView,
+            let indexPath = tableView.indexPath(for: self),
+            let actions = delegate?.tableView(tableView, editActionsForRowAt: indexPath, for: orientation),
+            actions.count > 0
+            else {
+                return
+        }
+        
+        originalLayoutMargins = super.layoutMargins
+        
+        // Remove highlight and deselect any selected cells
+        isHighlighted = false
+        let selectedIndexPaths = tableView.indexPathsForSelectedRows
+        selectedIndexPaths?.forEach { tableView.deselectRow(at: $0, animated: false) }
+        
+        // Temporarily remove table gestures
+        tableView.setGestureEnabled(false)
+        
+        configureActionView(with: actions, for: orientation)
+    }
+    
+    func configureActionView(with actions: [SwipeAction], for orientation: SwipeActionsOrientation) {
         guard let tableView = tableView,
             let indexPath = tableView.indexPath(for: self) else { return }
         
-        let actions = delegate?.tableView(tableView, editActionsForRowAt: indexPath, for: orientation) ?? []
         let options = delegate?.tableView(tableView, editActionsOptionsForRowAt: indexPath, for: orientation) ?? SwipeTableOptions()
         
         self.actionsView?.removeFromSuperview()
@@ -279,7 +293,7 @@ open class SwipeTableViewCell: UITableViewCell {
                 let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
                 return UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
             } else {
-                return UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1.0)
+                return UIViewPropertyAnimator(duration: 0.7, dampingRatio: 1.0)
             }
         }()
 
@@ -380,7 +394,12 @@ extension SwipeTableViewCell {
         actionsView = nil
     }
     
-    func hideSwipe(animated: Bool) {
+    /**
+     Hides the swipe actions and returns the cell to center.
+     
+     - parameter animated: Specify `true` to animate the hiding of the swipe actions or `false` to hide it immediately.
+     */
+    public func hideSwipe(animated: Bool) {
         guard state == .left || state == .right else { return }
 
         state = .animatingToCenter
@@ -420,7 +439,6 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             UIView.animate(withDuration: 0.3, animations: {
                 self.center.x = self.bounds.midX - (self.bounds.width + 100) * actionsView.orientation.scale
             })
-
         } else {
             if actionsView.options.expansionStyle == .selection || action.hidesWhenSelected {
                 hideSwipe(animated: true)
