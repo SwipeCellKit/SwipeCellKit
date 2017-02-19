@@ -4,6 +4,19 @@
 
 ---
 
+## [1.2.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.2.0)
+
+#### Breaking
+
+- Update `SwipeTableViewCellDelegate` allowing `editActionsForRowAt` to return `nil` and prevent swiping in the supplied orientation (#2).
+
+#### Added
+
+- Example app now lets you choose to disable swiping right. 
+- Expose `hideSwipe(animated:)` to allow the cell to be programmatically hidden.
+
+---
+
 ## [1.1.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.1.1)
 
 #### Fixed
