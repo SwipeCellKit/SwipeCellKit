@@ -438,7 +438,9 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             
             UIView.animate(withDuration: 0.3, animations: {
                 self.center.x = self.bounds.midX - (self.bounds.width + 100) * actionsView.orientation.scale
-            })
+            }) { _ in
+                self.reset()
+            }
         } else {
             if actionsView.options.expansionStyle == .selection || action.hidesWhenSelected {
                 hideSwipe(animated: true)
