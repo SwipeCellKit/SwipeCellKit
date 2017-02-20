@@ -4,6 +4,16 @@
 
 ---
 
+## [1.2.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.2.1)
+
+#### Fixed
+
+- Call `reset` at the end of a destructive swipe to ensure the tableView gestures are re-enabled (#3).
+- Feedback was not being generated when swiping from non-centered state
+- `SwipeTableViewCellDelegate` compiler error in README example.
+
+---
+
 ## [1.2.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.2.0)
 
 #### Breaking
