@@ -128,14 +128,14 @@ open class SwipeTableViewCell: UITableViewCell {
         
         switch gesture.state {
         case .began:
+            stopAnimatorIfNeeded()
+
             originalCenter = center.x
             
             feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
             feedbackGenerator?.prepare()
 
             if state == .center || state == .animatingToCenter {
-                stopAnimatorIfNeeded()
-            
                 let velocity = gesture.velocity(in: target)
                 let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
 
