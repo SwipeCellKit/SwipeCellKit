@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>SwipeActionsOrientation Enum Reference</title>
+    <title>SwipeVerticalAlignment Enum Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Enum/SwipeActionsOrientation" class="dashAnchor"></a>
-    <a title="SwipeActionsOrientation Enum Reference"></a>
+    <a name="//apple_ref/swift/Enum/SwipeVerticalAlignment" class="dashAnchor"></a>
+    <a title="SwipeVerticalAlignment Enum Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">SwipeCellKit Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">SwipeCellKit Reference</a>
         <img id="carat" src="../img/carat.png" />
-        SwipeActionsOrientation Enum Reference
+        SwipeVerticalAlignment Enum Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -79,14 +79,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>SwipeActionsOrientation</h1>
+            <h1>SwipeVerticalAlignment</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">SwipeActionsOrientation</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">SwipeVerticalAlignment</span></code></pre>
 
                 </div>
               </div>
-            <p>Describes which side of the cell that the action buttons will be displayed.</p>
+            <p>Describes the alignment mode used when action button images and titles are provided.</p>
 
           </section>
           <section class="section task-group-section">
@@ -95,9 +95,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwipeCellKit23SwipeActionsOrientation4leftFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/left" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwipeCellKit23SwipeActionsOrientation4leftFMS0_S0_">left</a>
+                    <a name="/s:FO12SwipeCellKit22SwipeVerticalAlignment19centerFirstBaselineFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/centerFirstBaseline" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwipeCellKit22SwipeVerticalAlignment19centerFirstBaselineFMS0_S0_">centerFirstBaseline</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -105,14 +105,20 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The left side of the cell.</p>
+                        <p>All actions will be inspected and the tallest image and first baseline offset of title text will be used to create the alignment rectangle.</p>
+
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    This mode will ensure the image and first line of each button title and consistently aligned across the swipe view.
+
+</div>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="k">left</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">centerFirstBaseline</span></code></pre>
 
                         </div>
                       </div>
@@ -126,9 +132,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwipeCellKit23SwipeActionsOrientation5rightFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/right" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwipeCellKit23SwipeActionsOrientation5rightFMS0_S0_">right</a>
+                    <a name="/s:FO12SwipeCellKit22SwipeVerticalAlignment6centerFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/center" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwipeCellKit22SwipeVerticalAlignment6centerFMS0_S0_">center</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -136,14 +142,20 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The right side of the cell.</p>
+                        <p>The action button image height and full title height are used to create the aligment rectange.</p>
+
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Buttons with varying number of lines will not be consistently aligned across the swipe view.
+
+</div>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="k">right</span> <span class="o">=</span> <span class="mi">1</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">center</span></code></pre>
 
                         </div>
                       </div>
