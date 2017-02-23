@@ -4,6 +4,20 @@
 
 ---
 
+## [1.3.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.3.0)
+
+#### Fixed
+
+- Active animations were not always stopped when a new pan gesture began.
+- Images are not aligned properly on buttons without a title. (#6)
+
+#### Added
+
+- New options in `SwipeTableOptions` to for more layout customization. (#7)
+- Example app now lets you choose between buttons with *title + image*, *title only*, and *image only*
+
+---
+
 ## [1.2.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.2.1)
 
 #### Fixed
