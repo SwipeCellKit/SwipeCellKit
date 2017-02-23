@@ -9,9 +9,14 @@ import UIKit
 import SwipeCellKit
 
 class MailViewController: UITableViewController {
+    enum ButtonDisplayMode {
+        case titleAndImage, titleOnly, imageOnly
+    }
+    
     var emails: [Email] = []
     var defaultOptions = SwipeTableOptions()
     var isSwipeRightEnabled = true
+    var buttonDisplayMode: ButtonDisplayMode = .titleAndImage
     
     // MARK: - Lifecycle
     
@@ -53,13 +58,24 @@ class MailViewController: UITableViewController {
     // MARK: - Actions
     
     @IBAction func moreTapped(_ sender: Any) {
+        
         let controller = UIAlertController(title: "Swipe Transition Style", message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: "Border", style: .default, handler: { _ in self.defaultOptions.transitionStyle = .border }))
         controller.addAction(UIAlertAction(title: "Drag", style: .default, handler: { _ in self.defaultOptions.transitionStyle = .drag }))
         controller.addAction(UIAlertAction(title: "Reveal", style: .default, handler: { _ in self.defaultOptions.transitionStyle = .reveal }))
         controller.addAction(UIAlertAction(title: "\(isSwipeRightEnabled ? "Disable" : "Enable") Swipe Right", style: .default, handler: { _ in self.isSwipeRightEnabled = !self.isSwipeRightEnabled }))
+        controller.addAction(UIAlertAction(title: "Button Display Mode", style: .default, handler: { _ in self.buttonDisplayModeTapped() }))
         controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         controller.addAction(UIAlertAction(title: "Reset", style: .destructive, handler: { _ in self.resetData() }))
+        present(controller, animated: true, completion: nil)
+    }
+    
+    func buttonDisplayModeTapped() {
+        let controller = UIAlertController(title: "Button Display Mode", message: nil, preferredStyle: .actionSheet)
+        controller.addAction(UIAlertAction(title: "Image + Title", style: .default, handler: { _ in self.buttonDisplayMode = .titleAndImage }))
+        controller.addAction(UIAlertAction(title: "Image Only", style: .default, handler: { _ in self.buttonDisplayMode = .imageOnly }))
+        controller.addAction(UIAlertAction(title: "Title Only", style: .default, handler: { _ in self.buttonDisplayMode = .titleOnly }))
+        controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(controller, animated: true, completion: nil)
     }
     
@@ -85,7 +101,7 @@ extension MailViewController: SwipeTableViewCellDelegate {
         if orientation == .left {
             guard isSwipeRightEnabled else { return nil }
             
-            let read = SwipeAction(style: .default, title: email.unread ? "Read" : "Unread") { action, indexPath in
+            let read = SwipeAction(style: .default, title: configureTitle(email.unread ? "Read" : "Unread")) { action, indexPath in
                 let updatedStatus = !email.unread
                 email.unread = updatedStatus
 
@@ -93,24 +109,24 @@ extension MailViewController: SwipeTableViewCellDelegate {
                 cell.setUnread(updatedStatus, animated: true)
             }
             read.backgroundColor = view.tintColor
-            read.image = email.unread ? #imageLiteral(resourceName: "Read") : #imageLiteral(resourceName: "Unread")
+            read.image = configureImage(email.unread ? #imageLiteral(resourceName: "Read") : #imageLiteral(resourceName: "Unread"))
             read.hidesWhenSelected = true
             return [read]
         } else {
-            let flag = SwipeAction(style: .default, title: "Flag", handler: nil)
+            let flag = SwipeAction(style: .default, title: configureTitle("Flag"), handler: nil)
             flag.backgroundColor = #colorLiteral(red: 1, green: 0.5803921569, blue: 0, alpha: 1)
             flag.hidesWhenSelected = true
-            flag.image = #imageLiteral(resourceName: "Flag")
+            flag.image = configureImage(#imageLiteral(resourceName: "Flag"))
             
-            let delete = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+            let delete = SwipeAction(style: .destructive, title: configureTitle("Delete")) { action, indexPath in
                 self.emails.remove(at: indexPath.row)
             }
-            delete.image = #imageLiteral(resourceName: "Trash")
+            delete.image = configureImage(#imageLiteral(resourceName: "Trash"))
             
             let cell = tableView.cellForRow(at: indexPath) as! MailCell
             let closure: (UIAlertAction) -> Void = { _ in cell.hideSwipe(animated: true) }
                 
-            let more = SwipeAction(style: .default, title: "More") { action, indexPath in
+            let more = SwipeAction(style: .default, title: configureTitle("More")) { action, indexPath in
                 let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
                 controller.addAction(UIAlertAction(title: "Reply", style: .default, handler: closure))
                 controller.addAction(UIAlertAction(title: "Forward", style: .default, handler: closure))
@@ -120,7 +136,7 @@ extension MailViewController: SwipeTableViewCellDelegate {
                 controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: closure))
                 self.present(controller, animated: true, completion: nil)
             }
-            more.image = #imageLiteral(resourceName: "More")
+            more.image = configureImage(#imageLiteral(resourceName: "More"))
 
             return [delete, flag, more]
         }
@@ -130,7 +146,16 @@ extension MailViewController: SwipeTableViewCellDelegate {
         var options = SwipeTableOptions()
         options.expansionStyle = orientation == .left ? .selection : .destructive
         options.transitionStyle = defaultOptions.transitionStyle
+        options.buttonSpacing = 11
         return options
+    }
+    
+    func configureTitle(_ title: String) -> String? {
+        return buttonDisplayMode != .imageOnly ? title : nil
+    }
+    
+    func configureImage(_ image: UIImage) -> UIImage? {
+        return buttonDisplayMode != .titleOnly ? image : nil
     }
 }
 

@@ -20,8 +20,13 @@ class SwipeActionsView: UIView {
     let actions: [SwipeAction]
     let options: SwipeTableOptions
     
-    var minimumButtonWidth: CGFloat = 74
-
+    var buttons: [SwipeActionButton] = []
+    
+    var minimumButtonWidth: CGFloat = 0
+    var maximumImageHeight: CGFloat {
+        return actions.reduce(0, { initial, next in max(initial, next.image?.size.height ?? 0) })
+    }
+    
     var visibleWidth: CGFloat = 0 {
         didSet {
             if options.transitionStyle == .reveal {
@@ -79,25 +84,33 @@ class SwipeActionsView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = options.backgroundColor ?? #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
         
-        addButtons(for: self.actions, withMaximum: maxSize)
+        buttons = addButtons(for: self.actions, withMaximum: maxSize)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addButtons(for actions: [SwipeAction], withMaximum size: CGSize) {
-        subviews.forEach { $0.removeFromSuperview() }
-        
-        for action in actions {
-            let actionButton = SwipeActionButton(frame: CGRect(origin: .zero, size: CGSize(width: size.width * 2, height: size.height)),
-                                                 action: action)
-            addSubview(actionButton)
+    func addButtons(for actions: [SwipeAction], withMaximum size: CGSize) -> [SwipeActionButton] {
+        let buttons: [SwipeActionButton] = actions.map({ action in
+            let frame = CGRect(origin: .zero, size: CGSize(width: size.width * 2, height: size.height))
             
+            let actionButton = SwipeActionButton(frame: frame, action: action)
             actionButton.addTarget(self, action: #selector(actionTapped(button:)), for: .touchUpInside)
-            
-            minimumButtonWidth = max(minimumButtonWidth, actionButton.preferredWidth)
+            actionButton.spacing = options.buttonSpacing ?? 8
+            actionButton.padding = options.buttonPadding ?? 8
+            return actionButton
+        })
+        
+        let maximum = options.maximumButtonWidth ?? (size.width - 30) / CGFloat(actions.count)
+        minimumButtonWidth = buttons.reduce(options.minimumButtonWidth ?? 74, { initial, next in max(initial, next.preferredWidth(maximum: maximum)) })
+        
+        buttons.forEach { button in
+            addSubview(button)
+            button.updateContentEdgeInsets(withContentWidth: minimumButtonWidth, for: orientation)
         }
+        
+        return buttons
     }
     
     func actionTapped(button: SwipeActionButton) {

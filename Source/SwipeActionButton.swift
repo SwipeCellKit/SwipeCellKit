@@ -8,16 +8,18 @@
 import UIKit
 
 class SwipeActionButton: UIButton {
-    var maximumWidth: CGFloat = 100
-    var preferredWidth: CGFloat = 0
-    var padding: CGFloat = 0
-    
+    var contentRect: CGRect = .zero
     var originalBackgroundColor: UIColor?
     
-    convenience init(frame: CGRect, action: SwipeAction, padding: CGFloat = 4) {
+    var spacing: CGFloat = 8
+    var padding: CGFloat = 8
+    
+    var actionsView: SwipeActionsView? {
+        return superview as? SwipeActionsView
+    }
+    
+    convenience init(frame: CGRect, action: SwipeAction) {
         self.init(frame: frame)
-        
-        self.padding = padding
         
         if let backgroundColor = action.backgroundColor {
             self.backgroundColor = backgroundColor
@@ -36,17 +38,13 @@ class SwipeActionButton: UIButton {
         contentHorizontalAlignment = .center
         
         titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFontWeightMedium)
-        titleLabel?.lineBreakMode = .byWordWrapping
         titleLabel?.textAlignment = .center
+        titleLabel?.lineBreakMode = .byWordWrapping
+        titleLabel?.numberOfLines = 0
         
         setTitle(action.title, for: .normal)
         setImage(action.image, for: .normal)
         setImage(action.highlightedImage ?? action.image, for: .highlighted)
-        
-        let textWidth = titleLabel?.textRect(forBounds: CGRect(x: 0, y: 0, width: maximumWidth, height: 0), limitedToNumberOfLines: 0).width ?? 0
-        let imageWidth = imageView?.image?.size.width ?? 0
-        
-        preferredWidth = min(maximumWidth, max(textWidth, imageWidth) + (padding * 2))
     }
     
     override var isHighlighted: Bool {
@@ -54,27 +52,67 @@ class SwipeActionButton: UIButton {
             backgroundColor = isHighlighted ? originalBackgroundColor?.darker() : originalBackgroundColor
         }
     }
-    
-    override func didMoveToSuperview() {
-        if let superview = superview as? SwipeActionsView {
-            layout(in: superview)
+        
+    func updateContentEdgeInsets(withContentWidth contentWidth: CGFloat, for orientation: SwipeActionsOrientation) {
+        switch orientation {
+        case .left:
+            contentRect = CGRect(x: bounds.width - contentWidth, y: 0, width: contentWidth, height: bounds.height)
+        case .right:
+            contentRect = CGRect(x: 0, y: 0, width: contentWidth, height: bounds.height)
         }
+        
+        contentRect = contentRect.insetBy(dx: padding, dy: padding)
+        
+        contentEdgeInsets = UIEdgeInsets(top: contentRect.minY,
+                                         left: contentRect.minX,
+                                         bottom: bounds.height - contentRect.maxY,
+                                         right: bounds.width - contentRect.maxX)
     }
     
-    func layout(in actionsView: SwipeActionsView) {
-        let orientationPadding = bounds.width - actionsView.minimumButtonWidth + padding
+    override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
+        let imageRect = super.imageRect(forContentRect: contentRect)
         
-        switch actionsView.orientation {
-        case .left:
-            contentEdgeInsets = UIEdgeInsets(top: 0, left: orientationPadding, bottom: 0, right: padding)
-        case .right:
-            contentEdgeInsets = UIEdgeInsets(top: 0, left: padding, bottom: 0, right: orientationPadding)
+        guard let actionsView = actionsView,
+            let titleLabel = titleLabel,
+            currentTitle?.isEmpty == false else {
+                return contentRect.center(size: imageRect.size)
+        }
+
+        let textRect = titleLabel.textRect(forBounds: contentRect, limitedToNumberOfLines: 0)
+        let additionalHeight = actionsView.options.buttonVerticalAlignment == .centerFirstBaseline ? titleLabel.firstBaselineOffsetFromTop : textRect.height
+        let totalHeight = actionsView.maximumImageHeight + additionalHeight
+        
+        let offsetFromCenter = ((actionsView.maximumImageHeight - totalHeight) / 2) - (spacing / 2)
+        
+        return contentRect.center(size: currentImage?.size ?? .zero).offsetBy(dx: 0, dy: offsetFromCenter)
+    }
+    
+    override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
+        let imageRect = self.imageRect(forContentRect: contentRect)
+
+        guard let actionsView = actionsView,
+            let titleLabel = titleLabel else {
+                return contentRect
         }
         
-        if let width = imageView?.image?.size.width {
-            titleEdgeInsets = UIEdgeInsets(top: 42, left: -width, bottom: 0, right: 0)
-            imageEdgeInsets = UIEdgeInsets(top: -32, left: (actionsView.minimumButtonWidth - (padding * 2) - width) / 2, bottom: 0, right: 0)
+        var textRect = titleLabel.textRect(forBounds: contentRect, limitedToNumberOfLines: 0)
+        textRect = contentRect.center(size: textRect.size)
+        
+        if actionsView.maximumImageHeight > 0 {
+            textRect.origin.y = imageRect.midY + (actionsView.maximumImageHeight / 2) + spacing + 1
         }
+        
+        return textRect
+    }
+    
+    func preferredWidth(maximum: CGFloat) -> CGFloat {
+        let width = maximum > 0 ? maximum : CGFloat.greatestFiniteMagnitude
+        let containingBounds = CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude)
+        
+        let textWidth = titleLabel?.textRect(forBounds: containingBounds, limitedToNumberOfLines: 0).width ?? 0
+        let imageWidth = imageView?.image?.size.width ?? 0
+
+        return min(width, max(textWidth, imageWidth) + padding * 2)
     }
 }
 
@@ -88,5 +126,19 @@ private extension UIColor {
         guard getRed(&r, green: &g, blue: &b, alpha: &a) else { return self }
         
         return UIColor(red: max(r - 0.1, 0.0), green: max(g - 0.1, 0.0), blue: max(b - 0.1, 0.0), alpha: a)
+    }
+}
+
+extension CGRect {
+    func center(size: CGSize) -> CGRect {
+        let dx = width - size.width
+        let dy = height - size.height
+        return CGRect(x: origin.x + dx * 0.5, y: origin.y + dy * 0.5, width: size.width, height: size.height)
+    }
+}
+
+private extension UILabel {
+    var firstBaselineOffsetFromTop: CGFloat {
+        return font.ascender
     }
 }
