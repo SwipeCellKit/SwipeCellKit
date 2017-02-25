@@ -115,7 +115,7 @@ func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPat
 }
 ````
 
-Optionally, you call implement the options method to customize the behavior of the swipe actions:
+Optionally, you can implement the `editActionsOptionsForRowAt` method to customize the behavior of the swipe actions:
 
 ````swift    
 func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
