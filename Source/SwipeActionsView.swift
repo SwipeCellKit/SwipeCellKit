@@ -105,9 +105,12 @@ class SwipeActionsView: UIView {
         let maximum = options.maximumButtonWidth ?? (size.width - 30) / CGFloat(actions.count)
         minimumButtonWidth = buttons.reduce(options.minimumButtonWidth ?? 74, { initial, next in max(initial, next.preferredWidth(maximum: maximum)) })
         
-        buttons.forEach { button in
-            addSubview(button)
+        buttons.enumerated().forEach { (index, button) in
             button.updateContentEdgeInsets(withContentWidth: minimumButtonWidth, for: orientation)
+            button.maximumImageHeight = maximumImageHeight
+            button.verticalAlignment = options.buttonVerticalAlignment
+
+            addSubview(button)
         }
         
         return buttons
