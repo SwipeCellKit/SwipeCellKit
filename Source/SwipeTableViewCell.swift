@@ -57,6 +57,7 @@ open class SwipeTableViewCell: UITableViewCell {
         }
     }
     
+    /// :nodoc:
     override public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
