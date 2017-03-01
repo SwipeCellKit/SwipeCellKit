@@ -17,6 +17,17 @@ class SwipeActionButton: UIButton {
     var maximumImageHeight: CGFloat = 0
     var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
     
+    var currentSpacing: CGFloat {
+        return (currentTitle?.isEmpty == false && maximumImageHeight > 0) ? spacing : 0
+    }
+    
+    var alignmentRect: CGRect {
+        let titleHeight = titleBoundingRect(with: verticalAlignment == .centerFirstBaseline ? CGRect.infinite.size : contentRect.size).height
+        let totalHeight = maximumImageHeight + titleHeight + currentSpacing
+
+        return contentRect.center(size: CGSize(width: contentRect.width, height: totalHeight))
+    }
+    
     convenience init(frame: CGRect, action: SwipeAction) {
         self.init(frame: frame)
         
@@ -51,7 +62,7 @@ class SwipeActionButton: UIButton {
             backgroundColor = isHighlighted ? originalBackgroundColor?.darker() : originalBackgroundColor
         }
     }
-        
+    
     func updateContentEdgeInsets(withContentWidth contentWidth: CGFloat, for orientation: SwipeActionsOrientation) {
         switch orientation {
         case .left:
@@ -70,54 +81,28 @@ class SwipeActionButton: UIButton {
     
     func preferredWidth(maximum: CGFloat) -> CGFloat {
         let width = maximum > 0 ? maximum : CGFloat.greatestFiniteMagnitude
-        let containingBounds = CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude)
-        
-        let textWidth = titleLabel?.textRect(forBounds: containingBounds, limitedToNumberOfLines: 0).width ?? 0
-        let imageWidth = imageView?.image?.size.width ?? 0
+        let textWidth = titleBoundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)).width
+        let imageWidth = currentImage?.size.width ?? 0
         
         return min(width, max(textWidth, imageWidth) + padding * 2)
     }
     
-    override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
-        guard let currentImage = currentImage else { return .zero }
+    func titleBoundingRect(with size: CGSize) -> CGRect {
+        guard let title = currentTitle, let font = titleLabel?.font else { return .zero }
         
-        return CGRect(origin: .zero, size: currentImage.size)
+        return title.boundingRect(with: size, options: [.usesLineFragmentOrigin], attributes: [NSFontAttributeName: font], context: nil)
     }
     
     override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
-        guard let title = currentTitle, let font = titleLabel?.font else { return .zero }
-        
-        return title.boundingRect(with: contentRect.size,
-                                  options: [.usesLineFragmentOrigin],
-                                  attributes: [NSFontAttributeName: font],
-                                  context: nil)
+        var rect = contentRect.center(size: titleBoundingRect(with: contentRect.size).size)
+        rect.origin.y = alignmentRect.minY + maximumImageHeight + currentSpacing
+        return rect
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        guard let titleLabel = titleLabel, let imageView = imageView else { return }
-        
-        let spacing = (currentTitle?.isEmpty == false && maximumImageHeight > 0) ? self.spacing : 0
-        let totalHeight = maximumImageHeight + titleHeightForAlignment + spacing
-        let alignmentRect = contentRect.center(size: CGSize(width: contentRect.width, height: totalHeight))
-        
-        imageView.center.x = contentRect.midX
-        imageView.frame.origin.y = alignmentRect.minY + (maximumImageHeight - imageView.bounds.height) / 2
-
-        titleLabel.center.x = contentRect.midX
-        titleLabel.frame.origin.y = alignmentRect.minY + maximumImageHeight + spacing
-    }
-    
-    var titleHeightForAlignment: CGFloat {
-        guard let titleLabel = titleLabel else { return 0 }
-        guard currentTitle?.isEmpty == false else { return 0 }
-        
-        if verticalAlignment == .centerFirstBaseline {
-            return titleLabel.font.ascender
-        } else {
-            return titleLabel.frame.height + (titleLabel.frame.height > 0 ? titleLabel.font.descender : 0)
-        }
+    override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
+        var rect = contentRect.center(size: currentImage?.size ?? .zero)
+        rect.origin.y = alignmentRect.minY + (maximumImageHeight - rect.height) / 2
+        return rect
     }
 }
 
