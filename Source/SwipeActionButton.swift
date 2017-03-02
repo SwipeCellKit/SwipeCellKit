@@ -52,6 +52,8 @@ class SwipeActionButton: UIButton {
         titleLabel?.lineBreakMode = .byWordWrapping
         titleLabel?.numberOfLines = 0
         
+        accessibilityLabel = action.accessibilityLabel
+        
         setTitle(action.title, for: .normal)
         setImage(action.image, for: .normal)
         setImage(action.highlightedImage ?? action.image, for: .highlighted)

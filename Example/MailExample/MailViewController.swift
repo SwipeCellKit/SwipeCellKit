@@ -111,6 +111,7 @@ extension MailViewController: SwipeTableViewCellDelegate {
             read.backgroundColor = view.tintColor
             read.image = configureImage(email.unread ? #imageLiteral(resourceName: "Read") : #imageLiteral(resourceName: "Unread"))
             read.hidesWhenSelected = true
+            read.accessibilityLabel = email.unread ? "Mark as Read" : "Mark as Unread"
             return [read]
         } else {
             let flag = SwipeAction(style: .default, title: configureTitle("Flag"), handler: nil)

@@ -47,7 +47,7 @@ open class SwipeTableViewCell: UITableViewCell {
         return gesture
     }()
     
-    let elasticScrollRation: CGFloat = 0.4
+    let elasticScrollRatio: CGFloat = 0.4
     var scrollRatio: CGFloat = 1.0
     
     /// :nodoc:
@@ -155,7 +155,7 @@ open class SwipeTableViewCell: UITableViewCell {
                 target.center.x = gesture.elasticTranslation(in: target,
                                                              withLimit: .zero,
                                                              fromOriginalCenter: CGPoint(x: originalCenter, y: 0)).x
-                scrollRatio = elasticScrollRation
+                scrollRatio = elasticScrollRatio
                 return
             }
             
@@ -188,9 +188,9 @@ open class SwipeTableViewCell: UITableViewCell {
                 target.center.x = gesture.elasticTranslation(in: target,
                                                              withLimit: CGSize(width: actionsView.preferredWidth, height: 0),
                                                              fromOriginalCenter: CGPoint(x: originalCenter, y: 0),
-                                                             applyingRatio: elasticScrollRation).x
+                                                             applyingRatio: elasticScrollRatio).x
                 if (target.center.x - originalCenter) / translation != 1.0 {
-                    scrollRatio = elasticScrollRation
+                    scrollRatio = elasticScrollRatio
                 }
                 
                 expanded = false
@@ -336,10 +336,12 @@ open class SwipeTableViewCell: UITableViewCell {
     override open func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         let point = convert(point, to: superview!)
 
-        for cell in tableView?.swipeCells ?? [] {
-            if (cell.state == .left || cell.state == .right) && !cell.contains(point: point) {
-                tableView?.hideSwipeCell()
-                return false
+        if !UIAccessibilityIsVoiceOverRunning() {
+            for cell in tableView?.swipeCells ?? [] {
+                if (cell.state == .left || cell.state == .right) && !cell.contains(point: point) {
+                    tableView?.hideSwipeCell()
+                    return false
+                }
             }
         }
         
@@ -456,6 +458,10 @@ extension SwipeTableViewCell {
     /// :nodoc:
     override open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer == tapGestureRecognizer {
+            if UIAccessibilityIsVoiceOverRunning() {
+                tableView?.hideSwipeCell()
+            }
+
             if let cells = tableView?.visibleCells as? [SwipeTableViewCell] {
                 let cell = cells.first(where: { $0.state != .center })
                 return cell == nil ? false : true
