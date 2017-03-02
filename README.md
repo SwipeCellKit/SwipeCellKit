@@ -21,6 +21,7 @@ A swipeable UITableViewCell with support for:
 * Haptic Feedback
 * Customizable transitions: *Border, Drag, and Reveal*
 * Animated expansion when dragging past threshold
+* Accessibility
 
 ## Demo
 
