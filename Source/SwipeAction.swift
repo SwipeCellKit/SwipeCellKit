@@ -63,6 +63,12 @@ public class SwipeAction: NSObject {
     /// - note: When set to `true`, the actions menu is automatically hidden when the action is selected. The default value is `false`.
     public var hidesWhenSelected = false
     
+    /// A Boolean value that determines whether the row is deleted from the UITableView when the destructive action is triggered
+    ///
+    /// - note: The default value is `true`.
+    /// - warning: When set to `true`, the `SwipeAction` handler must update the table view's backing data model to remove the item respresenting the row
+    public var deleteRowOnDestruction = true
+    
     /**
      Constructs a new `SwipeAction` instance.
 

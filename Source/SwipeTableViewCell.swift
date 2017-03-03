@@ -453,7 +453,9 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             actionsView.expanded = true
             
             action.handler?(action, indexPath)
-            tableView.deleteRows(at: [indexPath], with: .none)
+            if action.deleteRowOnDestruction {
+                tableView.deleteRows(at: [indexPath], with: .none)
+            }
             
             UIView.animate(withDuration: 0.3, animations: {
                 self.center.x = self.bounds.midX - (self.bounds.width + 100) * actionsView.orientation.scale
