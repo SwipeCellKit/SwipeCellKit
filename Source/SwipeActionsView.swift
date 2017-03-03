@@ -14,7 +14,7 @@ protocol SwipeActionsViewDelegate: class {
 class SwipeActionsView: UIView {
     weak var delegate: SwipeActionsViewDelegate?
     
-    var expansionAnimator: UIViewPropertyAnimator?
+    var expansionAnimator: Any?
 
     let orientation: SwipeActionsOrientation
     let actions: [SwipeAction]
@@ -56,16 +56,21 @@ class SwipeActionsView: UIView {
         didSet {
             guard oldValue != expanded else { return }
 
-            if expansionAnimator?.isRunning == true {
-                expansionAnimator?.stopAnimation(true)
+            if #available(iOS 10, *) {
+                var animator = expansionAnimator as? UIViewPropertyAnimator
+                
+                if animator?.isRunning == true {
+                    animator?.stopAnimation(true)
+                }
+                
+                animator = UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1.0) {
+                    self.setNeedsLayout()
+                    self.layoutIfNeeded()
+                }
+                
+                animator?.startAnimation()
+                expansionAnimator = animator
             }
-            
-            expansionAnimator = UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1.0) {
-                self.setNeedsLayout()
-                self.layoutIfNeeded()
-            }
-            
-            expansionAnimator?.startAnimation()
         }
     }
     

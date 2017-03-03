@@ -24,8 +24,8 @@ open class SwipeTableViewCell: UITableViewCell {
     /// The object that acts as the delegate of the `SwipeTableViewCell`.
     public weak var delegate: SwipeTableViewCellDelegate?
 
-    var feedbackGenerator: UIImpactFeedbackGenerator?
-    var animator: UIViewPropertyAnimator?
+    var feedbackGenerator: Any?
+    var animator: Any?
 
     var state = SwipeState.center
     var originalCenter: CGFloat = 0
@@ -133,8 +133,11 @@ open class SwipeTableViewCell: UITableViewCell {
 
             originalCenter = center.x
             
-            feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-            feedbackGenerator?.prepare()
+            if #available(iOS 10.0, *) {
+                let generator = UIImpactFeedbackGenerator(style: .light)
+                generator.prepare()
+                feedbackGenerator = generator
+            }
 
             if state == .center || state == .animatingToCenter {
                 let velocity = gesture.velocity(in: target)
@@ -176,7 +179,9 @@ open class SwipeTableViewCell: UITableViewCell {
                     let centerForTranslationToEdge = bounds.midX - limit * actionsView.orientation.scale
                     let delta = centerForTranslationToEdge - originalCenter
                     
-                    animate(toOffset: centerForTranslationToEdge)
+                    if #available(iOS 10.0, *) {
+                        animate(toOffset: centerForTranslationToEdge)
+                    }
                     gesture.setTranslation(CGPoint(x: delta, y: 0), in: superview!)
                 } else {
                     target.center.x = gesture.elasticTranslation(in: target,
@@ -197,9 +202,11 @@ open class SwipeTableViewCell: UITableViewCell {
                 break
             }
             
-            if expanded != actionsView.expanded {
-                feedbackGenerator?.impactOccurred()
-                feedbackGenerator?.prepare()
+            if expanded != actionsView.expanded, #available(iOS 10.0, *) {
+                if let generator = feedbackGenerator as? UIImpactFeedbackGenerator {
+                    generator.impactOccurred()
+                    generator.prepare()
+                }
             }
             
             actionsView.expanded = expanded
@@ -219,9 +226,11 @@ open class SwipeTableViewCell: UITableViewCell {
                 let distance = targetOffset - center.x
                 let normalizedVelocity = velocity.x * scrollRatio / distance
                 
-                animate(toOffset: targetOffset, withInitialVelocity: normalizedVelocity) { _ in
-                    if self.state == .center {
-                        self.reset()
+                if #available(iOS 10.0, *) {
+                    animate(toOffset: targetOffset, withInitialVelocity: normalizedVelocity) { _ in
+                        if self.state == .center {
+                            self.reset()
+                        }
                     }
                 }
             }
@@ -283,6 +292,7 @@ open class SwipeTableViewCell: UITableViewCell {
         self.actionsView = actionsView
     }
     
+    @available(iOS 10.0, *)
     func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((UIViewAnimatingPosition) -> Void)? = nil) {
         stopAnimatorIfNeeded()
         
@@ -314,8 +324,12 @@ open class SwipeTableViewCell: UITableViewCell {
     }
     
     func stopAnimatorIfNeeded() {
-        if animator?.isRunning == true {
-            animator?.stopAnimation(true)
+        if #available(iOS 10, *) {
+            guard let animator = animator as? UIViewPropertyAnimator else { return }
+            
+            if animator.isRunning == true {
+                animator.stopAnimation(true)
+            }
         }
     }
 
@@ -412,8 +426,10 @@ extension SwipeTableViewCell {
         let targetCenter = self.targetCenter(active: false)
         
         if animated {
-            animate(toOffset: targetCenter) { _ in
-                self.reset()
+            if #available(iOS 10.0, *) {
+                animate(toOffset: targetCenter) { _ in
+                    self.reset()
+                }
             }
         } else {
             center = CGPoint(x: targetCenter, y: self.center.y)
