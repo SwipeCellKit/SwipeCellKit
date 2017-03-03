@@ -23,6 +23,9 @@ open class SwipeTableViewCell: UITableViewCell {
     
     /// The object that acts as the delegate of the `SwipeTableViewCell`.
     public weak var delegate: SwipeTableViewCellDelegate?
+    
+    /// `true` if a swipe is in progress.
+    public var isSwiping: Bool { return state != SwipeState.center }
 
     var feedbackGenerator: Any?
     var animator: Any?
