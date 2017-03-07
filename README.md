@@ -25,7 +25,7 @@ A swipeable UITableViewCell with support for:
 
 ## Background
 
-Check out my [blog post](https://jerkoch.com/2017/02/07/swiper-no-swiping.html) of how *SwipeCellKit* came to be.
+Check out my [blog post](https://jerkoch.com/2017/02/07/swiper-no-swiping.html) on how *SwipeCellKit* came to be.
 
 ## Demo
 
