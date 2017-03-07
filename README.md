@@ -20,7 +20,9 @@ A swipeable UITableViewCell with support for:
 * Action buttons with: *text only, text + image, image only*
 * Haptic Feedback
 * Customizable transitions: *Border, Drag, and Reveal*
+* Customizable action button behavior during swipe
 * Animated expansion when dragging past threshold
+* Customizable expansion animations
 * Accessibility
 
 ## Background
