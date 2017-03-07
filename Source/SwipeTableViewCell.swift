@@ -162,10 +162,11 @@ open class SwipeTableViewCell: UITableViewCell {
             let expanded: Bool
             switch actionsView.options.expansionStyle {
             case .selection:
+                let threshold = max(0.5, (actionsView.preferredWidth + 20) / bounds.width)
                 target.center.x = gesture.elasticTranslation(in: target,
-                                                             withLimit: CGSize(width: bounds.width / 2, height: 0),
+                                                             withLimit: CGSize(width: bounds.width * threshold, height: 0),
                                                              fromOriginalCenter: CGPoint(x: originalCenter, y: 0)).x
-                expanded = abs(frame.minX) >= bounds.midX
+                expanded = abs(frame.minX) >= bounds.width * threshold
             case .destructive:
                 let distance = abs(translation)
                 let location = gesture.location(in: superview!).x
@@ -451,7 +452,7 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
 
             action.handler?(action, indexPath)
         }
-    }    
+    }
 }
 
 extension SwipeTableViewCell {

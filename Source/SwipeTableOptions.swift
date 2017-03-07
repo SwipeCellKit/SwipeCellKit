@@ -5,15 +5,20 @@
 //  Copyright © 2017 Jeremy Koch. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 /// The `SwipeTableOptions` class provides options for transistion and expansion behavior for swiped cell.
 public struct SwipeTableOptions {
+    /// The transition style. Transition is the style of how the action buttons are exposed during the swipe.
+    public var transitionStyle: SwipeTransitionStyle = .border
+    
     /// The expansion style. Expansion is the behavior when the cell is swiped past a defined threshold.
     public var expansionStyle: SwipeExpansionStyle = .none
     
-    /// The transition style. Transition is the style of how the action buttons are exposed during the swipe.
-    public var transitionStyle: SwipeTransitionStyle = .border
+    /// The object that is notified when expansion changes.
+    ///
+    /// - note: If an `expansionDelegate` is not provided, and the expanding action is configured with a clear background, the system automatically uses the default `ScaleAndAlphaExpansion` to show/hide underlying actions.
+    public var expansionDelegate: SwipeExpanding?
     
     /// The background color behind the action buttons.
     public var backgroundColor: UIColor?

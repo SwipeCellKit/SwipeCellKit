@@ -22,6 +22,9 @@ public enum SwipeActionStyle: Int {
  This class lets you define one or more custom actions to display for a given row in your table. Each instance of this class represents a single action to perform and includes the text, formatting information, and behavior for the corresponding button.
  */
 public class SwipeAction: NSObject {
+    /// An optional unique action identifier.
+    public var identifier: String?
+    
     /// The title of the action button.
     ///
     /// - note: You must specify a title or an image.
@@ -29,6 +32,9 @@ public class SwipeAction: NSObject {
     
     /// The style applied to the action button.
     public var style: SwipeActionStyle
+    
+    /// The object that is notified as transitioning occurs.
+    public var transitionDelegate: SwipeActionTransitioning?
     
     /// The font to use for the title of the action button.
     ///
@@ -76,5 +82,3 @@ public class SwipeAction: NSObject {
         self.handler = handler
     }
 }
-
-

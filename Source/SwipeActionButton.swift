@@ -8,12 +8,9 @@
 import UIKit
 
 class SwipeActionButton: UIButton {
-    var contentRect: CGRect = .zero
-    var originalBackgroundColor: UIColor?
-    
     var spacing: CGFloat = 8
-    var padding: CGFloat = 8
-    
+    var shouldHighlight = true
+
     var maximumImageHeight: CGFloat = 0
     var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
     
@@ -22,29 +19,16 @@ class SwipeActionButton: UIButton {
     }
     
     var alignmentRect: CGRect {
+        let contentRect = self.contentRect(forBounds: bounds)
         let titleHeight = titleBoundingRect(with: verticalAlignment == .centerFirstBaseline ? CGRect.infinite.size : contentRect.size).height
         let totalHeight = maximumImageHeight + titleHeight + currentSpacing
 
         return contentRect.center(size: CGSize(width: contentRect.width, height: totalHeight))
     }
     
-    convenience init(frame: CGRect, action: SwipeAction) {
-        self.init(frame: frame)
-        
-        if let backgroundColor = action.backgroundColor {
-            self.backgroundColor = backgroundColor
-        } else {
-            switch action.style {
-            case .destructive:
-                backgroundColor = #colorLiteral(red: 1, green: 0.2352941176, blue: 0.1882352941, alpha: 1)
-            default:
-                backgroundColor = #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
-            }
-        }
+    convenience init(action: SwipeAction) {
+        self.init(frame: .zero)
 
-        originalBackgroundColor = backgroundColor
-        
-        tintColor = action.textColor ?? .white
         contentHorizontalAlignment = .center
         
         titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFontWeightMedium)
@@ -55,30 +39,17 @@ class SwipeActionButton: UIButton {
         accessibilityLabel = action.accessibilityLabel
         
         setTitle(action.title, for: .normal)
+        setTitleColor(action.textColor ?? .white, for: .normal)
         setImage(action.image, for: .normal)
         setImage(action.highlightedImage ?? action.image, for: .highlighted)
     }
     
     override var isHighlighted: Bool {
         didSet {
-            backgroundColor = isHighlighted ? originalBackgroundColor?.darker() : originalBackgroundColor
+            guard shouldHighlight else { return }
+            
+            backgroundColor = isHighlighted ? UIColor.black.withAlphaComponent(0.1) : .clear
         }
-    }
-    
-    func updateContentEdgeInsets(withContentWidth contentWidth: CGFloat, for orientation: SwipeActionsOrientation) {
-        switch orientation {
-        case .left:
-            contentRect = CGRect(x: bounds.width - contentWidth, y: 0, width: contentWidth, height: bounds.height)
-        case .right:
-            contentRect = CGRect(x: 0, y: 0, width: contentWidth, height: bounds.height)
-        }
-        
-        contentRect = contentRect.insetBy(dx: padding, dy: padding)
-        
-        contentEdgeInsets = UIEdgeInsets(top: contentRect.minY,
-                                         left: contentRect.minX,
-                                         bottom: bounds.height - contentRect.maxY,
-                                         right: bounds.width - contentRect.maxX)
     }
     
     func preferredWidth(maximum: CGFloat) -> CGFloat {
@@ -86,7 +57,7 @@ class SwipeActionButton: UIButton {
         let textWidth = titleBoundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)).width
         let imageWidth = currentImage?.size.width ?? 0
         
-        return min(width, max(textWidth, imageWidth) + padding * 2)
+        return min(width, max(textWidth, imageWidth) + contentEdgeInsets.left + contentEdgeInsets.right)
     }
     
     func titleBoundingRect(with size: CGSize) -> CGRect {
@@ -105,19 +76,6 @@ class SwipeActionButton: UIButton {
         var rect = contentRect.center(size: currentImage?.size ?? .zero)
         rect.origin.y = alignmentRect.minY + (maximumImageHeight - rect.height) / 2
         return rect
-    }
-}
-
-private extension UIColor {
-    func darker() -> UIColor {
-        var r: CGFloat = 0
-        var g: CGFloat = 0
-        var b: CGFloat = 0
-        var a: CGFloat = 0
-        
-        guard getRed(&r, green: &g, blue: &b, alpha: &a) else { return self }
-        
-        return UIColor(red: max(r - 0.1, 0.0), green: max(g - 0.1, 0.0), blue: max(b - 0.1, 0.0), alpha: a)
     }
 }
 

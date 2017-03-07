@@ -4,6 +4,26 @@
 
 ---
 
+## [1.4.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.4.0)
+
+#### Fixed
+
+- The expansion threshold for selection-style was always 50% of the screen width regardless of if the action view width was larger.
+- Issue where the `textColor` property in `SwipeAction` was not being applied.
+
+#### Added
+
+- Accessibility support. (#5)
+- New `expansionDelegate` property in `SwipeTableOptions` providing ability to customize expansion behavior. See the README and API documentation for more details.
+- New `transitionDelegate` property in `SwipeAction` providing ability to customize transition behavior of individual actions as the swipe gesture is performed. See the README and API documentation for more details. (#9)
+- Example app now lets you choose *circular* button style to demo the new `transitionDelegate` and `expansionDelegate`.
+
+#### Updated
+
+- Internal `SwipeActionButton` layout to separate the background color from the actual `UIButton`
+
+---
+
 ## [1.3.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.3.0)
 
 #### Fixed
