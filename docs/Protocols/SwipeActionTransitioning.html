@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>SwipeTransitionStyle Enum Reference</title>
+    <title>SwipeActionTransitioning Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Enum/SwipeTransitionStyle" class="dashAnchor"></a>
-    <a title="SwipeTransitionStyle Enum Reference"></a>
+    <a name="//apple_ref/swift/Protocol/SwipeActionTransitioning" class="dashAnchor"></a>
+    <a title="SwipeActionTransitioning Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">SwipeCellKit Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">SwipeCellKit Reference</a>
         <img id="carat" src="../img/carat.png" />
-        SwipeTransitionStyle Enum Reference
+        SwipeActionTransitioning Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -97,14 +97,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>SwipeTransitionStyle</h1>
+            <h1>SwipeActionTransitioning</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">SwipeTransitionStyle</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">SwipeActionTransitioning</span></code></pre>
 
                 </div>
               </div>
-            <p>Describes the transition style. Transition is the style of how the action buttons are exposed during the swipe.</p>
+            <p>Adopt the <code>SwipeActionTransitioning</code> protocol in objects that implement custom appearance of actions during transition.</p>
 
           </section>
           <section class="section task-group-section">
@@ -113,9 +113,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwipeCellKit20SwipeTransitionStyle6borderFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/border" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwipeCellKit20SwipeTransitionStyle6borderFMS0_S0_">border</a>
+                    <a name="/s:FP12SwipeCellKit24SwipeActionTransitioning13didTransitionFT4withVS_31SwipeActionTransitioningContext_T_"></a>
+                    <a name="//apple_ref/swift/Method/didTransition(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwipeCellKit24SwipeActionTransitioning13didTransitionFT4withVS_31SwipeActionTransitioningContext_T_">didTransition(with:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -123,76 +123,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The visible action area is equally divide between all action buttons.</p>
+                        <p>Tells the delegate that transition change has occured.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">border</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwipeCellKit20SwipeTransitionStyle4dragFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/drag" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwipeCellKit20SwipeTransitionStyle4dragFMS0_S0_">drag</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The visible action area is dragged, pinned to the cell, with each action button fully sized as it is exposed.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">drag</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwipeCellKit20SwipeTransitionStyle6revealFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/reveal" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwipeCellKit20SwipeTransitionStyle6revealFMS0_S0_">reveal</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The visible action area sits behind the cell, pinned to the edge of the table view, and is revealed as the cell is dragged aside.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">reveal</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">didTransition</span><span class="p">(</span><span class="n">with</span> <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="../Structs/SwipeActionTransitioningContext.html">SwipeActionTransitioningContext</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
 
                         </div>
                       </div>

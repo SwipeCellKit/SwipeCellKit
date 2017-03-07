@@ -61,6 +61,12 @@
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Protocols/SwipeActionTransitioning.html">SwipeActionTransitioning</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/SwipeExpanding.html">SwipeExpanding</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/SwipeTableViewCellDelegate.html">SwipeTableViewCellDelegate</a>
               </li>
             </ul>
@@ -68,6 +74,18 @@
           <li class="nav-group-name">
             <a href="Structs.html">Structs</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/ScaleAndAlphaExpansion.html">ScaleAndAlphaExpansion</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/ScaleTransition.html">ScaleTransition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/SwipeActionTransitioningContext.html">SwipeActionTransitioningContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/SwipeExpansionAnimationTimingParameters.html">SwipeExpansionAnimationTimingParameters</a>
+              </li>
               <li class="nav-group-task">
                 <a href="Structs/SwipeTableOptions.html">SwipeTableOptions</a>
               </li>
@@ -102,7 +120,11 @@
 <li>Haptic Feedback</li>
 <li>Customizable transitions: <em>Border, Drag, and Reveal</em></li>
 <li>Animated expansion when dragging past threshold</li>
+<li>Accessibility</li>
 </ul>
+<a href='#background' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='background'>Background</h2>
+
+<p>Check out my <a href="https://jerkoch.com/2017/02/07/swiper-no-swiping.html">blog post</a> of how <code>SwipeCellKit</code> came to be.</p>
 <a href='#demo' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='demo'>Demo</h2>
 <a href='#transition-styles' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='transition-styles'>Transition Styles</h3>
 
@@ -184,6 +206,34 @@
     <span class="k">return</span> <span class="n">options</span>
 <span class="p">}</span>
 </code></pre>
+<a href='#customizing-transitions' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='customizing-transitions'>Customizing Transitions</h3>
+
+<p>You can customize the transition behavior of individual actions by assigning a <code>transitionDelegate</code> to the <code>SwipeAction</code> type. </p>
+
+<p>The provided <code>ScaleTransition</code> type monitors the action button&rsquo;s visibility as it crosses the <code>threshold</code>, and animates between <code>initialScale</code> and <code>identity</code>.  This provides a <q>pop-like</q> effect as the action buttons are exposed more than 50% of their target width. </p>
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Transition-Delegate.gif" /></p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">action</span> <span class="o">=</span> <span class="kt">SwipeAction</span><span class="p">(</span><span class="nv">style</span><span class="p">:</span> <span class="o">.</span><span class="k">default</span><span class="p">,</span> <span class="nv">title</span><span class="p">:</span> <span class="s">"More"</span><span class="p">)</span> <span class="p">{</span> <span class="n">action</span><span class="p">,</span> <span class="n">indexPath</span> <span class="k">in</span> <span class="k">return</span> <span class="p">}</span>
+<span class="n">action</span><span class="o">.</span><span class="n">transitionDelegate</span> <span class="o">=</span> <span class="kt">ScaleTransition</span><span class="o">.</span><span class="k">default</span>
+</code></pre>
+
+<p>The <code>ScaleTransition</code> type provides a static <code>default</code> configuration, but it can also be initiantiated with custom parameters to suit your needs.</p>
+
+<p>You can also easily provide your own completely custom transition behavior by adopting the <code>SwipeActionTransitioning</code> protocol.  The supplied <code>SwipeActionTransitioningContext</code> to the delegate methods reflect the current swipe state as the gesture is performed.</p>
+<a href='#customizing-expansion' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='customizing-expansion'>Customizing Expansion</h3>
+
+<p>It is also possible to customize the expansion behavior by assigning a <code>expansionDelegate</code> to the <code>SwipeTableOptions</code> type. The delegate is invoked during the (un)expansion process and allows you to customize the display of the action being expanded, as well as the other actions in the view. </p>
+
+<p>The provided <code>ScaleAndAlphaExpansion</code> type is useful for actions with clear backgrounds. When expansion occurs, the <code>ScaleAndAlphaExpansion</code> type automatically scales and fades the remaining actions in and out of the view. By default, if the expanded action has a clear background, the default <code>ScaleAndAlphaExpansion</code> will be automatically applied by the system.</p>
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Expansion-Delegate.gif" /></p>
+<pre class="highlight swift"><code><span class="k">var</span> <span class="nv">options</span> <span class="o">=</span> <span class="kt">SwipeTableOptions</span><span class="p">()</span>
+<span class="n">options</span><span class="o">.</span><span class="n">expansionDelegate</span> <span class="o">=</span> <span class="kt">ScaleAndAlphaExpansion</span><span class="o">.</span><span class="k">default</span>
+</code></pre>
+
+<p>The <code>ScaleAndAlphaExpansion</code> type provides a static <code>default</code> configuration, but it can also be instantiated with custom parameters to suit your needs.</p>
+
+<p>You can also provide your own completely custom expansion behavior by adopting the <code>SwipeExpanding</code> protocol. The protocol allows you to customize the animation timing parameters prior to initiating the (un)expansion animation, as well as customizing the action during (un)expansion.</p>
 <a href='#credits' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='credits'>Credits</h2>
 
 <p>Created and maintained by <a href="https://twitter.com/jerkoch"><strong>@jerkoch</strong></a>.</p>
@@ -196,7 +246,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://github.com/jerkoch/SwipeCellKit" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-03-02)</p>
+          <p>&copy; 2017 <a class="link" href="https://github.com/jerkoch/SwipeCellKit" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-03-07)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
