@@ -187,9 +187,7 @@ open class SwipeTableViewCell: UITableViewCell {
                     let centerForTranslationToEdge = bounds.midX - limit * actionsView.orientation.scale
                     let delta = centerForTranslationToEdge - originalCenter
                     
-                    if #available(iOS 10.0, *) {
-                        animate(toOffset: centerForTranslationToEdge)
-                    }
+                    animate(toOffset: centerForTranslationToEdge)
                     gesture.setTranslation(CGPoint(x: delta, y: 0), in: superview!)
                 } else {
                     target.center.x = gesture.elasticTranslation(in: target,
@@ -234,11 +232,9 @@ open class SwipeTableViewCell: UITableViewCell {
                 let distance = targetOffset - center.x
                 let normalizedVelocity = velocity.x * scrollRatio / distance
                 
-                if #available(iOS 10.0, *) {
-                    animate(toOffset: targetOffset, withInitialVelocity: normalizedVelocity) { _ in
-                        if self.state == .center {
-                            self.reset()
-                        }
+                animate(toOffset: targetOffset, withInitialVelocity: normalizedVelocity) {
+                    if self.state == .center {
+                        self.reset()
                     }
                 }
             }
@@ -300,39 +296,42 @@ open class SwipeTableViewCell: UITableViewCell {
         self.actionsView = actionsView
     }
     
-    @available(iOS 10.0, *)
-    func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((UIViewAnimatingPosition) -> Void)? = nil) {
-        stopAnimatorIfNeeded()
-        
-        layoutIfNeeded()
-        
-        let animator: UIViewPropertyAnimator = {
-            if velocity != 0 {
-                let velocity = CGVector(dx: velocity, dy: velocity)
-                let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
-                return UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
-            } else {
-                return UIViewPropertyAnimator(duration: 0.7, dampingRatio: 1.0)
-            }
-        }()
-
-        animator.addAnimations({
-            self.center = CGPoint(x: offset, y: self.center.y)
+    func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: (() -> Void)? = nil) {
+        if #available(iOS 10.0, *) {
+            stopAnimatorIfNeeded()
             
-            self.layoutIfNeeded()
-        })
-        
-        if let completion = completion {
-            animator.addCompletion(completion)
-        }
-        
-        self.animator = animator
+            layoutIfNeeded()
+            
+            let animator: UIViewPropertyAnimator = {
+                if velocity != 0 {
+                    let velocity = CGVector(dx: velocity, dy: velocity)
+                    let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
+                    return UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
+                } else {
+                    return UIViewPropertyAnimator(duration: 0.7, dampingRatio: 1.0)
+                }
+            }()
 
-        animator.startAnimation()
+            animator.addAnimations({
+                self.center = CGPoint(x: offset, y: self.center.y)
+                
+                self.layoutIfNeeded()
+            })
+            
+            if let completion = completion {
+                animator.addCompletion{ _ in
+                    completion()
+                }
+            }
+            
+            self.animator = animator
+
+            animator.startAnimation()
+        }
     }
     
     func stopAnimatorIfNeeded() {
-        if #available(iOS 10, *) {
+        if #available(iOS 10.0, *) {
             guard let animator = animator as? UIViewPropertyAnimator else { return }
             
             if animator.isRunning == true {
@@ -434,10 +433,8 @@ extension SwipeTableViewCell {
         let targetCenter = self.targetCenter(active: false)
         
         if animated {
-            if #available(iOS 10.0, *) {
-                animate(toOffset: targetCenter) { _ in
-                    self.reset()
-                }
+            animate(toOffset: targetCenter) {
+                self.reset()
             }
         } else {
             center = CGPoint(x: targetCenter, y: self.center.y)
