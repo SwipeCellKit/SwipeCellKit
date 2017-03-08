@@ -176,10 +176,10 @@ open class SwipeTableViewCell: UITableViewCell {
                 let distance = abs(translation)
                 let location = gesture.location(in: superview!).x
                 
-                if state == .center {
-                    expanded = distance > actionsView.preferredWidth && distance > bounds.width * 0.4
+                if let widthRatio = actionsView.options.minimumDestructiveWidthRatio, state == .center {
+                    expanded = distance > actionsView.preferredWidth && distance > bounds.width * widthRatio
                 } else {
-                    expanded = (actionsView.orientation == .right ? location < 80 : location > bounds.width - 80)
+                    expanded = (actionsView.orientation == .right ? location < 80 : location > bounds.width - 80) && (state != .center || distance > actionsView.preferredWidth)
                 }
                 
                 let limit: CGFloat = bounds.width - 30
