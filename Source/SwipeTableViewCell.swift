@@ -19,6 +19,10 @@ open class SwipeTableViewCell: UITableViewCell {
         case left
         case right
         case animatingToCenter
+        
+        init(orientation: SwipeActionsOrientation) {
+            self = orientation == .left ? .left : .right
+        }
     }
     
     /// The object that acts as the delegate of the `SwipeTableViewCell`.
@@ -140,7 +144,7 @@ open class SwipeTableViewCell: UITableViewCell {
                 let velocity = gesture.velocity(in: target)
                 let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
 
-                handleBeginPanIfNecessary(for: orientation)
+                showActionsView(for: orientation)
             }
             
         case .changed:
@@ -231,13 +235,14 @@ open class SwipeTableViewCell: UITableViewCell {
         }
     }
     
-    func handleBeginPanIfNecessary(for orientation: SwipeActionsOrientation) {
+    @discardableResult
+    func showActionsView(for orientation: SwipeActionsOrientation) -> Bool {
         guard let tableView = tableView,
             let indexPath = tableView.indexPath(for: self),
             let actions = delegate?.tableView(tableView, editActionsForRowAt: indexPath, for: orientation),
             actions.count > 0
             else {
-                return
+                return false
         }
         
         originalLayoutMargins = super.layoutMargins
@@ -250,10 +255,12 @@ open class SwipeTableViewCell: UITableViewCell {
         // Temporarily remove table gestures
         tableView.setGestureEnabled(false)
         
-        configureActionView(with: actions, for: orientation)
+        configureActionsView(with: actions, for: orientation)
+        
+        return true
     }
     
-    func configureActionView(with actions: [SwipeAction], for orientation: SwipeActionsOrientation) {
+    func configureActionsView(with actions: [SwipeAction], for orientation: SwipeActionsOrientation) {
         guard let tableView = tableView,
             let indexPath = tableView.indexPath(for: self) else { return }
         
@@ -419,6 +426,35 @@ extension SwipeTableViewCell {
         } else {
             center = CGPoint(x: targetCenter, y: self.center.y)
             reset()
+        }
+    }
+    
+    /**
+     Shows the swipe actions for the specified orientation.
+
+     - parameter orientation: The side of the cell on which to show the swipe actions.
+
+     - parameter animated: Specify `true` to animate the showing of the swipe actions or `false` to show them immediately.
+     
+     - parameter completion: The closure to be executed once the animation has finished. A `Boolean` argument indicates whether or not the animations actually finished before the completion handler was called.
+    */
+    public func showSwipe(orientation: SwipeActionsOrientation, animated: Bool = true, completion: ((Bool) -> Void)? = nil) {
+        let targetState = SwipeState(orientation: orientation)
+        
+        guard state != targetState, showActionsView(for: orientation) else { return }
+        
+        tableView?.hideSwipeCell()
+
+        state = targetState
+
+        let targetCenter = self.targetCenter(active: true)
+        
+        if animated {
+            animate(toOffset: targetCenter) { position in
+                completion?(position == .end)
+            }
+        } else {
+            center.x = targetCenter
         }
     }
 }
