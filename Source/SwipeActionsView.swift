@@ -20,7 +20,7 @@ class SwipeActionsView: UIView {
     var expansionAnimator: UIViewPropertyAnimator?
     
     var expansionDelegate: SwipeExpanding? {
-        return options.expansionDelegate ?? (expandableAction?.backgroundColor == .clear ? ScaleAndAlphaExpansion.default : nil)
+        return options.expansionDelegate ?? (expandableAction?.hasBackgroundColor == false ? ScaleAndAlphaExpansion.default : nil)
     }
 
     let orientation: SwipeActionsOrientation
@@ -130,16 +130,24 @@ class SwipeActionsView: UIView {
         minimumButtonWidth = buttons.reduce(options.minimumButtonWidth ?? 74, { initial, next in max(initial, next.preferredWidth(maximum: maximum)) })
         
         buttons.enumerated().forEach { (index, button) in
+            let action = actions[index]
             let frame = CGRect(origin: .zero, size: CGSize(width: size.width * 2, height: size.height))
-            let wrapperView = SwipeActionButtonWrapperView(frame: frame, action: actions[index])
-            wrapperView.updateContentRect(withContentWidth: minimumButtonWidth, for: orientation)
+            let wrapperView = SwipeActionButtonWrapperView(frame: frame, action: action, orientation: orientation, contentWidth: minimumButtonWidth)
             wrapperView.addSubview(button)
-            addSubview(wrapperView)
+            
+            if let effect = action.backgroundEffect {
+                let effectView = UIVisualEffectView(effect: effect)
+                effectView.frame = wrapperView.frame
+                effectView.contentView.addSubview(wrapperView)
+                addSubview(effectView)
+            } else {
+                addSubview(wrapperView)
+            }
             
             button.frame = wrapperView.contentRect
             button.maximumImageHeight = maximumImageHeight
             button.verticalAlignment = options.buttonVerticalAlignment
-            button.shouldHighlight = wrapperView.backgroundColor != .clear
+            button.shouldHighlight = action.hasBackgroundColor
         }
         
         return buttons
@@ -194,10 +202,23 @@ class SwipeActionsView: UIView {
 }
 
 class SwipeActionButtonWrapperView: UIView {
-    var contentRect: CGRect = .zero
+    let contentRect: CGRect
     
-    convenience init(frame: CGRect, action: SwipeAction) {
-        self.init(frame: frame)
+    init(frame: CGRect, action: SwipeAction, orientation: SwipeActionsOrientation, contentWidth: CGFloat) {
+        switch orientation {
+        case .left:
+            contentRect = CGRect(x: frame.width - contentWidth, y: 0, width: contentWidth, height: frame.height)
+        case .right:
+            contentRect = CGRect(x: 0, y: 0, width: contentWidth, height: frame.height)
+        }
+        
+        super.init(frame: frame)
+        
+        configureBackgroundColor(with: action)
+    }
+    
+    func configureBackgroundColor(with action: SwipeAction) {
+        guard action.hasBackgroundColor else { return }
         
         if let backgroundColor = action.backgroundColor {
             self.backgroundColor = backgroundColor
@@ -211,12 +232,7 @@ class SwipeActionButtonWrapperView: UIView {
         }
     }
     
-    func updateContentRect(withContentWidth contentWidth: CGFloat, for orientation: SwipeActionsOrientation) {
-        switch orientation {
-        case .left:
-            contentRect = CGRect(x: bounds.width - contentWidth, y: 0, width: contentWidth, height: bounds.height)
-        case .right:
-            contentRect = CGRect(x: 0, y: 0, width: contentWidth, height: bounds.height)
-        }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

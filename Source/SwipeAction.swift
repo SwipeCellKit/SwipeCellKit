@@ -64,6 +64,11 @@ public class SwipeAction: NSObject {
     /// - note: Use this property to specify the background color for your button. If you do not specify a value for this property, the framework assigns a default color based on the value in the style property.
     public var backgroundColor: UIColor?
     
+    /// The visual effect to apply to the action button.
+    ///
+    /// - note: Assigning a visual effect object to this property adds that effect to the background of the action button.
+    public var backgroundEffect: UIVisualEffect?
+    
     /// A Boolean value that determines whether the actions menu is automatically hidden upon selection.
     ///
     /// - note: When set to `true`, the actions menu is automatically hidden when the action is selected. The default value is `false`.
@@ -80,5 +85,13 @@ public class SwipeAction: NSObject {
         self.title = title
         self.style = style
         self.handler = handler
+    }
+}
+
+// MARK: - Internal
+
+internal extension SwipeAction {
+    var hasBackgroundColor: Bool {
+        return backgroundColor != .clear && backgroundEffect == nil
     }
 }
