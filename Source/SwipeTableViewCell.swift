@@ -472,13 +472,19 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
         if actionsView.options.expansionStyle == .destructive && action == actionsView.expandableAction {
             // Trigger the expansion (may already be expanded from drag)
             actionsView.expanded = true
+
+            let mask = UIView(frame: CGRect(x: 0, y: 0, width: bounds.width + actionsView.bounds.width, height: bounds.height))
+            mask.backgroundColor = UIColor.white
+            self.mask = mask
             
             action.handler?(action, indexPath)
             tableView.deleteRows(at: [indexPath], with: .none)
             
             UIView.animate(withDuration: 0.3, animations: {
+                mask.frame.size.height = 0
                 self.center.x = self.bounds.midX - (self.bounds.width + 100) * actionsView.orientation.scale
             }) { _ in
+                self.mask = nil
                 self.reset()
             }
         } else {
