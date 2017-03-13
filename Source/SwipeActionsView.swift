@@ -14,11 +14,10 @@ protocol SwipeActionsViewDelegate: class {
 class SwipeActionsView: UIView {
     weak var delegate: SwipeActionsViewDelegate?
     
-    var expansionAnimator: Any?
     let transitionLayout: SwipeTransitionLayout
     var layoutContext: ActionsViewLayoutContext
     
-    var expansionAnimator: UIViewPropertyAnimator?
+    var expansionAnimator: Any?
     
     var expansionDelegate: SwipeExpanding? {
         return options.expansionDelegate ?? (expandableAction?.hasBackgroundColor == false ? ScaleAndAlphaExpansion.default : nil)
@@ -68,18 +67,20 @@ class SwipeActionsView: UIView {
         didSet {
             guard oldValue != expanded else { return }
 
-            let timingParameters = expansionDelegate?.animationTimingParameters(buttons: buttons.reversed(), expanding: expanded)
-            
-            if expansionAnimator?.isRunning == true {
-                expansionAnimator?.stopAnimation(true)
+            if #available(iOS 10, *), let expansionAnimator = self.expansionAnimator as? UIViewPropertyAnimator {
+                let timingParameters = expansionDelegate?.animationTimingParameters(buttons: buttons.reversed(), expanding: expanded)
+                
+                if expansionAnimator.isRunning == true {
+                    expansionAnimator.stopAnimation(true)
+                }
+                
+                self.expansionAnimator = UIViewPropertyAnimator(duration: timingParameters?.duration ?? 0.6, dampingRatio: 1.0) {
+                    self.setNeedsLayout()
+                    self.layoutIfNeeded()
+                }
+                
+                (self.expansionAnimator as! UIViewPropertyAnimator).startAnimation(afterDelay: timingParameters?.delay ?? 0)
             }
-            
-            expansionAnimator = UIViewPropertyAnimator(duration: timingParameters?.duration ?? 0.6, dampingRatio: 1.0) {
-                self.setNeedsLayout()
-                self.layoutIfNeeded()
-            }
-            
-            expansionAnimator?.startAnimation(afterDelay: timingParameters?.delay ?? 0)
 
             notifyExpansion(expanded: expanded)
         }

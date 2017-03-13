@@ -237,7 +237,7 @@ open class SwipeTableViewCell: UITableViewCell {
                 let distance = targetOffset - center.x
                 let normalizedVelocity = velocity.x * scrollRatio / distance
                 
-                animate(toOffset: targetOffset, withInitialVelocity: normalizedVelocity) {
+                animate(toOffset: targetOffset, withInitialVelocity: normalizedVelocity) { _ in
                     if self.state == .center {
                         self.reset()
                     }
@@ -304,7 +304,7 @@ open class SwipeTableViewCell: UITableViewCell {
         self.actionsView = actionsView
     }
     
-    func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: (() -> Void)? = nil) {
+    func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((Bool) -> Void)? = nil) {
         if #available(iOS 10.0, *) {
             stopAnimatorIfNeeded()
             
@@ -327,8 +327,8 @@ open class SwipeTableViewCell: UITableViewCell {
             })
             
             if let completion = completion {
-                animator.addCompletion{ _ in
-                    completion()
+                animator.addCompletion{ position in
+                    completion(position == .end)
                 }
             }
             
@@ -441,7 +441,7 @@ extension SwipeTableViewCell {
         let targetCenter = self.targetCenter(active: false)
         
         if animated {
-            animate(toOffset: targetCenter) {
+            animate(toOffset: targetCenter) { _ in
                 self.reset()
             }
         } else {
@@ -471,8 +471,8 @@ extension SwipeTableViewCell {
         let targetCenter = self.targetCenter(active: true)
         
         if animated {
-            animate(toOffset: targetCenter) { position in
-                completion?(position == .end)
+            animate(toOffset: targetCenter) { finished in
+                completion?(finished)
             }
         } else {
             center.x = targetCenter
