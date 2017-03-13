@@ -98,6 +98,8 @@ open class SwipeTableViewCell: UITableViewCell {
     
     /// :nodoc:
     override open func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        
         var view: UIView = self
         while let superview = view.superview {
             view = superview
