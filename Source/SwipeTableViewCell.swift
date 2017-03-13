@@ -473,7 +473,7 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             // Trigger the expansion (may already be expanded from drag)
             actionsView.expanded = true
 
-            let mask = UIView(frame: CGRect(x: 0, y: 0, width: bounds.width + actionsView.bounds.width, height: bounds.height))
+            let mask = UIView(frame: CGRect(x: min(0, actionsView.frame.minX), y: 0, width: bounds.width + actionsView.bounds.width, height: bounds.height))
             mask.backgroundColor = UIColor.white
             self.mask = mask
             
