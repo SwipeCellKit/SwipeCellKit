@@ -9,14 +9,12 @@ import UIKit
 import SwipeCellKit
 
 class MailViewController: UITableViewController {
-    enum ButtonDisplayMode {
-        case titleAndImage, titleOnly, imageOnly
-    }
-    
     var emails: [Email] = []
+    
     var defaultOptions = SwipeTableOptions()
     var isSwipeRightEnabled = true
     var buttonDisplayMode: ButtonDisplayMode = .titleAndImage
+    var buttonStyle: ButtonStyle = .backgroundColor
     
     // MARK: - Lifecycle
     
@@ -57,14 +55,14 @@ class MailViewController: UITableViewController {
     
     // MARK: - Actions
     
-    @IBAction func moreTapped(_ sender: Any) {
-        
+    @IBAction func moreTapped(_ sender: Any) {        
         let controller = UIAlertController(title: "Swipe Transition Style", message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: "Border", style: .default, handler: { _ in self.defaultOptions.transitionStyle = .border }))
         controller.addAction(UIAlertAction(title: "Drag", style: .default, handler: { _ in self.defaultOptions.transitionStyle = .drag }))
         controller.addAction(UIAlertAction(title: "Reveal", style: .default, handler: { _ in self.defaultOptions.transitionStyle = .reveal }))
         controller.addAction(UIAlertAction(title: "\(isSwipeRightEnabled ? "Disable" : "Enable") Swipe Right", style: .default, handler: { _ in self.isSwipeRightEnabled = !self.isSwipeRightEnabled }))
         controller.addAction(UIAlertAction(title: "Button Display Mode", style: .default, handler: { _ in self.buttonDisplayModeTapped() }))
+        controller.addAction(UIAlertAction(title: "Button Style", style: .default, handler: { _ in self.buttonStyleTapped() }))
         controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         controller.addAction(UIAlertAction(title: "Reset", style: .destructive, handler: { _ in self.resetData() }))
         present(controller, animated: true, completion: nil)
@@ -77,6 +75,21 @@ class MailViewController: UITableViewController {
         controller.addAction(UIAlertAction(title: "Title Only", style: .default, handler: { _ in self.buttonDisplayMode = .titleOnly }))
         controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(controller, animated: true, completion: nil)
+    }
+    
+    func buttonStyleTapped() {
+        let controller = UIAlertController(title: "Button Style", message: nil, preferredStyle: .actionSheet)
+        controller.addAction(UIAlertAction(title: "Background Color", style: .default, handler: { _ in
+            self.buttonStyle = .backgroundColor
+            self.defaultOptions.transitionStyle = .border
+        }))
+        controller.addAction(UIAlertAction(title: "Circular", style: .default, handler: { _ in
+            self.buttonStyle = .circular
+            self.defaultOptions.transitionStyle = .reveal
+        }))
+        controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(controller, animated: true, completion: nil)
+        
     }
     
     // MARK: - Helpers
@@ -101,33 +114,34 @@ extension MailViewController: SwipeTableViewCellDelegate {
         if orientation == .left {
             guard isSwipeRightEnabled else { return nil }
             
-            let read = SwipeAction(style: .default, title: configureTitle(email.unread ? "Read" : "Unread")) { action, indexPath in
+            let read = SwipeAction(style: .default, title: nil) { action, indexPath in
                 let updatedStatus = !email.unread
                 email.unread = updatedStatus
 
                 let cell = tableView.cellForRow(at: indexPath) as! MailCell
                 cell.setUnread(updatedStatus, animated: true)
             }
-            read.backgroundColor = view.tintColor
-            read.image = configureImage(email.unread ? #imageLiteral(resourceName: "Read") : #imageLiteral(resourceName: "Unread"))
+            
             read.hidesWhenSelected = true
             read.accessibilityLabel = email.unread ? "Mark as Read" : "Mark as Unread"
+
+            let descriptor: ActionDescriptor = email.unread ? .read : .unread
+            configure(action: read, with: descriptor)
+
             return [read]
         } else {
-            let flag = SwipeAction(style: .default, title: configureTitle("Flag"), handler: nil)
-            flag.backgroundColor = #colorLiteral(red: 1, green: 0.5803921569, blue: 0, alpha: 1)
+            let flag = SwipeAction(style: .default, title: nil, handler: nil)
             flag.hidesWhenSelected = true
-            flag.image = configureImage(#imageLiteral(resourceName: "Flag"))
+            configure(action: flag, with: .flag)
             
-            let delete = SwipeAction(style: .destructive, title: configureTitle("Delete")) { action, indexPath in
+            let delete = SwipeAction(style: .destructive, title: nil) { action, indexPath in
                 self.emails.remove(at: indexPath.row)
             }
-            delete.image = configureImage(#imageLiteral(resourceName: "Trash"))
+            configure(action: delete, with: .trash)
             
             let cell = tableView.cellForRow(at: indexPath) as! MailCell
             let closure: (UIAlertAction) -> Void = { _ in cell.hideSwipe(animated: true) }
-                
-            let more = SwipeAction(style: .default, title: configureTitle("More")) { action, indexPath in
+            let more = SwipeAction(style: .default, title: nil) { action, indexPath in
                 let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
                 controller.addAction(UIAlertAction(title: "Reply", style: .default, handler: closure))
                 controller.addAction(UIAlertAction(title: "Forward", style: .default, handler: closure))
@@ -137,7 +151,7 @@ extension MailViewController: SwipeTableViewCellDelegate {
                 controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: closure))
                 self.present(controller, animated: true, completion: nil)
             }
-            more.image = configureImage(#imageLiteral(resourceName: "More"))
+            configure(action: more, with: .more)
 
             return [delete, flag, more]
         }
@@ -147,16 +161,31 @@ extension MailViewController: SwipeTableViewCellDelegate {
         var options = SwipeTableOptions()
         options.expansionStyle = orientation == .left ? .selection : .destructive
         options.transitionStyle = defaultOptions.transitionStyle
-        options.buttonSpacing = 11
+        
+        switch buttonStyle {
+        case .backgroundColor:
+            options.buttonSpacing = 11
+        case .circular:
+            options.buttonSpacing = 4
+            options.backgroundColor = #colorLiteral(red: 0.9467939734, green: 0.9468161464, blue: 0.9468042254, alpha: 1)
+        }
+
         return options
     }
     
-    func configureTitle(_ title: String) -> String? {
-        return buttonDisplayMode != .imageOnly ? title : nil
-    }
-    
-    func configureImage(_ image: UIImage) -> UIImage? {
-        return buttonDisplayMode != .titleOnly ? image : nil
+    func configure(action: SwipeAction, with descriptor: ActionDescriptor) {
+        action.title = descriptor.title(forDisplayMode: buttonDisplayMode)
+        action.image = descriptor.image(forStyle: buttonStyle, displayMode: buttonDisplayMode)
+
+        switch buttonStyle {
+        case .backgroundColor:
+            action.backgroundColor = descriptor.color
+        case .circular:
+            action.backgroundColor = .clear
+            action.textColor = descriptor.color
+            action.font = .systemFont(ofSize: 13)
+            action.transitionDelegate = ScaleTransition.default
+        }
     }
 }
 
@@ -221,4 +250,51 @@ class IndicatorView: UIView {
         color.set()
         UIBezierPath(ovalIn: rect).fill()
     }
+}
+
+enum ActionDescriptor {
+    case read, unread, more, flag, trash
+    
+    func title(forDisplayMode displayMode: ButtonDisplayMode) -> String? {
+        guard displayMode != .imageOnly else { return nil }
+        
+        switch self {
+        case .read: return "Read"
+        case .unread: return "Unread"
+        case .more: return "More"
+        case .flag: return "Flag"
+        case .trash: return "Trash"
+        }
+    }
+    
+    func image(forStyle style: ButtonStyle, displayMode: ButtonDisplayMode) -> UIImage? {
+        guard displayMode != .titleOnly else { return nil }
+        
+        let name: String
+        switch self {
+        case .read: name = "Read"
+        case .unread: name = "Unread"
+        case .more: name = "More"
+        case .flag: name = "Flag"
+        case .trash: name = "Trash"
+        }
+        
+        return UIImage(named: style == .backgroundColor ? name : name + "-circle")
+    }
+    
+    var color: UIColor {
+        switch self {
+        case .read, .unread: return #colorLiteral(red: 0, green: 0.4577052593, blue: 1, alpha: 1)
+        case .more: return #colorLiteral(red: 0.7803494334, green: 0.7761332393, blue: 0.7967314124, alpha: 1)
+        case .flag: return #colorLiteral(red: 1, green: 0.5803921569, blue: 0, alpha: 1)
+        case .trash: return #colorLiteral(red: 1, green: 0.2352941176, blue: 0.1882352941, alpha: 1)
+        }
+    }
+}
+enum ButtonDisplayMode {
+    case titleAndImage, titleOnly, imageOnly
+}
+
+enum ButtonStyle {
+    case backgroundColor, circular
 }

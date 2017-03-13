@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SwipeExpanding Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/SwipeExpanding" class="dashAnchor"></a>
+    <a title="SwipeExpanding Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">SwipeCellKit Docs</a> (100% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">SwipeCellKit Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        SwipeExpanding Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/SwipeAction.html">SwipeAction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SwipeTableViewCell.html">SwipeTableViewCell</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/SwipeActionStyle.html">SwipeActionStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SwipeActionsOrientation.html">SwipeActionsOrientation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SwipeExpansionStyle.html">SwipeExpansionStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SwipeTransitionStyle.html">SwipeTransitionStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SwipeVerticalAlignment.html">SwipeVerticalAlignment</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/SwipeActionTransitioning.html">SwipeActionTransitioning</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SwipeExpanding.html">SwipeExpanding</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SwipeTableViewCellDelegate.html">SwipeTableViewCellDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/ScaleAndAlphaExpansion.html">ScaleAndAlphaExpansion</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ScaleTransition.html">ScaleTransition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeActionTransitioningContext.html">SwipeActionTransitioningContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionAnimationTimingParameters.html">SwipeExpansionAnimationTimingParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeTableOptions.html">SwipeTableOptions</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>SwipeExpanding</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">SwipeExpanding</span></code></pre>
+
+                </div>
+              </div>
+            <p>Adopt the <code>SwipeExpanding</code> protocol in objects that implement custom appearance of actions during expansion.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwipeCellKit14SwipeExpanding25animationTimingParametersFT7buttonsGSaCSo8UIButton_9expandingSb_VS_39SwipeExpansionAnimationTimingParameters"></a>
+                    <a name="//apple_ref/swift/Method/animationTimingParameters(buttons:expanding:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwipeCellKit14SwipeExpanding25animationTimingParametersFT7buttonsGSaCSo8UIButton_9expandingSb_VS_39SwipeExpansionAnimationTimingParameters">animationTimingParameters(buttons:expanding:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Asks your object for the animation timing parameters.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">animationTimingParameters</span><span class="p">(</span><span class="nv">buttons</span><span class="p">:</span> <span class="p">[</span><span class="kt">UIButton</span><span class="p">],</span> <span class="nv">expanding</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SwipeExpansionAnimationTimingParameters.html">SwipeExpansionAnimationTimingParameters</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>buttons</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The expansion action button, which includes expanding action plus the remaining actions in the view.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>expanding</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The new expansion state.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>otherActionButtons</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The other action buttons in the view, not including the action button being expanded.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwipeCellKit14SwipeExpanding12actionButtonFTCSo8UIButton9didChangeSb18otherActionButtonsGSaS1___T_"></a>
+                    <a name="//apple_ref/swift/Method/actionButton(_:didChange:otherActionButtons:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwipeCellKit14SwipeExpanding12actionButtonFTCSo8UIButton9didChangeSb18otherActionButtonsGSaS1___T_">actionButton(_:didChange:otherActionButtons:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Tells your object when the expansion state is changing.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">actionButton</span><span class="p">(</span><span class="n">_</span> <span class="nv">button</span><span class="p">:</span> <span class="kt">UIButton</span><span class="p">,</span> <span class="n">didChange</span> <span class="nv">expanding</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">otherActionButtons</span><span class="p">:</span> <span class="p">[</span><span class="kt">UIButton</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>button</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The expansion action button.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>expanding</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The new expansion state.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>otherActionButtons</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The other action buttons in the view, not including the action button being expanded.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2017 <a class="link" href="https://github.com/jerkoch/SwipeCellKit" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-03-10)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

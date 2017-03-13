@@ -79,19 +79,6 @@ extension SwipeTableViewCell {
     }
 }
 
-extension SwipeActionButton {
-    /// :nodoc:
-    override var accessibilityFrame: CGRect {
-        get {
-            return UIAccessibilityConvertFrameToScreenCoordinates(contentRect, self)
-        }
-        
-        set {
-            super.accessibilityFrame = newValue
-        }
-    }
-}
-
 class SwipeAccessibilityCustomAction: UIAccessibilityCustomAction {
     let action: SwipeAction
     let indexPath: IndexPath

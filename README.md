@@ -20,8 +20,14 @@ A swipeable UITableViewCell with support for:
 * Action buttons with: *text only, text + image, image only*
 * Haptic Feedback
 * Customizable transitions: *Border, Drag, and Reveal*
+* Customizable action button behavior during swipe
 * Animated expansion when dragging past threshold
+* Customizable expansion animations
 * Accessibility
+
+## Background
+
+Check out my [blog post](https://jerkoch.com/2017/02/07/swiper-no-swiping.html) on how *SwipeCellKit* came to be.
 
 ## Demo
 
@@ -126,6 +132,40 @@ func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: I
     return options
 }
 ````
+
+### Customizing Transitions
+
+You can customize the transition behavior of individual actions by assigning a `transitionDelegate` to the `SwipeAction` type. 
+
+The provided `ScaleTransition` type monitors the action button's visibility as it crosses the `threshold`, and animates between `initialScale` and `identity`.  This provides a "pop-like" effect as the action buttons are exposed more than 50% of their target width. 
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Transition-Delegate.gif" /></p>
+
+````swift
+let action = SwipeAction(style: .default, title: "More") { action, indexPath in return }
+action.transitionDelegate = ScaleTransition.default
+````
+
+The `ScaleTransition` type provides a static `default` configuration, but it can also be initiantiated with custom parameters to suit your needs.
+
+You can also easily provide your own completely custom transition behavior by adopting the `SwipeActionTransitioning` protocol.  The supplied `SwipeActionTransitioningContext` to the delegate methods reflect the current swipe state as the gesture is performed.
+
+### Customizing Expansion
+
+It is also possible to customize the expansion behavior by assigning a `expansionDelegate` to the `SwipeTableOptions` type. The delegate is invoked during the (un)expansion process and allows you to customize the display of the action being expanded, as well as the other actions in the view. 
+
+The provided `ScaleAndAlphaExpansion` type is useful for actions with clear backgrounds. When expansion occurs, the `ScaleAndAlphaExpansion` type automatically scales and fades the remaining actions in and out of the view. By default, if the expanded action has a clear background, the default `ScaleAndAlphaExpansion` will be automatically applied by the system.
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Expansion-Delegate.gif" /></p>
+
+````swift
+var options = SwipeTableOptions()
+options.expansionDelegate = ScaleAndAlphaExpansion.default
+````
+
+The `ScaleAndAlphaExpansion` type provides a static `default` configuration, but it can also be instantiated with custom parameters to suit your needs.
+
+You can also provide your own completely custom expansion behavior by adopting the `SwipeExpanding` protocol. The protocol allows you to customize the animation timing parameters prior to initiating the (un)expansion animation, as well as customizing the action during (un)expansion.
 
 ## Credits
 
