@@ -31,6 +31,8 @@ class SwipeActionButton: UIButton {
 
         contentHorizontalAlignment = .center
         
+        tintColor = action.textColor ?? .white
+
         titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFontWeightMedium)
         titleLabel?.textAlignment = .center
         titleLabel?.lineBreakMode = .byWordWrapping
@@ -39,7 +41,7 @@ class SwipeActionButton: UIButton {
         accessibilityLabel = action.accessibilityLabel
         
         setTitle(action.title, for: .normal)
-        setTitleColor(action.textColor ?? .white, for: .normal)
+        setTitleColor(tintColor, for: .normal)
         setImage(action.image, for: .normal)
         setImage(action.highlightedImage ?? action.image, for: .highlighted)
     }
