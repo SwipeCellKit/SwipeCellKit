@@ -83,10 +83,12 @@ open class SwipeTableViewCell: UITableViewCell {
     }
     
     func configure() {
-        clipsToBounds = false
-        
-        addGestureRecognizer(tapGestureRecognizer)
-        addGestureRecognizer(panGestureRecognizer)
+        if #available(iOS 10, *) {
+            clipsToBounds = false
+            
+            addGestureRecognizer(tapGestureRecognizer)
+            addGestureRecognizer(panGestureRecognizer)
+        }
     }
     
     /// :nodoc:
@@ -100,17 +102,19 @@ open class SwipeTableViewCell: UITableViewCell {
     override open func didMoveToSuperview() {
         super.didMoveToSuperview()
         
-        var view: UIView = self
-        while let superview = view.superview {
-            view = superview
-            
-            if let tableView = view as? UITableView {
-                self.tableView = tableView
+        if #available(iOS 10, *) {
+            var view: UIView = self
+            while let superview = view.superview {
+                view = superview
                 
-                tableView.panGestureRecognizer.removeTarget(self, action: nil)
-                tableView.panGestureRecognizer.addTarget(self, action: #selector(handleTablePan(gesture:)))
-                return
-            }            
+                if let tableView = view as? UITableView {
+                    self.tableView = tableView
+                    
+                    tableView.panGestureRecognizer.removeTarget(self, action: nil)
+                    tableView.panGestureRecognizer.addTarget(self, action: #selector(handleTablePan(gesture:)))
+                    return
+                }            
+            }
         }
     }
     
@@ -437,15 +441,17 @@ extension SwipeTableViewCell {
     }
 
     func reset() {
-        state = .center
-        
-        tableView?.setGestureEnabled(true)
-        
-        actionsView?.removeFromSuperview()
-        actionsView = nil
-        
-        destructiveCoverView?.removeFromSuperview()
-        destructiveCoverView = nil
+        if #available(iOS 10, *) {
+            state = .center
+            
+            tableView?.setGestureEnabled(true)
+            
+            actionsView?.removeFromSuperview()
+            actionsView = nil
+            
+            destructiveCoverView?.removeFromSuperview()
+            destructiveCoverView = nil
+        }
     }
     
     /**
@@ -562,24 +568,28 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
 extension SwipeTableViewCell {
     /// :nodoc:
     override open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer == tapGestureRecognizer {
-            if UIAccessibilityIsVoiceOverRunning() {
-                tableView?.hideSwipeCell()
+        if #available(iOS 10, *) {
+            if gestureRecognizer == tapGestureRecognizer {
+                if UIAccessibilityIsVoiceOverRunning() {
+                    tableView?.hideSwipeCell()
+                }
+
+                if let cells = tableView?.visibleCells as? [SwipeTableViewCell] {
+                    let cell = cells.first(where: { $0.state.isActive })
+                    return cell == nil ? false : true
+                }
+            }
+            
+            if gestureRecognizer == panGestureRecognizer,
+                let view = gestureRecognizer.view,
+                let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
+                let translation = gestureRecognizer.translation(in: view)
+                return abs(translation.y) <= abs(translation.x)
             }
 
-            if let cells = tableView?.visibleCells as? [SwipeTableViewCell] {
-                let cell = cells.first(where: { $0.state.isActive })
-                return cell == nil ? false : true
-            }
+            return true
+        } else {
+            return super.gestureRecognizerShouldBegin(gestureRecognizer)
         }
-        
-        if gestureRecognizer == panGestureRecognizer,
-            let view = gestureRecognizer.view,
-            let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
-            let translation = gestureRecognizer.translation(in: view)
-            return abs(translation.y) <= abs(translation.x)
-        }
-
-        return true
     }
 }
