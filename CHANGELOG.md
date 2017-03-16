@@ -4,6 +4,21 @@
 
 ---
 
+## [1.5.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.5.0)
+
+#### Fixed
+
+- Issue where the destructive action animation relied on the table view to animate covering the deleted cell with the cells below it in order for its height to appear to shrink. If the cell being deleted was the last row, or the remaining cells below were not tall enough, the height of the deleted cell would not appear to shrink. Fixed by adding a mask to cell and animate its height to zero. (#15)
+- Missing call to `super.didMoveToSuperview` causing accessory taps to be ignored. (#16)
+- The previous action button `textColor` fix to re-add also setting the tint color to the text color. The tint color effects button images rendered as template images.
+
+#### Added
+
+- Ability to programmatically show swipe actions. (#13)
+- Support for action background effect. (#10)
+
+---
+
 ## [1.4.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.4.0)
 
 #### Fixed

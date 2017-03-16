@@ -23,13 +23,12 @@ open class SwipeTableViewCell: UITableViewCell {
         init(orientation: SwipeActionsOrientation) {
             self = orientation == .left ? .left : .right
         }
+        
+        var isActive: Bool { return self != .center }
     }
     
     /// The object that acts as the delegate of the `SwipeTableViewCell`.
     public weak var delegate: SwipeTableViewCellDelegate?
-    
-    /// `true` if a swipe is in progress.
-    public var isSwiping: Bool { return frame.minX < 0 }
 
     var feedbackGenerator: Any?
     var animator: Any?
@@ -235,14 +234,18 @@ open class SwipeTableViewCell: UITableViewCell {
             if actionsView.expanded == true, let expandedAction = actionsView.expandableAction  {
                 perform(action: expandedAction)
             } else {
-                let targetOffset = state != .center ? targetCenter(active: true) : bounds.midX
+                let targetOffset = targetCenter(active: state.isActive)
                 let distance = targetOffset - center.x
                 let normalizedVelocity = velocity.x * scrollRatio / distance
-                
+
                 animate(toOffset: targetOffset, withInitialVelocity: normalizedVelocity) { _ in
                     if self.state == .center {
                         self.reset()
                     }
+                }
+
+                if !state.isActive {
+                    notifyEditingStateChange(active: false)
                 }
             }
 
@@ -304,34 +307,33 @@ open class SwipeTableViewCell: UITableViewCell {
         }
         
         self.actionsView = actionsView
+        
+        notifyEditingStateChange(active: true)
     }
     
-    func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((Bool) -> Void)? = nil) {
-        if #available(iOS 10.0, *) {
-            stopAnimatorIfNeeded()
-            
-            layoutIfNeeded()
-            
-            let animator: UIViewPropertyAnimator = {
-                if velocity != 0 {
-                    let velocity = CGVector(dx: velocity, dy: velocity)
-                    let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
-                    return UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
-                } else {
-                    return UIViewPropertyAnimator(duration: 0.7, dampingRatio: 1.0)
-                }
-            }()
+    func notifyEditingStateChange(active: Bool) {
+        guard let tableView = tableView,
+            let indexPath = tableView.indexPath(for: self) else { return }
 
-            animator.addAnimations({
-                self.center = CGPoint(x: offset, y: self.center.y)
-                
-                self.layoutIfNeeded()
-            })
-            
-            if let completion = completion {
-                animator.addCompletion{ position in
-                    completion(position == .end)
-                }
+        if active {
+            delegate?.tableView(tableView, willBeginEditingRowAt: indexPath)
+        } else {
+            delegate?.tableView(tableView, didEndEditingRowAt: indexPath)
+        }
+    }
+    
+    func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((UIViewAnimatingPosition) -> Void)? = nil) {
+        stopAnimatorIfNeeded()
+        
+        layoutIfNeeded()
+        
+        let animator: UIViewPropertyAnimator = {
+            if velocity != 0 {
+                let velocity = CGVector(dx: velocity, dy: velocity)
+                let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
+                return UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
+            } else {
+                return UIViewPropertyAnimator(duration: 0.7, dampingRatio: 1.0)
             }
             
             self.animator = animator
@@ -450,6 +452,8 @@ extension SwipeTableViewCell {
             center = CGPoint(x: targetCenter, y: self.center.y)
             reset()
         }
+        
+        notifyEditingStateChange(active: false)
     }
     
     /**
@@ -495,15 +499,23 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
         if actionsView.options.expansionStyle == .destructive && action == actionsView.expandableAction {
             // Trigger the expansion (may already be expanded from drag)
             actionsView.expanded = true
+
+            let mask = UIView(frame: CGRect(x: min(0, actionsView.frame.minX), y: 0, width: bounds.width + actionsView.bounds.width, height: bounds.height))
+            mask.backgroundColor = UIColor.white
+            self.mask = mask
             
             action.handler?(action, indexPath)
             if action.deleteRowOnDestruction {
                 tableView.deleteRows(at: [indexPath], with: .none)
             }
             
+            delegate?.tableView(tableView, didEndEditingRowAt: indexPath)
+            
             UIView.animate(withDuration: 0.3, animations: {
+                mask.frame.size.height = 0
                 self.center.x = self.bounds.midX - (self.bounds.width + 100) * actionsView.orientation.scale
             }) { _ in
+                self.mask = nil
                 self.reset()
             }
         } else {
@@ -525,7 +537,7 @@ extension SwipeTableViewCell {
             }
 
             if let cells = tableView?.visibleCells as? [SwipeTableViewCell] {
-                let cell = cells.first(where: { $0.state != .center })
+                let cell = cells.first(where: { $0.state.isActive })
                 return cell == nil ? false : true
             }
         }
