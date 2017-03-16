@@ -182,10 +182,10 @@ open class SwipeTableViewCell: UITableViewCell {
                 let distance = abs(translation)
                 let location = gesture.location(in: superview!).x
                 
-                if let widthRatio = actionsView.options.minimumDestructiveWidthRatio, state == .center {
+                if let widthRatio = actionsView.options.minimumDestructiveWidthRatio, state.isActive {
                     expanded = distance > actionsView.preferredWidth && distance > bounds.width * widthRatio
                 } else {
-                    expanded = (actionsView.orientation == .right ? location < 80 : location > bounds.width - 80) && (state != .center || distance > actionsView.preferredWidth)
+                    expanded = (actionsView.orientation == .right ? location < 80 : location > bounds.width - 80) && (state.isActive || distance > actionsView.preferredWidth)
                 }
                 
                 let limit: CGFloat = bounds.width - 30
@@ -322,18 +322,32 @@ open class SwipeTableViewCell: UITableViewCell {
         }
     }
     
-    func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((UIViewAnimatingPosition) -> Void)? = nil) {
-        stopAnimatorIfNeeded()
-        
-        layoutIfNeeded()
-        
-        let animator: UIViewPropertyAnimator = {
-            if velocity != 0 {
-                let velocity = CGVector(dx: velocity, dy: velocity)
-                let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
-                return UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
-            } else {
-                return UIViewPropertyAnimator(duration: 0.7, dampingRatio: 1.0)
+    func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((Bool) -> Void)? = nil) {
+        if #available(iOS 10.0, *) {
+            stopAnimatorIfNeeded()
+            
+            layoutIfNeeded()
+            
+            let animator: UIViewPropertyAnimator = {
+                if velocity != 0 {
+                    let velocity = CGVector(dx: velocity, dy: velocity)
+                    let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
+                    return UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
+                } else {
+                    return UIViewPropertyAnimator(duration: 0.7, dampingRatio: 1.0)
+                }
+            }()
+            
+            animator.addAnimations({
+                self.center = CGPoint(x: offset, y: self.center.y)
+                
+                self.layoutIfNeeded()
+            })
+            
+            if let completion = completion {
+                animator.addCompletion { position in
+                    completion(position == .end)
+                }
             }
             
             self.animator = animator
