@@ -23,6 +23,8 @@ open class SwipeTableViewCell: UITableViewCell {
         init(orientation: SwipeActionsOrientation) {
             self = orientation == .left ? .left : .right
         }
+        
+        var isActive: Bool { return self != .center }
     }
     
     /// The object that acts as the delegate of the `SwipeTableViewCell`.
@@ -176,7 +178,7 @@ open class SwipeTableViewCell: UITableViewCell {
             case .destructive:
                 let distance = abs(translation)
                 let location = gesture.location(in: superview!).x
-                expanded = (actionsView.orientation == .right ? location < 80 : location > bounds.width - 80) && (state != .center || distance > actionsView.preferredWidth)
+                expanded = (actionsView.orientation == .right ? location < 80 : location > bounds.width - 80) && (state.isActive || distance > actionsView.preferredWidth)
                 
                 let limit: CGFloat = bounds.width - 30
                 if expanded && !actionsView.expanded {
@@ -222,14 +224,18 @@ open class SwipeTableViewCell: UITableViewCell {
             if actionsView.expanded == true, let expandedAction = actionsView.expandableAction  {
                 perform(action: expandedAction)
             } else {
-                let targetOffset = state != .center ? targetCenter(active: true) : bounds.midX
+                let targetOffset = targetCenter(active: state.isActive)
                 let distance = targetOffset - center.x
                 let normalizedVelocity = velocity.x * scrollRatio / distance
-                
+
                 animate(toOffset: targetOffset, withInitialVelocity: normalizedVelocity) { _ in
                     if self.state == .center {
                         self.reset()
                     }
+                }
+
+                if !state.isActive {
+                    notifyEditingStateChange(active: false)
                 }
             }
 
@@ -291,6 +297,19 @@ open class SwipeTableViewCell: UITableViewCell {
         }
         
         self.actionsView = actionsView
+        
+        notifyEditingStateChange(active: true)
+    }
+    
+    func notifyEditingStateChange(active: Bool) {
+        guard let tableView = tableView,
+            let indexPath = tableView.indexPath(for: self) else { return }
+
+        if active {
+            delegate?.tableView(tableView, willBeginEditingRowAt: indexPath)
+        } else {
+            delegate?.tableView(tableView, didEndEditingRowAt: indexPath)
+        }
     }
     
     func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((UIViewAnimatingPosition) -> Void)? = nil) {
@@ -429,6 +448,8 @@ extension SwipeTableViewCell {
             center = CGPoint(x: targetCenter, y: self.center.y)
             reset()
         }
+        
+        notifyEditingStateChange(active: false)
     }
     
     /**
@@ -482,6 +503,8 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             action.handler?(action, indexPath)
             tableView.deleteRows(at: [indexPath], with: .none)
             
+            delegate?.tableView(tableView, didEndEditingRowAt: indexPath)
+            
             UIView.animate(withDuration: 0.3, animations: {
                 mask.frame.size.height = 0
                 self.center.x = self.bounds.midX - (self.bounds.width + 100) * actionsView.orientation.scale
@@ -508,7 +531,7 @@ extension SwipeTableViewCell {
             }
 
             if let cells = tableView?.visibleCells as? [SwipeTableViewCell] {
-                let cell = cells.first(where: { $0.state != .center })
+                let cell = cells.first(where: { $0.state.isActive })
                 return cell == nil ? false : true
             }
         }
