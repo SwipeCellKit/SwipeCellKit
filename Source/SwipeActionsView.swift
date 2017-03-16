@@ -155,6 +155,12 @@ class SwipeActionsView: UIView {
         return buttons
     }
     
+    func hideButtons() {
+        buttons.forEach { button in
+            button.isHidden = true
+        }
+    }
+    
     func actionTapped(button: SwipeActionButton) {
         guard let index = buttons.index(of: button) else { return }
 
@@ -221,17 +227,7 @@ class SwipeActionButtonWrapperView: UIView {
     
     func configureBackgroundColor(with action: SwipeAction) {
         guard action.hasBackgroundColor else { return }
-        
-        if let backgroundColor = action.backgroundColor {
-            self.backgroundColor = backgroundColor
-        } else {
-            switch action.style {
-            case .destructive:
-                backgroundColor = #colorLiteral(red: 1, green: 0.2352941176, blue: 0.1882352941, alpha: 1)
-            default:
-                backgroundColor = #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
-            }
-        }
+        self.backgroundColor = action.resolvedBackgroundColor
     }
     
     required init?(coder aDecoder: NSCoder) {

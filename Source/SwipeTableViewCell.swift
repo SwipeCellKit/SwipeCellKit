@@ -38,6 +38,7 @@ open class SwipeTableViewCell: UITableViewCell {
     
     weak var tableView: UITableView?
     var actionsView: SwipeActionsView?
+    var destructiveCoverView: UIView?
 
     var originalLayoutMargins: UIEdgeInsets = .zero
     
@@ -442,6 +443,9 @@ extension SwipeTableViewCell {
         
         actionsView?.removeFromSuperview()
         actionsView = nil
+        
+        destructiveCoverView?.removeFromSuperview()
+        destructiveCoverView = nil
     }
     
     /**
@@ -518,19 +522,32 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             mask.backgroundColor = UIColor.white
             self.mask = mask
             
-            action.handler?(action, indexPath)
-            if action.deleteRowOnDestruction {
-                tableView.deleteRows(at: [indexPath], with: .none)
-            }
-            
-            delegate?.tableView(tableView, didEndEditingRowAt: indexPath)
-            
             UIView.animate(withDuration: 0.3, animations: {
-                mask.frame.size.height = 0
                 self.center.x = self.bounds.midX - (self.bounds.width + 100) * actionsView.orientation.scale
             }) { _ in
-                self.mask = nil
-                self.reset()
+                
+                self.destructiveCoverView?.removeFromSuperview()
+                let destructiveCoverView = UIView(frame: self.contentView.bounds)
+                destructiveCoverView.backgroundColor = action.resolvedBackgroundColor
+                self.contentView.addSubview(destructiveCoverView)
+                self.actionsView?.hideButtons()
+                self.destructiveCoverView = destructiveCoverView
+                
+                CATransaction.begin()
+                CATransaction.setCompletionBlock { [weak self] in
+                    self?.delegate?.tableView(tableView, didEndEditingRowAt: indexPath)
+                    self?.mask = nil
+                    self?.reset()
+                }
+                UIView.animate(withDuration: 0.3) {
+                    mask.frame.size.height = 0
+                }
+                action.handler?(action, indexPath)
+                if action.deleteRowOnDestruction {
+                    tableView.deleteRows(at: [indexPath], with: .bottom)
+                }
+                CATransaction.commit()
+
             }
         } else {
             if actionsView.options.expansionStyle == .selection || action.hidesWhenSelected {

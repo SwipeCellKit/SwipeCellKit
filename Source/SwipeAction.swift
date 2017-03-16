@@ -100,4 +100,17 @@ internal extension SwipeAction {
     var hasBackgroundColor: Bool {
         return backgroundColor != .clear && backgroundEffect == nil
     }
+    
+    var resolvedBackgroundColor: UIColor {
+        if let backgroundColor = backgroundColor {
+            return backgroundColor
+        } else {
+            switch style {
+            case .destructive:
+                return #colorLiteral(red: 1, green: 0.2352941176, blue: 0.1882352941, alpha: 1)
+            default:
+                return #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
+            }
+        }
+    }
 }
