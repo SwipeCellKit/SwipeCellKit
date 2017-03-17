@@ -187,7 +187,7 @@ open class SwipeTableViewCell: UITableViewCell {
                 let distance = abs(translation)
                 let location = gesture.location(in: superview!).x
                 
-                if let widthRatio = actionsView.options.minimumDestructiveWidthRatio, state.isActive {
+                if let widthRatio = actionsView.options.minimumDestructiveWidthRatio, !state.isActive {
                     expanded = distance > actionsView.preferredWidth && distance > bounds.width * widthRatio
                 } else {
                     expanded = (actionsView.orientation == .right ? location < 80 : location > bounds.width - 80) && (state.isActive || distance > actionsView.preferredWidth)
