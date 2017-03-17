@@ -42,6 +42,9 @@ public struct SwipeTableOptions {
     /// The amount of space, in points, between the button image and the button title.
     public var buttonSpacing: CGFloat?
     
+    /// The ratio of the cell width needed to trigger the destructive action
+    public var minimumDestructiveWidthRatio: CGFloat?
+    
     /// Constructs a new `SwipeTableOptions` instance with default options.
     public init() {}
 }

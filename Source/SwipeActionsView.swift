@@ -17,7 +17,7 @@ class SwipeActionsView: UIView {
     let transitionLayout: SwipeTransitionLayout
     var layoutContext: ActionsViewLayoutContext
     
-    var expansionAnimator: UIViewPropertyAnimator?
+    var expansionAnimator: Any?
     
     var expansionDelegate: SwipeExpanding? {
         return options.expansionDelegate ?? (expandableAction?.hasBackgroundColor == false ? ScaleAndAlphaExpansion.default : nil)
@@ -67,18 +67,20 @@ class SwipeActionsView: UIView {
         didSet {
             guard oldValue != expanded else { return }
 
-            let timingParameters = expansionDelegate?.animationTimingParameters(buttons: buttons.reversed(), expanding: expanded)
-            
-            if expansionAnimator?.isRunning == true {
-                expansionAnimator?.stopAnimation(true)
+            if #available(iOS 10, *), let expansionAnimator = self.expansionAnimator as? UIViewPropertyAnimator {
+                let timingParameters = expansionDelegate?.animationTimingParameters(buttons: buttons.reversed(), expanding: expanded)
+                
+                if expansionAnimator.isRunning == true {
+                    expansionAnimator.stopAnimation(true)
+                }
+                
+                self.expansionAnimator = UIViewPropertyAnimator(duration: timingParameters?.duration ?? 0.6, dampingRatio: 1.0) {
+                    self.setNeedsLayout()
+                    self.layoutIfNeeded()
+                }
+                
+                (self.expansionAnimator as! UIViewPropertyAnimator).startAnimation(afterDelay: timingParameters?.delay ?? 0)
             }
-            
-            expansionAnimator = UIViewPropertyAnimator(duration: timingParameters?.duration ?? 0.6, dampingRatio: 1.0) {
-                self.setNeedsLayout()
-                self.layoutIfNeeded()
-            }
-            
-            expansionAnimator?.startAnimation(afterDelay: timingParameters?.delay ?? 0)
 
             notifyExpansion(expanded: expanded)
         }
@@ -153,6 +155,12 @@ class SwipeActionsView: UIView {
         return buttons
     }
     
+    func hideButtons() {
+        buttons.forEach { button in
+            button.isHidden = true
+        }
+    }
+    
     func actionTapped(button: SwipeActionButton) {
         guard let index = buttons.index(of: button) else { return }
 
@@ -219,17 +227,7 @@ class SwipeActionButtonWrapperView: UIView {
     
     func configureBackgroundColor(with action: SwipeAction) {
         guard action.hasBackgroundColor else { return }
-        
-        if let backgroundColor = action.backgroundColor {
-            self.backgroundColor = backgroundColor
-        } else {
-            switch action.style {
-            case .destructive:
-                backgroundColor = #colorLiteral(red: 1, green: 0.2352941176, blue: 0.1882352941, alpha: 1)
-            default:
-                backgroundColor = #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
-            }
-        }
+        self.backgroundColor = action.resolvedBackgroundColor
     }
     
     required init?(coder aDecoder: NSCoder) {

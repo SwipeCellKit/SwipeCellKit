@@ -74,6 +74,11 @@ public class SwipeAction: NSObject {
     /// - note: When set to `true`, the actions menu is automatically hidden when the action is selected. The default value is `false`.
     public var hidesWhenSelected = false
     
+    /// A Boolean value that determines whether the row is deleted from the UITableView when the destructive action is triggered
+    ///
+    /// - note: The default value is `true`.
+    public var deleteRowOnDestruction = true
+    
     /**
      Constructs a new `SwipeAction` instance.
 
@@ -93,5 +98,18 @@ public class SwipeAction: NSObject {
 internal extension SwipeAction {
     var hasBackgroundColor: Bool {
         return backgroundColor != .clear && backgroundEffect == nil
+    }
+    
+    var resolvedBackgroundColor: UIColor {
+        if let backgroundColor = backgroundColor {
+            return backgroundColor
+        } else {
+            switch style {
+            case .destructive:
+                return #colorLiteral(red: 1, green: 0.2352941176, blue: 0.1882352941, alpha: 1)
+            default:
+                return #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
+            }
+        }
     }
 }
