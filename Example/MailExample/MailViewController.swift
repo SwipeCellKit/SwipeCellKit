@@ -173,13 +173,6 @@ extension MailViewController: SwipeTableViewCellDelegate {
         return options
     }
     
-    override func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
-    }
-    
-    
-    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
-    }
-    
     func configure(action: SwipeAction, with descriptor: ActionDescriptor) {
         action.title = descriptor.title(forDisplayMode: buttonDisplayMode)
         action.image = descriptor.image(forStyle: buttonStyle, displayMode: buttonDisplayMode)

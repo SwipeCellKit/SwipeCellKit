@@ -302,13 +302,14 @@ open class SwipeTableViewCell: UITableViewCell {
     }
     
     func notifyEditingStateChange(active: Bool) {
-        guard let tableView = tableView,
+        guard let actionsView = actionsView,
+            let tableView = tableView,
             let indexPath = tableView.indexPath(for: self) else { return }
 
         if active {
-            delegate?.tableView(tableView, willBeginEditingRowAt: indexPath)
+            delegate?.tableView(tableView, willBeginEditingRowAt: indexPath, for: actionsView.orientation)
         } else {
-            delegate?.tableView(tableView, didEndEditingRowAt: indexPath)
+            delegate?.tableView(tableView, didEndEditingRowAt: indexPath, for: actionsView.orientation)
         }
     }
     
@@ -503,7 +504,7 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             action.handler?(action, indexPath)
             tableView.deleteRows(at: [indexPath], with: .none)
             
-            delegate?.tableView(tableView, didEndEditingRowAt: indexPath)
+            delegate?.tableView(tableView, didEndEditingRowAt: indexPath, for: actionsView.orientation)
             
             UIView.animate(withDuration: 0.3, animations: {
                 mask.frame.size.height = 0
