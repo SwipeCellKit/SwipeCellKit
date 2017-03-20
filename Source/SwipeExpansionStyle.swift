@@ -67,8 +67,8 @@ public struct SwipeExpansionStyle {
     }
     
     public enum FillOption {
-        case withFill(delete: Bool)
-        case afterFill(delete: Bool)
+        case with(delete: Bool)
+        case after(delete: Bool)
     }
     
     /// No expansion. Elasticity is applied once all action buttons have been exposed.
@@ -82,7 +82,7 @@ public struct SwipeExpansionStyle {
     /// The default action performs a destructive behavior. The cell is removed from the table view in an animated fashion.
     public static var destructive: SwipeExpansionStyle { return SwipeExpansionStyle(target: .edgeInset(30),
                                                                                     additionalTriggers: [.touchThreshold(0.8)],
-                                                                                    completionAnimation: .fill(.withFill(delete: true))) }
+                                                                                    completionAnimation: .fill(.with(delete: true))) }
     
     /// The relative target expansion threshold. Expansion will occur at the specified value.
     public let target: Target
@@ -156,9 +156,9 @@ extension SwipeExpansionStyle.CompletionAnimation: Equatable {
 extension SwipeExpansionStyle.FillOption: Equatable {
     public static func ==(lhs: SwipeExpansionStyle.FillOption, rhs: SwipeExpansionStyle.FillOption) -> Bool {
         switch (lhs, rhs) {
-        case (.withFill(let lhs), .withFill(let rhs)):
+        case (.with(let lhs), .with(let rhs)):
             return lhs == rhs
-        case (.afterFill(let lhs), .afterFill(let rhs)):
+        case (.after(let lhs), .after(let rhs)):
             return lhs == rhs
         default:
             return false

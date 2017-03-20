@@ -471,20 +471,22 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
 
             switch actionsView.options.expansionStyle.completionAnimation {
             case .bounce:
-                performBounceAction(action: action)
+                perform(action: action, hide: true)
             case .fill(let fillOption):
                 performFillAction(action: action, fillOption: fillOption)
             }
             
-        } else if action.hidesWhenSelected {
-            performBounceAction(action: action)
+        } else {
+            perform(action: action, hide: action.hidesWhenSelected)
         }
     }
     
-    func performBounceAction(action: SwipeAction) {
+    func perform(action: SwipeAction, hide: Bool) {
         guard let tableView = tableView, let indexPath = tableView.indexPath(for: self) else { return }
 
-        hideSwipe(animated: true)
+        if hide {
+            hideSwipe(animated: true)
+        }
         
         action.handler?(action, indexPath)
     }
@@ -499,7 +501,7 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
         self.mask = mask
 
         switch fillOption {
-        case .withFill(let delete):
+        case .with(let delete):
             action.handler?(action, indexPath)
             
             if delete {
@@ -510,34 +512,37 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             
             UIView.animate(withDuration: 0.3, animations: {
                 mask.frame.size.height = 0
-                self.center.x = self.bounds.midX - (self.bounds.width + 100) * actionsView.orientation.scale
+                self.bounds.origin.x = self.bounds.width * 1.5 * actionsView.orientation.scale
             }) { _ in
                 self.mask = nil
+                self.bounds.origin.x = 0
                 self.reset()
             }
-        case .afterFill(let delete):
+        case .after(let delete):
             UIView.animate(withDuration: 0.3, animations: {
-                self.center.x = self.bounds.midX - (self.bounds.width + 100) * actionsView.orientation.scale
+                self.bounds.origin.x = self.bounds.width * actionsView.orientation.scale
             }) { _ in
                 CATransaction.begin()
                 CATransaction.setCompletionBlock { [weak self] in
                     self?.delegate?.tableView(tableView, didEndEditingRowAt: indexPath, for: actionsView.orientation)
                     self?.mask = nil
+                    self?.bounds.origin.x = 0
                     self?.reset()
                 }
-                
-                mask.frame.size.height = 0
+
+                UIView.animate(withDuration: 0.3) {
+                    actionsView.alpha = 0
+                    mask.frame.size.height = 0
+                }
                 
                 action.handler?(action, indexPath)
                 
                 if delete {
-                    tableView.deleteRows(at: [indexPath], with: .bottom)
+                    tableView.deleteRows(at: [indexPath], with: .none)
                 }
                 
                 CATransaction.commit()
             }
-            
-            break
         }
         
     }
