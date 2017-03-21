@@ -491,7 +491,7 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
         action.handler?(action, indexPath)
     }
     
-    func performFillAction(action: SwipeAction, fillOption: SwipeExpansionStyle.FillOption) {
+    func performFillAction(action: SwipeAction, fillOption: SwipeExpansionStyle.FillOptions) {
         guard let actionsView = actionsView,
             let tableView = tableView,
             let indexPath = tableView.indexPath(for: self) else { return }
@@ -499,52 +499,53 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
         let mask = UIView(frame: CGRect(x: min(0, actionsView.frame.minX), y: 0, width: bounds.width + actionsView.bounds.width, height: bounds.height))
         mask.backgroundColor = UIColor.white
         self.mask = mask
+        
+        let newCenter = bounds.midX - (bounds.width + actionsView.minimumButtonWidth) * actionsView.orientation.scale
 
-        switch fillOption {
-        case .with(let delete):
-            action.handler?(action, indexPath)
+        action.completionHandler = { [weak self] style in
+            action.completionHandler = nil
+
+            self?.delegate?.tableView(tableView, didEndEditingRowAt: indexPath, for: actionsView.orientation)
             
-            if delete {
+            switch style {
+            case .delete:
                 tableView.deleteRows(at: [indexPath], with: .none)
-            }
-            
-            delegate?.tableView(tableView, didEndEditingRowAt: indexPath, for: actionsView.orientation)
-            
-            UIView.animate(withDuration: 0.3, animations: {
-                mask.frame.size.height = 0
-                self.bounds.origin.x = self.bounds.width * 1.5 * actionsView.orientation.scale
-            }) { _ in
-                self.mask = nil
-                self.bounds.origin.x = 0
-                self.reset()
-            }
-        case .after(let delete):
-            UIView.animate(withDuration: 0.3, animations: {
-                self.bounds.origin.x = self.bounds.width * actionsView.orientation.scale
-            }) { _ in
-                CATransaction.begin()
-                CATransaction.setCompletionBlock { [weak self] in
-                    self?.delegate?.tableView(tableView, didEndEditingRowAt: indexPath, for: actionsView.orientation)
+                
+                UIView.animate(withDuration: 0.3, animations: {
+                    self?.center.x = newCenter
+                    mask.frame.size.height = 0
+                    
+                    if fillOption.timing == .after {
+                        actionsView.alpha = 0
+                    }
+                }) { [weak self] _ in
                     self?.mask = nil
-                    self?.bounds.origin.x = 0
                     self?.reset()
                 }
-
-                UIView.animate(withDuration: 0.3) {
-                    actionsView.alpha = 0
-                    mask.frame.size.height = 0
-                }
-                
-                action.handler?(action, indexPath)
-                
-                if delete {
-                    tableView.deleteRows(at: [indexPath], with: .none)
-                }
-                
-                CATransaction.commit()
+            case .reset:
+                self?.hideSwipe(animated: true)
             }
         }
         
+        let invokeAction = {
+            action.handler?(action, indexPath)
+            
+            if let style = fillOption.autoFulFillmentStyle {
+                action.fulfill(with: style)
+            }
+        }
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            self.center.x = newCenter
+        }) { _ in
+            if fillOption.timing == .after {
+                invokeAction()
+            }
+        }
+        
+        if fillOption.timing == .with {
+            invokeAction()
+        }
     }
 }
 

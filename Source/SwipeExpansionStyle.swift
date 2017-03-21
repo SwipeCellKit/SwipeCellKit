@@ -62,15 +62,28 @@ public struct SwipeExpansionStyle {
     }
     
     public enum CompletionAnimation {
-        case fill(FillOption)
+        case fill(FillOptions)
         case bounce
     }
     
-    public enum FillOption {
-        case with(delete: Bool)
-        case after(delete: Bool)
+    public struct FillOptions {
+        public enum HandlerInvocationTiming {
+            case with
+            case after
+        }
+        
+        public static func automatic(timing: HandlerInvocationTiming, style: ExpansionFulfillmentStyle) -> FillOptions {
+            return FillOptions(timing: timing, autoFulFillmentStyle: style)
+        }
+
+        public static func manual(timing: HandlerInvocationTiming) -> FillOptions {
+            return FillOptions(timing: timing, autoFulFillmentStyle: nil)
+        }
+
+        public let timing: HandlerInvocationTiming
+        public let autoFulFillmentStyle: ExpansionFulfillmentStyle?
     }
-    
+
     /// No expansion. Elasticity is applied once all action buttons have been exposed.
     public static var none: SwipeExpansionStyle { return SwipeExpansionStyle() }
     
@@ -82,8 +95,15 @@ public struct SwipeExpansionStyle {
     /// The default action performs a destructive behavior. The cell is removed from the table view in an animated fashion.
     public static var destructive: SwipeExpansionStyle { return SwipeExpansionStyle(target: .edgeInset(30),
                                                                                     additionalTriggers: [.touchThreshold(0.8)],
-                                                                                    completionAnimation: .fill(.with(delete: true))) }
-    
+                                                                                    completionAnimation: .fill(.automatic(timing: .with, style: .delete))) }
+
+    /// The default action performs a fill behavior.
+    ///
+    /// - note: The action handle must call `SwipeAction.fulfill(stye:)` to resolve the fill expansion.
+    public static var fill: SwipeExpansionStyle { return SwipeExpansionStyle(target: .edgeInset(30),
+                                                                             additionalTriggers: [.overscroll(30)],
+                                                                             completionAnimation: .fill(.manual(timing: .after))) }
+
     /// The relative target expansion threshold. Expansion will occur at the specified value.
     public let target: Target
     
@@ -143,23 +163,10 @@ extension SwipeExpansionStyle.Target: Equatable {
 extension SwipeExpansionStyle.CompletionAnimation: Equatable {
     public static func ==(lhs: SwipeExpansionStyle.CompletionAnimation, rhs: SwipeExpansionStyle.CompletionAnimation) -> Bool {
         switch (lhs, rhs) {
-        case (.fill(let lhs), .fill(let rhs)):
-            return lhs == rhs
+        case (.fill, .fill):
+            return true
         case (.bounce, .bounce):
             return true
-        default:
-            return false
-        }
-    }
-}
-
-extension SwipeExpansionStyle.FillOption: Equatable {
-    public static func ==(lhs: SwipeExpansionStyle.FillOption, rhs: SwipeExpansionStyle.FillOption) -> Bool {
-        switch (lhs, rhs) {
-        case (.with(let lhs), .with(let rhs)):
-            return lhs == rhs
-        case (.after(let lhs), .after(let rhs)):
-            return lhs == rhs
         default:
             return false
         }
