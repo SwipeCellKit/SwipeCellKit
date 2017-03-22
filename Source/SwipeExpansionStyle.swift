@@ -25,7 +25,7 @@ public struct SwipeExpansionStyle {
 
     /// The default action performs a fill behavior.
     ///
-    /// - note: The action handle must call `SwipeAction.fulfill(stye:)` to resolve the fill expansion.
+    /// - note: The action handle must call `SwipeAction.fulfill(style:)` to resolve the fill expansion.
     public static var fill: SwipeExpansionStyle { return SwipeExpansionStyle(target: .edgeInset(30),
                                                                              additionalTriggers: [.overscroll(30)],
                                                                              completionAnimation: .fill(.manual(timing: .after))) }
