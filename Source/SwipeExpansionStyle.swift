@@ -18,9 +18,10 @@ public struct SwipeExpansionStyle {
                                                                                   completionAnimation: .bounce) }
     
     /// The default action performs a destructive behavior. The cell is removed from the table view in an animated fashion.
-    public static var destructive: SwipeExpansionStyle { return SwipeExpansionStyle(target: .edgeInset(30),
-                                                                                    additionalTriggers: [.touchThreshold(0.8)],
-                                                                                    completionAnimation: .fill(.automatic(.delete, timing: .with))) }
+    public static var destructive: SwipeExpansionStyle { return .destructive(with: .fill(.automatic(.delete, timing: .with))) }
+
+    /// The default action performs a destructive behavior after the fill animation completes. The cell is removed from the table view in an animated fashion.
+    public static var destructiveAfterFill: SwipeExpansionStyle { return .destructive(with: .fill(.automatic(.delete, timing: .after))) }
 
     /// The default action performs a fill behavior.
     ///
@@ -28,6 +29,19 @@ public struct SwipeExpansionStyle {
     public static var fill: SwipeExpansionStyle { return SwipeExpansionStyle(target: .edgeInset(30),
                                                                              additionalTriggers: [.overscroll(30)],
                                                                              completionAnimation: .fill(.manual(timing: .after))) }
+
+    /**
+     Returns a `SwipeExpansionStyle` instance for the default action which peforms destructive behavior with the specified completion animation.
+     
+     - parameter completionAnimation: The expansion animation completion style.
+     
+     - returns: The new `SwipeExpansionStyle` instance.
+     */
+    public static func destructive(with completionAnimation: CompletionAnimation) -> SwipeExpansionStyle {
+        return SwipeExpansionStyle(target: .edgeInset(30),
+                                   additionalTriggers: [.touchThreshold(0.8)],
+                                   completionAnimation: completionAnimation)
+    }
 
     /// The relative target expansion threshold. Expansion will occur at the specified value.
     public let target: Target
@@ -162,6 +176,8 @@ extension SwipeExpansionStyle {
          - parameter style: The fulfillment style describing how expansion should be resolved once the action has been fulfilled.
          
          - parameter timing: The timing which specifies when the action handler with be invoked with respect to the fill animation.
+         
+         - returns: The new `FillOptions` instance.
          */
         public static func automatic(_ style: ExpansionFulfillmentStyle, timing: HandlerInvocationTiming) -> FillOptions {
             return FillOptions(autoFulFillmentStyle: style, timing: timing)
@@ -171,6 +187,8 @@ extension SwipeExpansionStyle {
          Returns a `FillOptions` instance with manual fulfillemnt.
          
          - parameter timing: The timing which specifies when the action handler with be invoked with respect to the fill animation.
+         
+         - returns: The new `FillOptions` instance.
          */
         public static func manual(timing: HandlerInvocationTiming) -> FillOptions {
             return FillOptions(autoFulFillmentStyle: nil, timing: timing)
