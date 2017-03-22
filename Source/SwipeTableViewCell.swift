@@ -349,6 +349,19 @@ open class SwipeTableViewCell: UITableViewCell {
             self.animator = animator
 
             animator.startAnimation()
+        } else {
+            var remainingTime = 0.7
+            if velocity != 0 {
+                let remainingDistance = abs(offset - self.frame.origin.x)
+                remainingTime = Double(min(remainingDistance / velocity, 0.3))
+            }
+            
+            UIView.animate(withDuration: remainingTime, delay: 0,
+                           options: .curveEaseOut,
+                           animations: {
+                            self.center = CGPoint(x: offset, y: self.center.y)
+            },
+                           completion: completion)
         }
     }
     
