@@ -178,7 +178,7 @@ When `elasticOverscroll` is enabled, the action buttons will only fill 25% perce
 
 The completion animation occurs on touch up if expansion is actively triggered. The `SwipeExpansionStyle.CompletionAnimation` enumeration defines the following expansion animation completion style options:
 
-1. `.fill(FillOptions)`: The expansion buttons will completely expand to fill the previous place of the cell. 
+1. `.fill(FillOptions)`: The default expansion button will completely expand to fill the previous place of the cell. 
 2. `.bounce`: The expansion will bounce back from the trigger point and hide the action view, resetting the cell.
 
 For fill expansions, you can use the `FillOptions` type to configure the behavior of the fill completion animation along with the timing of the invocation of the action handler. These options are defined by the `ExpansionFulfillmentStyle` and `HandlerInvocationTiming`. 
