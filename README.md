@@ -160,12 +160,12 @@ Expansion behavior is defined by four components: a target, triggers, elastic ov
 
 The target describes the location to which the cell will scroll when expansion is triggered. The `SwipeExpansionStyle.Target` enumeration defines the following options:
 
-1. `.percentage`: Percentage of screen width (0.0 to 1.0).
-2. `.edgeInset`: Inset from opposite screen edge (in points).
+1. `.percentage`: Percentage of superview's width (0.0 to 1.0).
+2. `.edgeInset`: Inset from superview's opposite edge (in points).
 
 ##### Triggers 
 
-By default, will automatically trigger after the actions view is completely exposed. It may be desirable to customize this trigger point, or define addtional triggers to complement the default behavior.  The `SwipeExpansionStyle.Trigger` enumeration defines the following options:
+By default, expansion will automatically trigger after the actions view is completely exposed. It may be desirable to customize this trigger point, or define addtional triggers to complement the default behavior.  The `SwipeExpansionStyle.Trigger` enumeration defines the following options:
 
 1. `.touchThreshold`: The trigger a specified by a touch occuring past the supplied percentage in the superview (0.0 to 1.0). The action view must also be fully exposed for this trigger to activate.
 2. `.overscroll`: The trigger is specified by the distance past the fully exposed action view (in points).
@@ -178,7 +178,7 @@ When `elasticOverscroll` is enabled, the action buttons will only fill 25% perce
 
 The completion animation occurs on touch up if expansion is actively triggered. The `SwipeExpansionStyle.CompletionAnimation` enumeration defines the following expansion animation completion style options:
 
-1. `.fill(FillOptions)`: The expansion button will completely expand to fill the previous place of the cell. 
+1. `.fill(FillOptions)`: The expansion buttons will completely expand to fill the previous place of the cell. 
 2. `.bounce`: The expansion will bounce back from the trigger point and hide the action view, resetting the cell.
 
 For fill expansions, you can use the `FillOptions` type to configure the behavior of the fill completion animation along with the timing of the invocation of the action handler. These options are defined by the `ExpansionFulfillmentStyle` and `HandlerInvocationTiming`. 
