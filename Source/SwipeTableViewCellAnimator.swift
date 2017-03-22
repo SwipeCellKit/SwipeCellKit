@@ -106,6 +106,6 @@ class UIViewAnimatorSwipeTableViewCellAnimator: SwipeTableViewCellAnimator {
     
     func stop() {
         guard let `cell` = cell else { return }
-        cell.layer.removeAnimation(forKey: "")
+        cell.layer.removeAllAnimations()
     }
 }
