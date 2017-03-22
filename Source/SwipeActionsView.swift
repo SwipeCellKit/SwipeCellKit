@@ -17,7 +17,7 @@ class SwipeActionsView: UIView {
     let transitionLayout: SwipeTransitionLayout
     var layoutContext: ActionsViewLayoutContext
     
-    var expansionAnimator: UIViewPropertyAnimator?
+    var expansionAnimator: Any?
     
     var expansionDelegate: SwipeExpanding? {
         return options.expansionDelegate ?? (expandableAction?.hasBackgroundColor == false ? ScaleAndAlphaExpansion.default : nil)
@@ -67,18 +67,24 @@ class SwipeActionsView: UIView {
         didSet {
             guard oldValue != expanded else { return }
 
-            let timingParameters = expansionDelegate?.animationTimingParameters(buttons: buttons.reversed(), expanding: expanded)
-            
-            if expansionAnimator?.isRunning == true {
-                expansionAnimator?.stopAnimation(true)
+            if #available(iOS 10, *) {
+                let timingParameters = expansionDelegate?.animationTimingParameters(buttons: buttons.reversed(), expanding: expanded)
+                
+                var localExpansionAnimator = self.expansionAnimator as? UIViewPropertyAnimator
+                
+                if localExpansionAnimator?.isRunning == true {
+                    localExpansionAnimator?.stopAnimation(true)
+                }
+                
+                localExpansionAnimator = UIViewPropertyAnimator(duration: timingParameters?.duration ?? 0.6, dampingRatio: 1.0) {
+                    self.setNeedsLayout()
+                    self.layoutIfNeeded()
+                }
+                
+                localExpansionAnimator?.startAnimation(afterDelay: timingParameters?.delay ?? 0)
+                
+                self.expansionAnimator = localExpansionAnimator
             }
-            
-            expansionAnimator = UIViewPropertyAnimator(duration: timingParameters?.duration ?? 0.6, dampingRatio: 1.0) {
-                self.setNeedsLayout()
-                self.layoutIfNeeded()
-            }
-            
-            expansionAnimator?.startAnimation(afterDelay: timingParameters?.delay ?? 0)
 
             notifyExpansion(expanded: expanded)
         }
