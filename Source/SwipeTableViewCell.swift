@@ -29,8 +29,17 @@ open class SwipeTableViewCell: UITableViewCell {
     
     /// The object that acts as the delegate of the `SwipeTableViewCell`.
     public weak var delegate: SwipeTableViewCellDelegate?
-
-    var feedbackGenerator: Any?
+    
+    var _feedbackGenerator: Any?
+    @available(iOS 10, *)
+    var feedbackGenerator: UIImpactFeedbackGenerator? {
+        get {
+            return _feedbackGenerator as? UIImpactFeedbackGenerator
+        }
+        set {
+            _feedbackGenerator = newValue
+        }
+    }
     var cellAnimator: SwipeTableViewCellAnimator?
 
     var state = SwipeState.center
@@ -148,9 +157,8 @@ open class SwipeTableViewCell: UITableViewCell {
             originalCenter = center.x
             
             if #available(iOS 10.0, *) {
-                let generator = UIImpactFeedbackGenerator(style: .light)
-                generator.prepare()
-                feedbackGenerator = generator
+                feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+                feedbackGenerator?.prepare()
             }
 
             if state == .center || state == .animatingToCenter {
@@ -216,10 +224,8 @@ open class SwipeTableViewCell: UITableViewCell {
             }
             
             if expanded != actionsView.expanded, #available(iOS 10.0, *) {
-                if let generator = feedbackGenerator as? UIImpactFeedbackGenerator {
-                    generator.impactOccurred()
-                    generator.prepare()
-                }
+                feedbackGenerator?.impactOccurred()
+                feedbackGenerator?.prepare()
             }
             
             actionsView.expanded = expanded
@@ -230,7 +236,8 @@ open class SwipeTableViewCell: UITableViewCell {
             let velocity = gesture.velocity(in: target)
             state = targetState(forVelocity: velocity)
             
-            feedbackGenerator = nil
+            // Nullify the ivar directly to reduce an #available if statement
+            _feedbackGenerator = nil
 
             if actionsView.expanded == true, let expandedAction = actionsView.expandableAction  {
                 perform(action: expandedAction)
