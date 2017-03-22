@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		170BCE721E8340C000F46E18 /* SwipeTableViewCellAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170BCE711E8340C000F46E18 /* SwipeTableViewCellAnimator.swift */; };
 		3F234AC81E44A7A400E22A38 /* SwipeCellKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 3F234AC61E44A7A400E22A38 /* SwipeCellKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3F234AD61E44A94F00E22A38 /* SwipeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F234AD21E44A94F00E22A38 /* SwipeTableViewCell.swift */; };
 		3F234AD71E44A94F00E22A38 /* SwipeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F234AD31E44A94F00E22A38 /* SwipeAction.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		170BCE711E8340C000F46E18 /* SwipeTableViewCellAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeTableViewCellAnimator.swift; sourceTree = "<group>"; };
 		3F234AC31E44A7A400E22A38 /* SwipeCellKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwipeCellKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F234AC61E44A7A400E22A38 /* SwipeCellKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwipeCellKit.h; sourceTree = "<group>"; };
 		3F234AC71E44A7A400E22A38 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -68,6 +70,7 @@
 		3F234AC51E44A7A400E22A38 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				170BCE711E8340C000F46E18 /* SwipeTableViewCellAnimator.swift */,
 				3F234AD21E44A94F00E22A38 /* SwipeTableViewCell.swift */,
 				3FA78CA01E5A5A0B00A1D8FF /* SwipeTableViewCell+Accessibility.swift */,
 				3F3ED7111E48AF37009DD5D8 /* SwipeTableViewCellDelegate.swift */,
@@ -183,6 +186,7 @@
 				3FD016E11E6D7F7700B54FFC /* SwipeActionTransitioning.swift in Sources */,
 				3FD016DF1E6D778700B54FFC /* SwipeExpanding.swift in Sources */,
 				3F51DA071E462F9B005467BD /* SwipeTableOptions.swift in Sources */,
+				170BCE721E8340C000F46E18 /* SwipeTableViewCellAnimator.swift in Sources */,
 				3F234AD91E44A94F00E22A38 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

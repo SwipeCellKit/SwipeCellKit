@@ -31,7 +31,7 @@ open class SwipeTableViewCell: UITableViewCell {
     public weak var delegate: SwipeTableViewCellDelegate?
 
     var feedbackGenerator: Any?
-    var animator: Any?
+    var cellAnimator: SwipeTableViewCellAnimator?
 
     var state = SwipeState.center
     var originalCenter: CGFloat = 0
@@ -75,6 +75,12 @@ open class SwipeTableViewCell: UITableViewCell {
         super.init(coder: aDecoder)
         
         configure()
+        
+        if #available(iOS 10, *) {
+            self.cellAnimator = UIViewPropertyAnimatorSwipeTableViewCellAnimator(cell: self)
+        } else {
+            self.cellAnimator = UIViewAnimatorSwipeTableViewCellAnimator(cell: self)
+        }
     }
     
     deinit {
@@ -137,7 +143,7 @@ open class SwipeTableViewCell: UITableViewCell {
         
         switch gesture.state {
         case .began:
-            stopAnimatorIfNeeded()
+            self.cellAnimator?.stop()
 
             originalCenter = center.x
             
@@ -319,60 +325,7 @@ open class SwipeTableViewCell: UITableViewCell {
     }
     
     func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((Bool) -> Void)? = nil) {
-        if #available(iOS 10, *) {
-            stopAnimatorIfNeeded()
-            
-            layoutIfNeeded()
-            
-            let animator: UIViewPropertyAnimator = {
-                if velocity != 0 {
-                    let velocity = CGVector(dx: velocity, dy: velocity)
-                    let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
-                    return UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
-                } else {
-                    return UIViewPropertyAnimator(duration: 0.7, dampingRatio: 1.0)
-                }
-            }()
-
-            animator.addAnimations({
-                self.center = CGPoint(x: offset, y: self.center.y)
-                
-                self.layoutIfNeeded()
-            })
-            
-            if let completion = completion {
-                animator.addCompletion { position in
-                    completion(position == .end)
-                }
-            }
-            
-            self.animator = animator
-
-            animator.startAnimation()
-        } else {
-            var remainingTime = 0.7
-            if velocity != 0 {
-                let remainingDistance = abs(offset - self.frame.origin.x)
-                remainingTime = Double(min(remainingDistance / velocity, 0.3))
-            }
-            
-            UIView.animate(withDuration: remainingTime, delay: 0,
-                           options: .curveEaseOut,
-                           animations: {
-                            self.center = CGPoint(x: offset, y: self.center.y)
-            },
-                           completion: completion)
-        }
-    }
-    
-    func stopAnimatorIfNeeded() {
-        if #available(iOS 10, *) {
-            guard let animator = self.animator as? UIViewPropertyAnimator else { return }
-            
-            if animator.isRunning == true {
-                animator.stopAnimation(true)
-            }
-        }
+        self.cellAnimator?.animate(toOffset: offset, withInitialVelocity: velocity, completion: completion)
     }
 
     func handleTap(gesture: UITapGestureRecognizer) {
