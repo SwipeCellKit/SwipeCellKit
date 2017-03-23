@@ -10,20 +10,14 @@ import Foundation
 
 protocol SwipeAnimator {
     /**
-     Asks the delegate for the actions to display in response to a swipe in the specified row.
-     
-     - parameter offset: The end offset x value of the animation
-     
-     - parameter velocity: The speed at which the animation is to pick up from.
-     
-     - parameter completion: The block indicating when the animation has completed
+     Starts the defined animation
      */
-    func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat, completion: ((Bool) -> Void)?)
+    func startAnimation()
     
     /**
-     Stops the animation at the current position
+     Stops the current animation
      */
-    func stop()
+    func stopAnimation()
 }
 
 @available(iOS 10, *)
@@ -33,17 +27,25 @@ class UIViewPropertyCellAnimator: SwipeAnimator {
     
     var animator: UIViewPropertyAnimator?
     
-    init(cell: SwipeTableViewCell) {
+    init(cell: SwipeTableViewCell, toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((Bool) -> Void)? = nil) {
         self.cell = cell
+        self.animator = buildAnimator(toOffset: offset, withInitialVelocity: velocity, completion: completion)
     }
     
-    func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((Bool) -> Void)? = nil) {
-        
-        guard let `cell` = cell else { return }
-        
-        stop()
-        
-        cell.layoutIfNeeded()
+    func startAnimation() {
+        self.cell?.layoutIfNeeded()
+        self.animator?.startAnimation()
+    }
+    
+    func stopAnimation() {
+        if animator?.isRunning == true {
+            animator?.stopAnimation(true)
+        }
+    }
+    
+    private func buildAnimator(toOffset offset: CGFloat,
+                               withInitialVelocity velocity: CGFloat = 0,
+                               completion: ((Bool) -> Void)? = nil) -> UIViewPropertyAnimator {
         
         let animator: UIViewPropertyAnimator = {
             if velocity != 0 {
@@ -56,8 +58,9 @@ class UIViewPropertyCellAnimator: SwipeAnimator {
         }()
         
         animator.addAnimations({
-            cell.center = CGPoint(x: offset, y: cell.center.y)
+            guard let `cell` = self.cell else { return }
             
+            cell.center = CGPoint(x: offset, y: cell.center.y)
             cell.layoutIfNeeded()
         })
         
@@ -67,44 +70,45 @@ class UIViewPropertyCellAnimator: SwipeAnimator {
             }
         }
         
-        self.animator = animator
-        self.animator?.startAnimation()
-    }
-    
-    func stop() {
-        if animator?.isRunning == true {
-            animator?.stopAnimation(true)
-        }
+        return animator
     }
 }
 
 class UIViewCellAnimator: SwipeAnimator {
     
     weak var cell:SwipeTableViewCell?
+    let offset:CGFloat
+    let velocity:CGFloat
+    let completion:((Bool) -> Void)?
     
-    init(cell: SwipeTableViewCell) {
+    init(cell: SwipeTableViewCell, toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((Bool) -> Void)? = nil) {
         self.cell = cell
+        self.offset = offset
+        self.velocity = velocity
+        self.completion = completion
     }
     
-    func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((Bool) -> Void)? = nil) {
-        
+    func startAnimation() {
         guard let `cell` = cell else { return }
         
-        var remainingTime = 0.7
+        var remainingTime = 0.3
         if velocity != 0 {
             let remainingDistance = abs(offset - cell.frame.origin.x)
             remainingTime = Double(min(remainingDistance / velocity, 0.3))
         }
         
-        UIView.animate(withDuration: remainingTime, delay: 0,
+        UIView.animate(withDuration: remainingTime,
+                       delay: 0,
                        options: .curveEaseOut,
                        animations: {
-                        cell.center = CGPoint(x: offset, y: cell.center.y)
+                        guard let `cell` = self.cell else { return }
+                        
+                        cell.center = CGPoint(x: self.offset, y: cell.center.y)
         },
                        completion: completion)
     }
     
-    func stop() {
+    func stopAnimation() {
         guard let `cell` = cell else { return }
         cell.layer.removeAllAnimations()
     }

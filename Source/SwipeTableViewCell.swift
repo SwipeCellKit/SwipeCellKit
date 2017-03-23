@@ -84,12 +84,6 @@ open class SwipeTableViewCell: UITableViewCell {
         super.init(coder: aDecoder)
         
         configure()
-        
-        if #available(iOS 10, *) {
-            self.cellAnimator = UIViewPropertyCellAnimator(cell: self)
-        } else {
-            self.cellAnimator = UIViewCellAnimator(cell: self)
-        }
     }
     
     deinit {
@@ -152,7 +146,7 @@ open class SwipeTableViewCell: UITableViewCell {
         
         switch gesture.state {
         case .began:
-            self.cellAnimator?.stop()
+            self.cellAnimator?.stopAnimation()
 
             originalCenter = center.x
             
@@ -332,7 +326,15 @@ open class SwipeTableViewCell: UITableViewCell {
     }
     
     func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((Bool) -> Void)? = nil) {
-        self.cellAnimator?.animate(toOffset: offset, withInitialVelocity: velocity, completion: completion)
+        self.cellAnimator?.stopAnimation()
+        
+        if #available(iOS 10, *) {
+            self.cellAnimator = UIViewPropertyCellAnimator(cell: self, toOffset: offset, withInitialVelocity: velocity, completion: completion)
+        } else {
+            self.cellAnimator = UIViewCellAnimator(cell: self, toOffset: offset, withInitialVelocity: velocity, completion: completion)
+        }
+        
+        self.cellAnimator?.startAnimation()
     }
 
     func handleTap(gesture: UITapGestureRecognizer) {
