@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol SwipeTableViewCellAnimator {
+protocol SwipeAnimator {
     /**
      Asks the delegate for the actions to display in response to a swipe in the specified row.
      
@@ -27,7 +27,7 @@ protocol SwipeTableViewCellAnimator {
 }
 
 @available(iOS 10, *)
-class UIViewPropertyAnimatorSwipeTableViewCellAnimator: SwipeTableViewCellAnimator {
+class UIViewPropertyCellAnimator: SwipeAnimator {
     
     weak var cell:SwipeTableViewCell?
     
@@ -78,7 +78,7 @@ class UIViewPropertyAnimatorSwipeTableViewCellAnimator: SwipeTableViewCellAnimat
     }
 }
 
-class UIViewAnimatorSwipeTableViewCellAnimator: SwipeTableViewCellAnimator {
+class UIViewCellAnimator: SwipeAnimator {
     
     weak var cell:SwipeTableViewCell?
     

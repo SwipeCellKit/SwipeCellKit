@@ -40,7 +40,7 @@ open class SwipeTableViewCell: UITableViewCell {
             _feedbackGenerator = newValue
         }
     }
-    var cellAnimator: SwipeTableViewCellAnimator?
+    var cellAnimator: SwipeAnimator?
 
     var state = SwipeState.center
     var originalCenter: CGFloat = 0
@@ -86,9 +86,9 @@ open class SwipeTableViewCell: UITableViewCell {
         configure()
         
         if #available(iOS 10, *) {
-            self.cellAnimator = UIViewPropertyAnimatorSwipeTableViewCellAnimator(cell: self)
+            self.cellAnimator = UIViewPropertyCellAnimator(cell: self)
         } else {
-            self.cellAnimator = UIViewAnimatorSwipeTableViewCellAnimator(cell: self)
+            self.cellAnimator = UIViewCellAnimator(cell: self)
         }
     }
     
