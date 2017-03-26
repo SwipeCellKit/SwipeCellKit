@@ -277,7 +277,7 @@ open class SwipeTableViewCell: UITableViewCell {
         }
     }
     
-    func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((UIViewAnimatingPosition) -> Void)? = nil) {
+    func animate(duration: Double = 0.7, toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((UIViewAnimatingPosition) -> Void)? = nil) {
         stopAnimatorIfNeeded()
         
         layoutIfNeeded()
@@ -288,7 +288,7 @@ open class SwipeTableViewCell: UITableViewCell {
                 let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
                 return UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
             } else {
-                return UIViewPropertyAnimator(duration: 0.7, dampingRatio: 1.0)
+                return UIViewPropertyAnimator(duration: duration, dampingRatio: 1.0)
             }
         }()
 
@@ -524,9 +524,7 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             }
         }
         
-        UIView.animate(withDuration: 0.3, animations: {
-            self.center.x = newCenter
-        }) { _ in
+        animate(duration: 0.3, toOffset: newCenter) { _ in
             if fillOption.timing == .after {
                 invokeAction()
             }
