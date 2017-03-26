@@ -13,7 +13,7 @@ public struct SwipeTableOptions {
     public var transitionStyle: SwipeTransitionStyle = .border
     
     /// The expansion style. Expansion is the behavior when the cell is swiped past a defined threshold.
-    public var expansionStyle: SwipeExpansionStyle = .none
+    public var expansionStyle: SwipeExpansionStyle?
     
     /// The object that is notified when expansion changes.
     ///

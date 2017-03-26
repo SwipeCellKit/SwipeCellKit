@@ -145,20 +145,11 @@ open class SwipeTableViewCell: UITableViewCell {
                 return
             }
             
-            let expansionStyle = actionsView.options.expansionStyle            
-            if expansionStyle.target == .none {
-                target.center.x = gesture.elasticTranslation(in: target,
-                                                             withLimit: CGSize(width: actionsView.preferredWidth, height: 0),
-                                                             fromOriginalCenter: CGPoint(x: originalCenter, y: 0),
-                                                             applyingRatio: elasticScrollRatio).x
-                if (target.center.x - originalCenter) / translation != 1.0 {
-                    scrollRatio = elasticScrollRatio
-                }
-            } else {
+            if let expansionStyle = actionsView.options.expansionStyle {
                 let expanded = expansionStyle.shouldExpand(view: self, gesture: gesture, in: tableView!)
                 let targetOffset = expansionStyle.targetOffset(for: self, in: tableView!)
                 let currentOffset = abs(translation + originalCenter - bounds.midX)
-
+                
                 if expanded && !actionsView.expanded && targetOffset > currentOffset {
                     let centerForTranslationToEdge = bounds.midX - targetOffset * actionsView.orientation.scale
                     let delta = centerForTranslationToEdge - originalCenter
@@ -177,6 +168,14 @@ open class SwipeTableViewCell: UITableViewCell {
                 }
                 
                 actionsView.expanded = expanded
+            } else {
+                target.center.x = gesture.elasticTranslation(in: target,
+                                                             withLimit: CGSize(width: actionsView.preferredWidth, height: 0),
+                                                             fromOriginalCenter: CGPoint(x: originalCenter, y: 0),
+                                                             applyingRatio: elasticScrollRatio).x
+                if (target.center.x - originalCenter) / translation != 1.0 {
+                    scrollRatio = elasticScrollRatio
+                }
             }
         case .ended:
             guard let actionsView = actionsView else { return }
@@ -456,17 +455,16 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
     func perform(action: SwipeAction) {
         guard let actionsView = actionsView else { return }
         
-        if action == actionsView.expandableAction {
+        if action == actionsView.expandableAction, let expansionStyle = actionsView.options.expansionStyle {
             // Trigger the expansion (may already be expanded from drag)
             actionsView.expanded = true
 
-            switch actionsView.options.expansionStyle.completionAnimation {
+            switch expansionStyle.completionAnimation {
             case .bounce:
                 perform(action: action, hide: true)
             case .fill(let fillOption):
                 performFillAction(action: action, fillOption: fillOption)
-            }
-            
+            }            
         } else {
             perform(action: action, hide: action.hidesWhenSelected)
         }

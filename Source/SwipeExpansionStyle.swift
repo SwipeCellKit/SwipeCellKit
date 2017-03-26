@@ -8,10 +8,7 @@
 import UIKit
 
 /// Describes the expansion style.  Expansion is the behavior when the cell is swiped past a defined threshold.
-public struct SwipeExpansionStyle {
-    /// No expansion. Elasticity is applied once all action buttons have been exposed.
-    public static var none: SwipeExpansionStyle { return SwipeExpansionStyle() }
-    
+public struct SwipeExpansionStyle {    
     /// The default action performs a selection-type behavior. The cell bounces back to its unopened state upon selection and the row remains in the table view.
     public static var selection: SwipeExpansionStyle { return SwipeExpansionStyle(target: .percentage(0.5),
                                                                                   elasticOverscroll: true,
@@ -68,7 +65,7 @@ public struct SwipeExpansionStyle {
 
      - returns: The new `SwipeExpansionStyle` instance.
      */
-    public init(target: Target = .none, additionalTriggers: [Trigger] = [], elasticOverscroll: Bool = false, completionAnimation: CompletionAnimation = .bounce) {
+    public init(target: Target, additionalTriggers: [Trigger] = [], elasticOverscroll: Bool = false, completionAnimation: CompletionAnimation = .bounce) {
         self.target = target
         self.additionalTriggers = additionalTriggers
         self.elasticOverscroll = elasticOverscroll
@@ -101,9 +98,6 @@ public struct SwipeExpansionStyle {
 extension SwipeExpansionStyle {    
     /// Describes the relative target expansion threshold. Expansion will occur at the specified value.
     public enum Target {
-        /// No target.
-        case none
-        
         /// The target is specified by a percentage.
         case percentage(CGFloat)
         
@@ -115,8 +109,6 @@ extension SwipeExpansionStyle {
             
             let offset: CGFloat = {
                 switch self {
-                case .none:
-                    return .greatestFiniteMagnitude
                 case .percentage(let value):
                     return superview.bounds.width * value
                 case .edgeInset(let value):
@@ -124,7 +116,7 @@ extension SwipeExpansionStyle {
                 }
             }()
             
-            return max(actionsView.preferredWidth, offset)
+            return max(actionsView.preferredWidth + 20, offset)
         }
     }
     
@@ -205,8 +197,6 @@ extension SwipeExpansionStyle {
 extension SwipeExpansionStyle.Target: Equatable {
     public static func ==(lhs: SwipeExpansionStyle.Target, rhs: SwipeExpansionStyle.Target) -> Bool {
         switch (lhs, rhs) {
-        case (.none, .none):
-            return true
         case (.percentage(let lhs), .percentage(let rhs)):
             return lhs == rhs
         case (.edgeInset(let lhs), .edgeInset(let rhs)):

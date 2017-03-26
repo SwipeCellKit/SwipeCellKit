@@ -55,7 +55,7 @@ class SwipeActionsView: UIView {
     }
 
     var contentSize: CGSize {
-        if !options.expansionStyle.elasticOverscroll || visibleWidth < preferredWidth {
+        if let expansionStyle = options.expansionStyle, !expansionStyle.elasticOverscroll || visibleWidth < preferredWidth {
             return CGSize(width: visibleWidth, height: bounds.height)
         } else {
             let scrollRatio = max(0, visibleWidth - preferredWidth)
@@ -85,7 +85,7 @@ class SwipeActionsView: UIView {
     }
     
     var expandableAction: SwipeAction? {
-        return options.expansionStyle.target != .none ? actions.last : nil
+        return options.expansionStyle != nil ? actions.last : nil
     }
     
     init(maxSize: CGSize, options: SwipeTableOptions, orientation: SwipeActionsOrientation, actions: [SwipeAction]) {
