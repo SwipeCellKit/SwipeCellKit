@@ -133,6 +133,41 @@ func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: I
 }
 ````
 
+### Expansion
+
+Four built-in expansion styles are provided by `SwipeExpansionStyle`:  
+
+* .selection
+* .destructive (like Mail.app)
+* .destructiveAfterFill (like Mailbox/Tweetbot)
+* .fill
+
+Much effort has gone into making `SwipeExpansionStyle` extremely customizable. If these built-in styles do not meet your needs, see *Customizing Expansion* for more details on creating custom styles.
+
+The built-in `.fill` expansion style requires manual action fulfillment. This means your action handler must call `SwipeAction.fulfill(style:)` at some point during or after invocation to resolve the fill expansion. The supplied `ExpansionFulfillmentStyle` allows you to delete or reset the cell at some later point (possibly after further user interaction).
+
+The built-in `.destructive`, and `.destructiveAfterFill` expansion styles are configured to automatically perform row deletion when the action handler is invoked (automatic fulfillment).  Your deletion behavior may require coordination with other row animations (eg. inside `beginUpdates` and `endUpdates`). In this case, you can easily create a custom `SwipeExpansionStyle` which requires manual fulfillment to trigger deletion:
+
+````swift
+var options = SwipeTableOptions()
+options.expansionStyle = .destructive(automaticallyDelete: false)
+````
+
+> **NOTE**: You must call `SwipeAction.fulfill(with style:)` at some point while/after your action handler is invoked to trigger deletion. Do not call `deleteRows` directly.
+
+````swift
+let delete = SwipeAction(style: .destructive, title: nil) { action, indexPath in
+    // Update model
+    self.emails.remove(at: indexPath.row)
+
+    // Coordinate table view update animations
+    self.tableView.beginUpdates()
+    self.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
+    action.fulfill(with: .delete)
+    self.tableView.endUpdates()
+}
+````
+
 ### Customizing Transitions
 
 You can customize the transition behavior of individual actions by assigning a `transitionDelegate` to the `SwipeAction` type. 
@@ -151,8 +186,6 @@ The `ScaleTransition` type provides a static `default` configuration, but it can
 You can also easily provide your own completely custom transition behavior by adopting the `SwipeActionTransitioning` protocol.  The supplied `SwipeActionTransitioningContext` to the delegate methods reflect the current swipe state as the gesture is performed.
 
 ### Customizing Expansion
-
-#### Overview
 
 Expansion behavior is defined by four components: a target, triggers, elastic overscroll, and the completion animation.  
 
@@ -183,9 +216,9 @@ The completion animation occurs on touch up if expansion is actively triggered. 
 
 For fill expansions, you can use the `FillOptions` type to configure the behavior of the fill completion animation along with the timing of the invocation of the action handler. These options are defined by the `ExpansionFulfillmentStyle` and `HandlerInvocationTiming`. 
 
-The `ExpansionFulfillmentStyle` allows you to configure how to resolve the actively filled state . The built-in `.selection`, `destructive`, and `destructiveAfterFill` expansion styles configure the `ExpansionFulfillmentStyle` to automatically peform the appropriate `.delete` or `.reset` case of `ExpansionFulfillmentStyle` when the action handler is invoked. This is done by created a `FillOptions` instance using the static `automatic(_ style:timing:)` method.  When you need to determine this behavior at runtime or coordinate deletion with other animations, you can create a `FillOptions` instance using the static `manual(timing:)` fuction and call `action.fulfull(style:)` asynchronously after your action handler is invoked.
+The `ExpansionFulfillmentStyle` allows you to configure how to resolve the actively filled state . The built-in `.destructive`, and `.destructiveAfterFill` expansion styles configure the `ExpansionFulfillmentStyle` to automatically perform the `.delete` when the action handler is invoked. This is done by created a `FillOptions` instance using the static `automatic(_ style:timing:)` method.  When you need to determine this behavior at runtime or coordinate deletion with other animations, you can create a `FillOptions` instance using the static `manual(timing:)` function and call `action.fulfull(style:)` asynchronously after your action handler is invoked.
 
-You can use the `HandlerInvocationTiming` to configure if the action handler should be invoked `.with` the fill animation, or `.after` the fill animation completes.  Using the `.with` option behaves like the stock Mail.app, while the `.after` option behaves more like the 3rd party Mailbox and TweetBot apps.
+You can use the `HandlerInvocationTiming` to configure if the action handler should be invoked `.with` the fill animation, or `.after` the fill animation completes.  Using the `.with` option behaves like the stock Mail.app, while the `.after` option behaves more like the 3rd party Mailbox and Tweetbot apps.
 
 #### Built-in Styles
 
@@ -226,8 +259,6 @@ elasticOverscroll: false
 addditionalTriggers: [.overscroll(30)]
 completionAnimation: .fill(.manual(timing: .after))
 ```
-
-> Note: For the `.fill` style, the action handler must call `SwipeAction.fulfill(stye:)` to resolve the fill expansion.
 
 #### Button Behavior
 

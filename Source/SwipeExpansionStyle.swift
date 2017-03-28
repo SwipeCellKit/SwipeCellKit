@@ -30,7 +30,7 @@ public struct SwipeExpansionStyle {
     /**
      Returns a `SwipeExpansionStyle` instance for the default action which peforms destructive behavior with the specified options.
      
-     - parameter automaticallyDelete: Specifies if row/item deletion should be peformed automatically. If `false`, the action handler must call `SwipeAction.fulfill(with style:)` at some point after invocation to trigger deletion.
+     - parameter automaticallyDelete: Specifies if row/item deletion should be peformed automatically. If `false`, you must call `SwipeAction.fulfill(with style:)` at some point while/after your action handler is invoked to trigger deletion.
 
      - parameter timing: The timing which specifies when the action handler will be invoked with respect to the fill animation.
 
