@@ -47,6 +47,10 @@ The transition style describes how the action buttons are exposed during the swi
 
 <p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Transition-Reveal.gif" /></p>
 
+#### Customized
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Transition-Delegate.gif" /></p>
+
 ### Expansion Styles
 
 The expansion style describes the behavior when the cell is swiped past a defined threshold.
@@ -62,6 +66,10 @@ The expansion style describes the behavior when the cell is swiped past a define
 #### Destructive
 
 <p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Expansion-Destructive.gif" /></p>
+
+#### Customized
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Expansion-Delegate.gif" /></p>
 
 ## Requirements
 
