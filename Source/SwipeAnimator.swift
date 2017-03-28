@@ -9,6 +9,18 @@
 import Foundation
 
 protocol SwipeAnimator {
+    
+    init(duration: TimeInterval,
+         mass: CGFloat,
+         stiffness: CGFloat,
+         damping: CGFloat,
+         dampingRatio ratio: CGFloat,
+         initialVelocity velocity: CGFloat)
+    
+    func addAnimations(_ animation: @escaping () -> Swift.Void)
+    
+    func addCompletion(_ completion: @escaping (Bool) -> Swift.Void)
+    
     /**
      Starts the defined animation
      */
@@ -17,99 +29,101 @@ protocol SwipeAnimator {
     /**
      Stops the current animation
      */
-    func stopAnimation()
+    func stopAnimation(on view:UIView?)
 }
 
 @available(iOS 10, *)
 class UIViewPropertyCellAnimator: SwipeAnimator {
     
-    weak var cell:SwipeTableViewCell?
-    
     var animator: UIViewPropertyAnimator?
     
-    init(cell: SwipeTableViewCell, toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((Bool) -> Void)? = nil) {
-        self.cell = cell
-        self.animator = buildAnimator(toOffset: offset, withInitialVelocity: velocity, completion: completion)
+    required init(duration: TimeInterval,
+                  mass: CGFloat,
+                  stiffness: CGFloat,
+                  damping: CGFloat,
+                  dampingRatio ratio: CGFloat,
+                  initialVelocity velocity: CGFloat = 0) {
+        
+        if velocity != 0 {
+            let velocity = CGVector(dx: velocity, dy: velocity)
+            let parameters = UISpringTimingParameters(mass: mass,
+                                                      stiffness: stiffness,
+                                                      damping: damping,
+                                                      initialVelocity: velocity)
+            
+            self.animator = UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
+            
+        } else {
+            self.animator = UIViewPropertyAnimator(duration: duration, dampingRatio: ratio)
+        }
+    }
+    
+    func addAnimations(_ animation: @escaping () -> Void) {
+        self.animator?.addAnimations(animation)
+    }
+    
+    func addCompletion(_ completion: @escaping (Bool) -> Void) {
+        self.animator?.addCompletion { (position) in
+            completion(position == .end)
+        }
     }
     
     func startAnimation() {
-        self.cell?.layoutIfNeeded()
         self.animator?.startAnimation()
     }
     
-    func stopAnimation() {
+    func stopAnimation(on view:UIView? = nil) {
         if animator?.isRunning == true {
             animator?.stopAnimation(true)
         }
-    }
-    
-    private func buildAnimator(toOffset offset: CGFloat,
-                               withInitialVelocity velocity: CGFloat = 0,
-                               completion: ((Bool) -> Void)? = nil) -> UIViewPropertyAnimator {
-        
-        let animator: UIViewPropertyAnimator = {
-            if velocity != 0 {
-                let velocity = CGVector(dx: velocity, dy: velocity)
-                let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
-                return UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
-            } else {
-                return UIViewPropertyAnimator(duration: 0.7, dampingRatio: 1.0)
-            }
-        }()
-        
-        animator.addAnimations({
-            guard let `cell` = self.cell else { return }
-            
-            cell.center = CGPoint(x: offset, y: cell.center.y)
-            cell.layoutIfNeeded()
-        })
-        
-        if let completion = completion {
-            animator.addCompletion { position in
-                completion(position == .end)
-            }
-        }
-        
-        return animator
     }
 }
 
 class UIViewCellAnimator: SwipeAnimator {
     
-    weak var cell:SwipeTableViewCell?
-    let offset:CGFloat
+    let duration:TimeInterval
+    let damping:CGFloat
     let velocity:CGFloat
-    let completion:((Bool) -> Void)?
     
-    init(cell: SwipeTableViewCell, toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((Bool) -> Void)? = nil) {
-        self.cell = cell
-        self.offset = offset
+    var animation:(() -> Swift.Void)?
+    var completion:((Bool) -> Swift.Void)?
+    
+    // Maybe I can use the extra mass/stiffness/ratio in some calculation for the ratio?
+    required init(duration: TimeInterval,
+                  mass: CGFloat = 0,
+                  stiffness: CGFloat = 0,
+                  damping: CGFloat,
+                  dampingRatio ratio: CGFloat = 0,
+                  initialVelocity velocity: CGFloat) {
+        
+        self.duration = duration
+        self.damping = damping
         self.velocity = velocity
+    }
+    
+    func addAnimations(_ animation: @escaping () -> Void) {
+        self.animation = animation
+    }
+    
+    func addCompletion(_ completion: @escaping (Bool) -> Void) {
         self.completion = completion
     }
     
     func startAnimation() {
-        guard let `cell` = cell else { return }
+        guard let animation = animation else { return }
         
-        var remainingTime = 0.3
-        if velocity != 0 {
-            let remainingDistance = abs(offset - cell.frame.origin.x)
-            remainingTime = Double(min(remainingDistance / velocity, 0.3))
-        }
-        
-        UIView.animate(withDuration: remainingTime,
+        UIView.animate(withDuration: 0.5,
                        delay: 0,
-                       options: .curveEaseOut,
-                       animations: {
-                        guard let `cell` = self.cell else { return }
-                        
-                        cell.center = CGPoint(x: self.offset, y: cell.center.y)
-        },
+                       usingSpringWithDamping: damping,
+                       initialSpringVelocity: velocity,
+                       options: .curveEaseInOut,
+                       animations: animation,
                        completion: completion)
     }
     
-    func stopAnimation() {
-        guard let `cell` = cell else { return }
-        cell.layer.removeAllAnimations()
+    func stopAnimation(on view:UIView?) {
+        guard let view = view else { return }
+        // Can't do this without the cell instance to stop the animations on the layer
+        view.layer.removeAllAnimations()
     }
 }

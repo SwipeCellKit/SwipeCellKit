@@ -146,7 +146,7 @@ open class SwipeTableViewCell: UITableViewCell {
         
         switch gesture.state {
         case .began:
-            self.cellAnimator?.stopAnimation()
+            cellAnimator?.stopAnimation(on: self)
 
             originalCenter = center.x
             
@@ -326,15 +326,37 @@ open class SwipeTableViewCell: UITableViewCell {
     }
     
     func animate(toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((Bool) -> Void)? = nil) {
-        self.cellAnimator?.stopAnimation()
+        cellAnimator?.stopAnimation(on: self)
         
         if #available(iOS 10, *) {
-            self.cellAnimator = UIViewPropertyCellAnimator(cell: self, toOffset: offset, withInitialVelocity: velocity, completion: completion)
+            cellAnimator = UIViewPropertyCellAnimator(duration: 0.7,
+                                                      mass: 1.0,
+                                                      stiffness: 100,
+                                                      damping: 18,
+                                                      dampingRatio: 1.0,
+                                                      initialVelocity: velocity)
         } else {
-            self.cellAnimator = UIViewCellAnimator(cell: self, toOffset: offset, withInitialVelocity: velocity, completion: completion)
+            var remainingTime = 0.7
+            if velocity != 0 {
+                let remainingDistance = abs(offset - frame.origin.x)
+                remainingTime = Double(min(remainingDistance / velocity, 0.3))
+            }
+            
+            cellAnimator = UIViewCellAnimator(duration: remainingTime,
+                                              damping: 1.0,
+                                              initialVelocity: velocity)
         }
         
-        self.cellAnimator?.startAnimation()
+        cellAnimator?.addAnimations {
+            self.center = CGPoint(x: offset, y: self.center.y)
+            self.layoutIfNeeded()
+        }
+        
+        if let completion = completion {
+            cellAnimator?.addCompletion(completion)
+        }
+        
+        cellAnimator?.startAnimation()
     }
 
     func handleTap(gesture: UITapGestureRecognizer) {
