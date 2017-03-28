@@ -204,21 +204,31 @@ You can also easily provide your own completely custom transition behavior by ad
 
 ### Customizing Expansion
 
-Expansion behavior is defined by four components: a target, triggers, elastic overscroll, and the completion animation.  
+Expansion behavior is defined by the properties available in the `SwipeExpansionStyle` type: 
+
+* `target`: The relative target expansion threshold. Expansion will occur at the specified value.
+* `additionalTriggers`: Additional triggers to useful for determining if expansion should occur.
+* `elasticOverscroll`: Specifies if buttons should expand to fully fill overscroll, or expand at a percentage relative to the overscroll.
+* `completionAnimation`: Specifies the expansion animation completion style.
+* `minimumTargetOverscroll`: Specifies the minimum amount of overscroll required if the configured target is less than the fully exposed action view.
 
 #### Target
 
-The target describes the location to which the cell will scroll when expansion is triggered. The `SwipeExpansionStyle.Target` enumeration defines the following options:
+The target describes a location to which the view will scroll when expansion is triggered. A trigger is simply a threshold causing expansion to occur.
 
-1. `.percentage`: Percentage of superview's width (0.0 to 1.0).
-2. `.edgeInset`: Inset from superview's opposite edge (in points).
+The `SwipeExpansionStyle.Target` enumeration defines the following target options:
 
-#### Triggers 
+1. `.percentage(CGFloat)`: Percentage of superview's width (0.0 to 1.0).
+2. `.edgeInset(CGFloat)`: Inset from superview's opposite edge (in points).
 
-By default, expansion will automatically trigger after the actions view is completely exposed. It may be desirable to customize this trigger point, or define addtional triggers to complement the default behavior.  The `SwipeExpansionStyle.Trigger` enumeration defines the following options:
+By default, the configured *target* will also act as a trigger. For instance, if a target is configured with `.percentage(0.5)`, expansion will trigger when the view is scrolled more than 50% of its superview. 
 
-1. `.touchThreshold`: The trigger a specified by a touch occuring past the supplied percentage in the superview (0.0 to 1.0). The action view must also be fully exposed for this trigger to activate.
-2. `.overscroll`: The trigger is specified by the distance past the fully exposed action view (in points).
+#### Additional Triggers 
+
+It may be desirable to add additional triggers to complement the default target trigger. For instance, destructive expansion adds a touch threshold, triggering expansion when a touch occurs towards the opposite edge of the view. The `SwipeExpansionStyle.Trigger` enumeration defines the following options:
+
+1. `.touchThreshold(CGFloat)`: The trigger a specified by a touch occuring past the supplied percentage in the superview (0.0 to 1.0). The action view must also be fully exposed for this trigger to activate.
+2. `.overscroll(CGFloat)`: The trigger is specified by the distance past the fully exposed action view (in points).
 
 #### Elastic Overscroll
 
