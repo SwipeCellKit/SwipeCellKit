@@ -15,10 +15,10 @@ public struct SwipeExpansionStyle {
                                                                                   completionAnimation: .bounce) }
     
     /// The default action performs a destructive behavior. The cell is removed from the table view in an animated fashion.
-    public static var destructive: SwipeExpansionStyle { return .destructive(with: .fill(.automatic(.delete, timing: .with))) }
+    public static var destructive: SwipeExpansionStyle { return .destructive(automaticallyDelete: true, timing: .with) }
 
     /// The default action performs a destructive behavior after the fill animation completes. The cell is removed from the table view in an animated fashion.
-    public static var destructiveAfterFill: SwipeExpansionStyle { return .destructive(with: .fill(.automatic(.delete, timing: .after))) }
+    public static var destructiveAfterFill: SwipeExpansionStyle { return .destructive(automaticallyDelete: true, timing: .after) }
 
     /// The default action performs a fill behavior.
     ///
@@ -28,16 +28,18 @@ public struct SwipeExpansionStyle {
                                                                              completionAnimation: .fill(.manual(timing: .after))) }
 
     /**
-     Returns a `SwipeExpansionStyle` instance for the default action which peforms destructive behavior with the specified completion animation.
+     Returns a `SwipeExpansionStyle` instance for the default action which peforms destructive behavior with the specified options.
      
-     - parameter completionAnimation: The expansion animation completion style.
-     
+     - parameter automaticallyDelete: Specifies if row/item deletion should be peformed automatically. If `false`, the action handler must call `SwipeAction.fulfill(with style:)` at some point after invocation to trigger deletion.
+
+     - parameter timing: The timing which specifies when the action handler will be invoked with respect to the fill animation.
+
      - returns: The new `SwipeExpansionStyle` instance.
      */
-    public static func destructive(with completionAnimation: CompletionAnimation) -> SwipeExpansionStyle {
+    public static func destructive(automaticallyDelete: Bool, timing: FillOptions.HandlerInvocationTiming = .with) -> SwipeExpansionStyle {
         return SwipeExpansionStyle(target: .edgeInset(30),
                                    additionalTriggers: [.touchThreshold(0.8)],
-                                   completionAnimation: completionAnimation)
+                                   completionAnimation: .fill(automaticallyDelete ? .automatic(.delete, timing: timing) : .manual(timing: timing)))
     }
 
     /// The relative target expansion threshold. Expansion will occur at the specified value.
@@ -153,7 +155,7 @@ extension SwipeExpansionStyle {
     
     /// Specifies the options for the fill completion animation.
     public struct FillOptions {
-        /// Describes when the action handler with be invoked with respect to the fill animation.
+        /// Describes when the action handler will be invoked with respect to the fill animation.
         public enum HandlerInvocationTiming {
             /// The action handler is invoked with the fill animation.
             case with
@@ -167,7 +169,7 @@ extension SwipeExpansionStyle {
          
          - parameter style: The fulfillment style describing how expansion should be resolved once the action has been fulfilled.
          
-         - parameter timing: The timing which specifies when the action handler with be invoked with respect to the fill animation.
+         - parameter timing: The timing which specifies when the action handler will be invoked with respect to the fill animation.
          
          - returns: The new `FillOptions` instance.
          */
@@ -178,7 +180,7 @@ extension SwipeExpansionStyle {
         /**
          Returns a `FillOptions` instance with manual fulfillemnt.
          
-         - parameter timing: The timing which specifies when the action handler with be invoked with respect to the fill animation.
+         - parameter timing: The timing which specifies when the action handler will be invoked with respect to the fill animation.
          
          - returns: The new `FillOptions` instance.
          */
@@ -189,7 +191,7 @@ extension SwipeExpansionStyle {
         /// The fulfillment style describing how expansion should be resolved once the action has been fulfilled.
         public let autoFulFillmentStyle: ExpansionFulfillmentStyle?
         
-        /// The timing which specifies when the action handler with be invoked with respect to the fill animation.
+        /// The timing which specifies when the action handler will be invoked with respect to the fill animation.
         public let timing: HandlerInvocationTiming
     }
 }
