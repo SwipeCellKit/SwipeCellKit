@@ -47,6 +47,10 @@ The transition style describes how the action buttons are exposed during the swi
 
 <p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Transition-Reveal.gif" /></p>
 
+#### Customized
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Transition-Delegate.gif" /></p>
+
 ### Expansion Styles
 
 The expansion style describes the behavior when the cell is swiped past a defined threshold.
@@ -62,6 +66,10 @@ The expansion style describes the behavior when the cell is swiped past a define
 #### Destructive
 
 <p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Expansion-Destructive.gif" /></p>
+
+#### Customized
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Expansion-Delegate.gif" /></p>
 
 ## Requirements
 
@@ -133,6 +141,41 @@ func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: I
 }
 ````
 
+### Expansion
+
+Four built-in expansion styles are provided by `SwipeExpansionStyle`:  
+
+* .selection
+* .destructive (like Mail.app)
+* .destructiveAfterFill (like Mailbox/Tweetbot)
+* .fill
+
+Much effort has gone into making `SwipeExpansionStyle` extremely customizable. If these built-in styles do not meet your needs, see *Customizing Expansion* for more details on creating custom styles.
+
+The built-in `.fill` expansion style requires manual action fulfillment. This means your action handler must call `SwipeAction.fulfill(style:)` at some point during or after invocation to resolve the fill expansion. The supplied `ExpansionFulfillmentStyle` allows you to delete or reset the cell at some later point (possibly after further user interaction).
+
+The built-in `.destructive`, and `.destructiveAfterFill` expansion styles are configured to automatically perform row deletion when the action handler is invoked (automatic fulfillment).  Your deletion behavior may require coordination with other row animations (eg. inside `beginUpdates` and `endUpdates`). In this case, you can easily create a custom `SwipeExpansionStyle` which requires manual fulfillment to trigger deletion:
+
+````swift
+var options = SwipeTableOptions()
+options.expansionStyle = .destructive(automaticallyDelete: false)
+````
+
+> **NOTE**: You must call `SwipeAction.fulfill(with style:)` at some point while/after your action handler is invoked to trigger deletion. Do not call `deleteRows` directly.
+
+````swift
+let delete = SwipeAction(style: .destructive, title: nil) { action, indexPath in
+    // Update model
+    self.emails.remove(at: indexPath.row)
+
+    // Coordinate table view update animations
+    self.tableView.beginUpdates()
+    self.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
+    action.fulfill(with: .delete)
+    self.tableView.endUpdates()
+}
+````
+
 ### Customizing Transitions
 
 You can customize the transition behavior of individual actions by assigning a `transitionDelegate` to the `SwipeAction` type. 
@@ -152,7 +195,82 @@ You can also easily provide your own completely custom transition behavior by ad
 
 ### Customizing Expansion
 
-It is also possible to customize the expansion behavior by assigning a `expansionDelegate` to the `SwipeTableOptions` type. The delegate is invoked during the (un)expansion process and allows you to customize the display of the action being expanded, as well as the other actions in the view. 
+Expansion behavior is defined by four components: a target, triggers, elastic overscroll, and the completion animation.  
+
+##### Target
+
+The target describes the location to which the cell will scroll when expansion is triggered. The `SwipeExpansionStyle.Target` enumeration defines the following options:
+
+1. `.percentage`: Percentage of superview's width (0.0 to 1.0).
+2. `.edgeInset`: Inset from superview's opposite edge (in points).
+
+##### Triggers 
+
+By default, expansion will automatically trigger after the actions view is completely exposed. It may be desirable to customize this trigger point, or define addtional triggers to complement the default behavior.  The `SwipeExpansionStyle.Trigger` enumeration defines the following options:
+
+1. `.touchThreshold`: The trigger a specified by a touch occuring past the supplied percentage in the superview (0.0 to 1.0). The action view must also be fully exposed for this trigger to activate.
+2. `.overscroll`: The trigger is specified by the distance past the fully exposed action view (in points).
+
+##### Elastic Overscroll
+
+When `elasticOverscroll` is enabled, the action buttons will only fill 25% percent of the additional space provided to the actions view.  
+
+##### Completion Animations
+
+The completion animation occurs on touch up if expansion is actively triggered. The `SwipeExpansionStyle.CompletionAnimation` enumeration defines the following expansion animation completion style options:
+
+1. `.fill(FillOptions)`: The default expansion button will completely expand to fill the previous place of the cell. 
+2. `.bounce`: The expansion will bounce back from the trigger point and hide the action view, resetting the cell.
+
+For fill expansions, you can use the `FillOptions` type to configure the behavior of the fill completion animation along with the timing of the invocation of the action handler. These options are defined by the `ExpansionFulfillmentStyle` and `HandlerInvocationTiming`. 
+
+The `ExpansionFulfillmentStyle` allows you to configure how to resolve the actively filled state . The built-in `.destructive`, and `.destructiveAfterFill` expansion styles configure the `ExpansionFulfillmentStyle` to automatically perform the `.delete` when the action handler is invoked. This is done by created a `FillOptions` instance using the static `automatic(_ style:timing:)` method.  When you need to determine this behavior at runtime or coordinate deletion with other animations, you can create a `FillOptions` instance using the static `manual(timing:)` function and call `action.fulfull(style:)` asynchronously after your action handler is invoked.
+
+You can use the `HandlerInvocationTiming` to configure if the action handler should be invoked `.with` the fill animation, or `.after` the fill animation completes.  Using the `.with` option behaves like the stock Mail.app, while the `.after` option behaves more like the 3rd party Mailbox and Tweetbot apps.
+
+#### Built-in Styles
+
+The framework provides four built-in `SwipeExpansionStyle` instances which configure the above components accordingly:
+
+1. `.selection`
+
+```
+target: .percentage(0.5)
+elasticOverscroll: true
+addditionalTriggers: []
+completionAnimation: .bounce
+```
+
+2. `.destructive`
+
+```
+target: .edgeInset(30)
+elasticOverscroll: false
+addditionalTriggers: [.touchThreshold(0.8)]
+completionAnimation: .fill(.automatic(.delete, timing: .with))
+```
+
+3. `.destructiveAfterFill`
+
+```
+target: .edgeInset(30)
+elasticOverscroll: false
+addditionalTriggers: [.touchThreshold(0.8)]
+completionAnimation: .fill(.automatic(.delete, timing: .after))
+```
+
+4. `.fill`
+
+```
+target: .edgeInset(30)
+elasticOverscroll: false
+addditionalTriggers: [.overscroll(30)]
+completionAnimation: .fill(.manual(timing: .after))
+```
+
+#### Button Behavior
+
+It is also possible to customize the button expansion behavior by assigning a `expansionDelegate` to the `SwipeTableOptions` type. The delegate is invoked during the (un)expansion process and allows you to customize the display of the action being expanded, as well as the other actions in the view. 
 
 The provided `ScaleAndAlphaExpansion` type is useful for actions with clear backgrounds. When expansion occurs, the `ScaleAndAlphaExpansion` type automatically scales and fades the remaining actions in and out of the view. By default, if the expanded action has a clear background, the default `ScaleAndAlphaExpansion` will be automatically applied by the system.
 
