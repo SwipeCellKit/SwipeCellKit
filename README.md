@@ -300,7 +300,7 @@ Created and maintained by [**@jerkoch**](https://twitter.com/jerkoch).
 
 ## Showcase
 
-We're interested in knowing [who's using *SwipeCellKit*](/jerkoch/SwipeCellKit/blob/develop/SHOWCASE.md) in their app. Please submit a pull request to add your app! 
+We're interested in knowing [who's using *SwipeCellKit*](https://github.com/jerkoch/SwipeCellKit/blob/develop/SHOWCASE.md) in their app. Please submit a pull request to add your app! 
 
 ## License
 
