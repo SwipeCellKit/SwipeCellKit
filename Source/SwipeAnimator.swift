@@ -10,6 +10,21 @@ import Foundation
 
 protocol SwipeAnimator {
     
+    /**
+     Initializer used for creating a spring animation
+     
+     - parameter duration: The duration of the animation
+     
+     - parameter mass: The mass of the object to animate
+     
+     - parameter stiffness: How rigid the object is as it moves through the animation
+     
+     - parameter damping: Dampening force applied to the animating object
+     
+     - parameter ratio: The dampening ratio of the animating object
+     
+     - parameter velocity: The initial velocity of the object before applying the spring animation
+     */
     init(duration: TimeInterval,
          mass: CGFloat,
          stiffness: CGFloat,
@@ -17,8 +32,18 @@ protocol SwipeAnimator {
          dampingRatio ratio: CGFloat,
          initialVelocity velocity: CGFloat)
     
+    /**
+     The animation to be run by the SwipeAnimator
+     
+     - parameter animation: The closure to be executed by the animator
+     */
     func addAnimations(_ animation: @escaping () -> Swift.Void)
     
+    /**
+     Completion handler for the animation that is going to be started
+     
+     - parameter completion: The closure to be execute on completion of the animator
+     */
     func addCompletion(_ completion: @escaping (Bool) -> Swift.Void)
     
     /**
@@ -28,6 +53,8 @@ protocol SwipeAnimator {
     
     /**
      Stops the current animation
+     
+     - parameter view: Required parameter for stopping animations for iOS 9 or less
      */
     func stopAnimation(on view:UIView?)
 }
@@ -123,7 +150,6 @@ class UIViewCellAnimator: SwipeAnimator {
     
     func stopAnimation(on view:UIView?) {
         guard let view = view else { return }
-        // Can't do this without the cell instance to stop the animations on the layer
         view.layer.removeAllAnimations()
     }
 }
