@@ -4,6 +4,20 @@
 
 ---
 
+## [1.6.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.6.0)
+
+#### Added
+
+- Fully customizable expansion styles. See README documentation for more details. (#14)
+- `SwipeTableViewDelegate` delegate methods for `willBeginEditingRowAt` and `didEndEditingRowAt`. (#18)
+
+#### Fixed
+
+- Removed action view cleanup when cell moved moved off UIWindow. Initially, this was added to prevent retain cycles caused by `SwipeAction` handlers capturing `self`.  Instead, it should be left up to the implementor to use `[weak self]` in handler implementations or ensure the action view is hidden before dismissing/popping a temporary parent view controller.  I've verified this behaves the same way as `UITableViewRowAction`. (#23)
+- Issue where the table view pan gesture was being disabled along with all other table view gestures when a cell was swiped. (#21)
+
+---
+
 ## [1.5.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.5.0)
 
 #### Fixed
