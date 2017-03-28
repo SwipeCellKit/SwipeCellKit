@@ -329,12 +329,12 @@ open class SwipeTableViewCell: UITableViewCell {
         cellAnimator?.stopAnimation(on: self)
         
         if #available(iOS 10, *) {
-            cellAnimator = UIViewPropertyCellAnimator(duration: 0.7,
-                                                      mass: 1.0,
-                                                      stiffness: 100,
-                                                      damping: 18,
-                                                      dampingRatio: 1.0,
-                                                      initialVelocity: velocity)
+            cellAnimator = UIViewPropertySpringAnimator(duration: 0.7,
+                                                        mass: 1.0,
+                                                        stiffness: 100,
+                                                        damping: 18,
+                                                        dampingRatio: 1.0,
+                                                        initialVelocity: velocity)
         } else {
             var remainingTime = 0.7
             if velocity != 0 {
@@ -342,9 +342,9 @@ open class SwipeTableViewCell: UITableViewCell {
                 remainingTime = Double(min(remainingDistance / velocity, 0.3))
             }
             
-            cellAnimator = UIViewCellAnimator(duration: remainingTime,
-                                              damping: 1.0,
-                                              initialVelocity: velocity)
+            cellAnimator = UIViewSpringAnimator(duration: remainingTime,
+                                                damping: 1.0,
+                                                initialVelocity: velocity)
         }
         
         cellAnimator?.addAnimations {

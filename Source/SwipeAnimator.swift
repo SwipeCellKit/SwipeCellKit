@@ -52,6 +52,13 @@ protocol SwipeAnimator {
     func startAnimation()
     
     /**
+     Starts the defined animation after the given delay
+     
+     - parameter delay: Delay of the animation
+     */
+    func startAnimation(afterDelay delay: TimeInterval)
+    
+    /**
      Stops the current animation
      
      - parameter view: Required parameter for stopping animations for iOS 9 or less
@@ -60,7 +67,7 @@ protocol SwipeAnimator {
 }
 
 @available(iOS 10, *)
-class UIViewPropertyCellAnimator: SwipeAnimator {
+class UIViewPropertySpringAnimator: SwipeAnimator {
     
     var animator: UIViewPropertyAnimator?
     
@@ -78,25 +85,29 @@ class UIViewPropertyCellAnimator: SwipeAnimator {
                                                       damping: damping,
                                                       initialVelocity: velocity)
             
-            self.animator = UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
+            animator = UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
             
         } else {
-            self.animator = UIViewPropertyAnimator(duration: duration, dampingRatio: ratio)
+            animator = UIViewPropertyAnimator(duration: duration, dampingRatio: ratio)
         }
     }
     
     func addAnimations(_ animation: @escaping () -> Void) {
-        self.animator?.addAnimations(animation)
+        animator?.addAnimations(animation)
     }
     
     func addCompletion(_ completion: @escaping (Bool) -> Void) {
-        self.animator?.addCompletion { (position) in
+        animator?.addCompletion { (position) in
             completion(position == .end)
         }
     }
     
     func startAnimation() {
-        self.animator?.startAnimation()
+        animator?.startAnimation()
+    }
+    
+    func startAnimation(afterDelay delay:TimeInterval) {
+        animator?.startAnimation(afterDelay: delay)
     }
     
     func stopAnimation(on view:UIView? = nil) {
@@ -106,7 +117,7 @@ class UIViewPropertyCellAnimator: SwipeAnimator {
     }
 }
 
-class UIViewCellAnimator: SwipeAnimator {
+class UIViewSpringAnimator: SwipeAnimator {
     
     let duration:TimeInterval
     let damping:CGFloat
@@ -139,8 +150,20 @@ class UIViewCellAnimator: SwipeAnimator {
     func startAnimation() {
         guard let animation = animation else { return }
         
-        UIView.animate(withDuration: 0.5,
+        UIView.animate(withDuration: duration,
                        delay: 0,
+                       usingSpringWithDamping: damping,
+                       initialSpringVelocity: velocity,
+                       options: .curveEaseInOut,
+                       animations: animation,
+                       completion: completion)
+    }
+    
+    func startAnimation(afterDelay delay:TimeInterval) {
+        guard let animation = animation else { return }
+        
+        UIView.animate(withDuration: duration,
+                       delay: delay,
                        usingSpringWithDamping: damping,
                        initialSpringVelocity: velocity,
                        options: .curveEaseInOut,
