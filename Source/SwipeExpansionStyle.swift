@@ -54,6 +54,9 @@ public struct SwipeExpansionStyle {
     /// Specifies the expansion animation completion style.
     public let completionAnimation: CompletionAnimation
     
+    /// Specifies the minimum amount of overscroll required if the configured target is less than the fully exposed action view.
+    public var minimumTargetOverscroll: CGFloat = 20
+    
     /**
      Contructs a new `SwipeExpansionStyle` instance.
      
@@ -79,7 +82,7 @@ public struct SwipeExpansionStyle {
         
         guard abs(view.frame.minX) >= actionsView.preferredWidth else { return false }
         
-        if abs(view.frame.minX) >= target.offset(for: view, in: superview) {
+        if abs(view.frame.minX) >= target.offset(for: view, in: superview, minimumOverscroll: minimumTargetOverscroll) {
             return true
         }
         
@@ -93,7 +96,7 @@ public struct SwipeExpansionStyle {
     }
     
     func targetOffset(for view: Swipeable, in superview: UIView) -> CGFloat {
-        return target.offset(for: view, in: superview)
+        return target.offset(for: view, in: superview, minimumOverscroll: minimumTargetOverscroll)
     }
 }
 
@@ -106,7 +109,7 @@ extension SwipeExpansionStyle {
         /// The target is specified by a edge inset.
         case edgeInset(CGFloat)
         
-        func offset(for view: Swipeable, in superview: UIView) -> CGFloat {
+        func offset(for view: Swipeable, in superview: UIView, minimumOverscroll: CGFloat) -> CGFloat {
             guard let actionsView = view.actionsView else { return .greatestFiniteMagnitude }
             
             let offset: CGFloat = {
@@ -118,7 +121,7 @@ extension SwipeExpansionStyle {
                 }
             }()
             
-            return max(actionsView.preferredWidth + 20, offset)
+            return max(actionsView.preferredWidth + minimumOverscroll, offset)
         }
     }
     
