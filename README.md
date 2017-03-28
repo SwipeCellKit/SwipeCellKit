@@ -140,6 +140,15 @@ func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: I
     return options
 }
 ````
+### Transitions
+
+Three built-in transition styles are provided by `SwipeTransitionStyle`:  
+
+* .border: The visible action area is equally divide between all action buttons.
+* .drag: The visible action area is dragged, pinned to the cell, with each action button fully sized as it is exposed.
+* .reveal: The visible action area sits behind the cell, pinned to the edge of the table view, and is revealed as the cell is dragged aside.
+
+See *Customizing Transitions* for more details on customizing button appearance as the swipe is performed.
 
 ### Expansion
 
@@ -197,25 +206,25 @@ You can also easily provide your own completely custom transition behavior by ad
 
 Expansion behavior is defined by four components: a target, triggers, elastic overscroll, and the completion animation.  
 
-##### Target
+#### Target
 
 The target describes the location to which the cell will scroll when expansion is triggered. The `SwipeExpansionStyle.Target` enumeration defines the following options:
 
 1. `.percentage`: Percentage of superview's width (0.0 to 1.0).
 2. `.edgeInset`: Inset from superview's opposite edge (in points).
 
-##### Triggers 
+#### Triggers 
 
 By default, expansion will automatically trigger after the actions view is completely exposed. It may be desirable to customize this trigger point, or define addtional triggers to complement the default behavior.  The `SwipeExpansionStyle.Trigger` enumeration defines the following options:
 
 1. `.touchThreshold`: The trigger a specified by a touch occuring past the supplied percentage in the superview (0.0 to 1.0). The action view must also be fully exposed for this trigger to activate.
 2. `.overscroll`: The trigger is specified by the distance past the fully exposed action view (in points).
 
-##### Elastic Overscroll
+#### Elastic Overscroll
 
 When `elasticOverscroll` is enabled, the action buttons will only fill 25% percent of the additional space provided to the actions view.  
 
-##### Completion Animations
+#### Completion Animations
 
 The completion animation occurs on touch up if expansion is actively triggered. The `SwipeExpansionStyle.CompletionAnimation` enumeration defines the following expansion animation completion style options:
 
