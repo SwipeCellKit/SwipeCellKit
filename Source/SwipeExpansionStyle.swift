@@ -200,6 +200,7 @@ extension SwipeExpansionStyle {
 }
 
 extension SwipeExpansionStyle.Target: Equatable {
+    /// :nodoc:
     public static func ==(lhs: SwipeExpansionStyle.Target, rhs: SwipeExpansionStyle.Target) -> Bool {
         switch (lhs, rhs) {
         case (.percentage(let lhs), .percentage(let rhs)):
@@ -213,6 +214,7 @@ extension SwipeExpansionStyle.Target: Equatable {
 }
 
 extension SwipeExpansionStyle.CompletionAnimation: Equatable {
+    /// :nodoc:
     public static func ==(lhs: SwipeExpansionStyle.CompletionAnimation, rhs: SwipeExpansionStyle.CompletionAnimation) -> Bool {
         switch (lhs, rhs) {
         case (.fill, .fill):

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>SwipeExpansionStyle Enum Reference</title>
+    <title>ExpansionFulfillmentStyle Enum Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Enum/SwipeExpansionStyle" class="dashAnchor"></a>
-    <a title="SwipeExpansionStyle Enum Reference"></a>
+    <a name="//apple_ref/swift/Enum/ExpansionFulfillmentStyle" class="dashAnchor"></a>
+    <a title="ExpansionFulfillmentStyle Enum Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">SwipeCellKit Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">SwipeCellKit Reference</a>
         <img id="carat" src="../img/carat.png" />
-        SwipeExpansionStyle Enum Reference
+        ExpansionFulfillmentStyle Enum Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -42,13 +42,13 @@
             <a href="../Enums.html">Enums</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Enums/ExpansionFulfillmentStyle.html">ExpansionFulfillmentStyle</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Enums/SwipeActionStyle.html">SwipeActionStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/SwipeActionsOrientation.html">SwipeActionsOrientation</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/SwipeExpansionStyle.html">SwipeExpansionStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/SwipeTransitionStyle.html">SwipeTransitionStyle</a>
@@ -88,6 +88,21 @@
                 <a href="../Structs/SwipeExpansionAnimationTimingParameters.html">SwipeExpansionAnimationTimingParameters</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle.html">SwipeExpansionStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle/Target.html">– Target</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle/Trigger.html">– Trigger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle/CompletionAnimation.html">– CompletionAnimation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle/FillOptions.html">– FillOptions</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/SwipeTableOptions.html">SwipeTableOptions</a>
               </li>
             </ul>
@@ -97,14 +112,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>SwipeExpansionStyle</h1>
+            <h1>ExpansionFulfillmentStyle</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">SwipeExpansionStyle</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ExpansionFulfillmentStyle</span></code></pre>
 
                 </div>
               </div>
-            <p>Describes the expansion style.  Expansion is the behavior when the cell is swiped past a defined threshold.</p>
+            <p>Describes how expansion should be resolved once the action has been fulfilled.</p>
 
           </section>
           <section class="section task-group-section">
@@ -113,9 +128,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwipeCellKit19SwipeExpansionStyle4noneFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/none" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwipeCellKit19SwipeExpansionStyle4noneFMS0_S0_">none</a>
+                    <a name="/s:FO12SwipeCellKit25ExpansionFulfillmentStyle6deleteFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/delete" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwipeCellKit25ExpansionFulfillmentStyle6deleteFMS0_S0_">delete</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -123,14 +138,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>No expansion. Elasticity is applied once all action buttons have been exposed.</p>
+                        <p>Implies the item will be deleted upon action fulfillment.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="k">none</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">delete</span></code></pre>
 
                         </div>
                       </div>
@@ -144,9 +159,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwipeCellKit19SwipeExpansionStyle9selectionFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/selection" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwipeCellKit19SwipeExpansionStyle9selectionFMS0_S0_">selection</a>
+                    <a name="/s:FO12SwipeCellKit25ExpansionFulfillmentStyle5resetFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/reset" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwipeCellKit25ExpansionFulfillmentStyle5resetFMS0_S0_">reset</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -154,51 +169,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The default action performs a selection-type behavior. The cell bounces back to its unopened state upon selection and the row remains in the table view.</p>
+                        <p>Implies the item will be reset and the actions view hidden upon action fulfillment.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">selection</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwipeCellKit19SwipeExpansionStyle11destructiveFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/destructive" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwipeCellKit19SwipeExpansionStyle11destructiveFMS0_S0_">destructive</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The default action performs a destructive behavior. The cell is removed from the table view in an animated fashion.</p>
-
-<div class="aside aside-warning">
-    <p class="aside-title">Warning</p>
-    The <code><a href="../Classes/SwipeAction.html">SwipeAction</a></code> handler must update the table view&rsquo;s backing data model to remove the item respresenting the row.
-
-</div>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">destructive</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">reset</span></code></pre>
 
                         </div>
                       </div>
@@ -210,7 +188,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://github.com/jerkoch/SwipeCellKit" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-03-10)</p>
+          <p>&copy; 2017 <a class="link" href="https://github.com/jerkoch/SwipeCellKit" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-03-28)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

@@ -41,13 +41,13 @@
             <a href="Enums.html">Enums</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Enums/ExpansionFulfillmentStyle.html">ExpansionFulfillmentStyle</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Enums/SwipeActionStyle.html">SwipeActionStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="Enums/SwipeActionsOrientation.html">SwipeActionsOrientation</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Enums/SwipeExpansionStyle.html">SwipeExpansionStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="Enums/SwipeTransitionStyle.html">SwipeTransitionStyle</a>
@@ -85,6 +85,21 @@
               </li>
               <li class="nav-group-task">
                 <a href="Structs/SwipeExpansionAnimationTimingParameters.html">SwipeExpansionAnimationTimingParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/SwipeExpansionStyle.html">SwipeExpansionStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/SwipeExpansionStyle/Target.html">– Target</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/SwipeExpansionStyle/Trigger.html">– Trigger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/SwipeExpansionStyle/CompletionAnimation.html">– CompletionAnimation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/SwipeExpansionStyle/FillOptions.html">– FillOptions</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/SwipeTableOptions.html">SwipeTableOptions</a>
@@ -140,6 +155,9 @@
 <a href='#reveal' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='reveal'>Reveal</h4>
 
 <p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Transition-Reveal.gif" /></p>
+<a href='#customized' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='customized'>Customized</h4>
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Transition-Delegate.gif" /></p>
 <a href='#expansion-styles' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='expansion-styles'>Expansion Styles</h3>
 
 <p>The expansion style describes the behavior when the cell is swiped past a defined threshold.</p>
@@ -152,6 +170,9 @@
 <a href='#destructive' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='destructive'>Destructive</h4>
 
 <p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Expansion-Destructive.gif" /></p>
+<a href='#customized' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='customized'>Customized</h4>
+
+<p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Expansion-Delegate.gif" /></p>
 <a href='#requirements' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='requirements'>Requirements</h2>
 
 <ul>
@@ -208,6 +229,51 @@
     <span class="k">return</span> <span class="n">options</span>
 <span class="p">}</span>
 </code></pre>
+<a href='#transitions' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='transitions'>Transitions</h3>
+
+<p>Three built-in transition styles are provided by <code>SwipeTransitionStyle</code>:  </p>
+
+<ul>
+<li>.border: The visible action area is equally divide between all action buttons.</li>
+<li>.drag: The visible action area is dragged, pinned to the cell, with each action button fully sized as it is exposed.</li>
+<li>.reveal: The visible action area sits behind the cell, pinned to the edge of the table view, and is revealed as the cell is dragged aside.</li>
+</ul>
+
+<p>See <em>Customizing Transitions</em> for more details on customizing button appearance as the swipe is performed.</p>
+<a href='#expansion' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='expansion'>Expansion</h3>
+
+<p>Four built-in expansion styles are provided by <code>SwipeExpansionStyle</code>:  </p>
+
+<ul>
+<li>.selection</li>
+<li>.destructive (like Mail.app)</li>
+<li>.destructiveAfterFill (like Mailbox/Tweetbot)</li>
+<li>.fill</li>
+</ul>
+
+<p>Much effort has gone into making <code>SwipeExpansionStyle</code> extremely customizable. If these built-in styles do not meet your needs, see <em>Customizing Expansion</em> for more details on creating custom styles.</p>
+
+<p>The built-in <code>.fill</code> expansion style requires manual action fulfillment. This means your action handler must call <code>SwipeAction.fulfill(style:)</code> at some point during or after invocation to resolve the fill expansion. The supplied <code>ExpansionFulfillmentStyle</code> allows you to delete or reset the cell at some later point (possibly after further user interaction).</p>
+
+<p>The built-in <code>.destructive</code>, and <code>.destructiveAfterFill</code> expansion styles are configured to automatically perform row deletion when the action handler is invoked (automatic fulfillment).  Your deletion behavior may require coordination with other row animations (eg. inside <code>beginUpdates</code> and <code>endUpdates</code>). In this case, you can easily create a custom <code>SwipeExpansionStyle</code> which requires manual fulfillment to trigger deletion:</p>
+<pre class="highlight swift"><code><span class="k">var</span> <span class="nv">options</span> <span class="o">=</span> <span class="kt">SwipeTableOptions</span><span class="p">()</span>
+<span class="n">options</span><span class="o">.</span><span class="n">expansionStyle</span> <span class="o">=</span> <span class="o">.</span><span class="nf">destructive</span><span class="p">(</span><span class="nv">automaticallyDelete</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+</code></pre>
+
+<blockquote>
+<p><strong>NOTE</strong>: You must call <code>SwipeAction.fulfill(with style:)</code> at some point while/after your action handler is invoked to trigger deletion. Do not call <code>deleteRows</code> directly.</p>
+</blockquote>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">delete</span> <span class="o">=</span> <span class="kt">SwipeAction</span><span class="p">(</span><span class="nv">style</span><span class="p">:</span> <span class="o">.</span><span class="n">destructive</span><span class="p">,</span> <span class="nv">title</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span> <span class="p">{</span> <span class="n">action</span><span class="p">,</span> <span class="n">indexPath</span> <span class="k">in</span>
+    <span class="c1">// Update model</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">emails</span><span class="o">.</span><span class="nf">remove</span><span class="p">(</span><span class="nv">at</span><span class="p">:</span> <span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">)</span>
+
+    <span class="c1">// Coordinate table view update animations</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">tableView</span><span class="o">.</span><span class="nf">beginUpdates</span><span class="p">()</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">tableView</span><span class="o">.</span><span class="nf">insertRows</span><span class="p">(</span><span class="nv">at</span><span class="p">:</span> <span class="p">[</span><span class="kt">IndexPath</span><span class="p">(</span><span class="nv">row</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">section</span><span class="p">:</span> <span class="mi">1</span><span class="p">)],</span> <span class="nv">with</span><span class="p">:</span> <span class="o">.</span><span class="n">automatic</span><span class="p">)</span>
+    <span class="n">action</span><span class="o">.</span><span class="nf">fulfill</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="o">.</span><span class="n">delete</span><span class="p">)</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">tableView</span><span class="o">.</span><span class="nf">endUpdates</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre>
 <a href='#customizing-transitions' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='customizing-transitions'>Customizing Transitions</h3>
 
 <p>You can customize the transition behavior of individual actions by assigning a <code>transitionDelegate</code> to the <code>SwipeAction</code> type. </p>
@@ -224,7 +290,82 @@
 <p>You can also easily provide your own completely custom transition behavior by adopting the <code>SwipeActionTransitioning</code> protocol.  The supplied <code>SwipeActionTransitioningContext</code> to the delegate methods reflect the current swipe state as the gesture is performed.</p>
 <a href='#customizing-expansion' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='customizing-expansion'>Customizing Expansion</h3>
 
-<p>It is also possible to customize the expansion behavior by assigning a <code>expansionDelegate</code> to the <code>SwipeTableOptions</code> type. The delegate is invoked during the (un)expansion process and allows you to customize the display of the action being expanded, as well as the other actions in the view. </p>
+<p>Expansion behavior is defined by four components: a target, triggers, elastic overscroll, and the completion animation.  </p>
+<a href='#target' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='target'>Target</h4>
+
+<p>The target describes the location to which the cell will scroll when expansion is triggered. The <code>SwipeExpansionStyle.Target</code> enumeration defines the following options:</p>
+
+<ol>
+<li><code>.percentage</code>: Percentage of superview&rsquo;s width (0.0 to 1.0).</li>
+<li><code>.edgeInset</code>: Inset from superview&rsquo;s opposite edge (in points).</li>
+</ol>
+<a href='#triggers' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='triggers'>Triggers</h4>
+
+<p>By default, expansion will automatically trigger after the actions view is completely exposed. It may be desirable to customize this trigger point, or define addtional triggers to complement the default behavior.  The <code>SwipeExpansionStyle.Trigger</code> enumeration defines the following options:</p>
+
+<ol>
+<li><code>.touchThreshold</code>: The trigger a specified by a touch occuring past the supplied percentage in the superview (0.0 to 1.0). The action view must also be fully exposed for this trigger to activate.</li>
+<li><code>.overscroll</code>: The trigger is specified by the distance past the fully exposed action view (in points).</li>
+</ol>
+<a href='#elastic-overscroll' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='elastic-overscroll'>Elastic Overscroll</h4>
+
+<p>When <code>elasticOverscroll</code> is enabled, the action buttons will only fill 25% percent of the additional space provided to the actions view.  </p>
+<a href='#completion-animations' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='completion-animations'>Completion Animations</h4>
+
+<p>The completion animation occurs on touch up if expansion is actively triggered. The <code>SwipeExpansionStyle.CompletionAnimation</code> enumeration defines the following expansion animation completion style options:</p>
+
+<ol>
+<li><code>.fill(FillOptions)</code>: The default expansion button will completely expand to fill the previous place of the cell.</li>
+<li><code>.bounce</code>: The expansion will bounce back from the trigger point and hide the action view, resetting the cell.</li>
+</ol>
+
+<p>For fill expansions, you can use the <code>FillOptions</code> type to configure the behavior of the fill completion animation along with the timing of the invocation of the action handler. These options are defined by the <code>ExpansionFulfillmentStyle</code> and <code>HandlerInvocationTiming</code>. </p>
+
+<p>The <code>ExpansionFulfillmentStyle</code> allows you to configure how to resolve the actively filled state . The built-in <code>.destructive</code>, and <code>.destructiveAfterFill</code> expansion styles configure the <code>ExpansionFulfillmentStyle</code> to automatically perform the <code>.delete</code> when the action handler is invoked. This is done by created a <code>FillOptions</code> instance using the static <code>automatic(_ style:timing:)</code> method.  When you need to determine this behavior at runtime or coordinate deletion with other animations, you can create a <code>FillOptions</code> instance using the static <code>manual(timing:)</code> function and call <code>action.fulfull(style:)</code> asynchronously after your action handler is invoked.</p>
+
+<p>You can use the <code>HandlerInvocationTiming</code> to configure if the action handler should be invoked <code>.with</code> the fill animation, or <code>.after</code> the fill animation completes.  Using the <code>.with</code> option behaves like the stock Mail.app, while the <code>.after</code> option behaves more like the 3rd party Mailbox and Tweetbot apps.</p>
+<a href='#built-in-styles' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='built-in-styles'>Built-in Styles</h4>
+
+<p>The framework provides four built-in <code>SwipeExpansionStyle</code> instances which configure the above components accordingly:</p>
+
+<ol>
+<li><code>.selection</code></li>
+</ol>
+<pre class="highlight plaintext"><code>target: .percentage(0.5)
+elasticOverscroll: true
+addditionalTriggers: []
+completionAnimation: .bounce
+</code></pre>
+
+<ol>
+<li><code>.destructive</code></li>
+</ol>
+<pre class="highlight plaintext"><code>target: .edgeInset(30)
+elasticOverscroll: false
+addditionalTriggers: [.touchThreshold(0.8)]
+completionAnimation: .fill(.automatic(.delete, timing: .with))
+</code></pre>
+
+<ol>
+<li><code>.destructiveAfterFill</code></li>
+</ol>
+<pre class="highlight plaintext"><code>target: .edgeInset(30)
+elasticOverscroll: false
+addditionalTriggers: [.touchThreshold(0.8)]
+completionAnimation: .fill(.automatic(.delete, timing: .after))
+</code></pre>
+
+<ol>
+<li><code>.fill</code></li>
+</ol>
+<pre class="highlight plaintext"><code>target: .edgeInset(30)
+elasticOverscroll: false
+addditionalTriggers: [.overscroll(30)]
+completionAnimation: .fill(.manual(timing: .after))
+</code></pre>
+<a href='#button-behavior' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h4 id='button-behavior'>Button Behavior</h4>
+
+<p>It is also possible to customize the button expansion behavior by assigning a <code>expansionDelegate</code> to the <code>SwipeTableOptions</code> type. The delegate is invoked during the (un)expansion process and allows you to customize the display of the action being expanded, as well as the other actions in the view. </p>
 
 <p>The provided <code>ScaleAndAlphaExpansion</code> type is useful for actions with clear backgrounds. When expansion occurs, the <code>ScaleAndAlphaExpansion</code> type automatically scales and fades the remaining actions in and out of the view. By default, if the expanded action has a clear background, the default <code>ScaleAndAlphaExpansion</code> will be automatically applied by the system.</p>
 
@@ -239,6 +380,9 @@
 <a href='#credits' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='credits'>Credits</h2>
 
 <p>Created and maintained by <a href="https://twitter.com/jerkoch"><strong>@jerkoch</strong></a>.</p>
+<a href='#showcase' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='showcase'>Showcase</h2>
+
+<p>We&rsquo;re interested in knowing <a href="/jerkoch/SwipeCellKit/blob/develop/SHOWCASE.md">who&rsquo;s using <em>SwipeCellKit</em></a> in their app. Please submit a pull request to add your app! </p>
 <a href='#license' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='license'>License</h2>
 
 <p><code>SwipeCellKit</code> is released under an <a href="http://opensource.org/licenses/MIT">MIT License</a>. See <code>LICENSE</code> for details.</p>
@@ -248,7 +392,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://github.com/jerkoch/SwipeCellKit" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-03-10)</p>
+          <p>&copy; 2017 <a class="link" href="https://github.com/jerkoch/SwipeCellKit" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-03-28)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
