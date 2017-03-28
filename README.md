@@ -298,6 +298,10 @@ You can also provide your own completely custom expansion behavior by adopting t
 
 Created and maintained by [**@jerkoch**](https://twitter.com/jerkoch).
 
+## Showcase
+
+We're interested in knowing [who's using *SwipeCellKit*](/jerkoch/SwipeCellKit/blob/develop/SHOWCASE.md) in their app. Please submit a pull request to add your app! 
+
 ## License
 
 `SwipeCellKit` is released under an [MIT License][mitLink]. See `LICENSE` for details.
