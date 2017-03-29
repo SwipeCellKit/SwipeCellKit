@@ -305,7 +305,7 @@ open class SwipeTableViewCell: UITableViewCell {
             var remainingTime = duration
             if velocity != 0 {
                 let remainingDistance = abs(offset - frame.origin.x)
-                remainingTime = Double(min(remainingDistance / velocity, 0.3))
+                remainingTime = Double(min(remainingDistance / abs(velocity), CGFloat(duration)))
             }
             
             cellAnimator = UIViewSpringAnimator(duration: remainingTime,
