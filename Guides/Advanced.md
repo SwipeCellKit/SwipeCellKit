@@ -1,6 +1,4 @@
-## Advanced
-
-### Customizing Transitions
+## Customizing Transitions
 
 You can customize the transition behavior of individual actions by assigning a `transitionDelegate` to the `SwipeAction` type. 
 
@@ -17,7 +15,7 @@ The `ScaleTransition` type provides a static `default` configuration, but it can
 
 You can also easily provide your own completely custom transition behavior by adopting the `SwipeActionTransitioning` protocol.  The supplied `SwipeActionTransitioningContext` to the delegate methods reflect the current swipe state as the gesture is performed.
 
-### Customizing Expansion
+## Customizing Expansion
 
 Expansion behavior is defined by the properties available in the `SwipeExpansionStyle` type: 
 
@@ -27,7 +25,7 @@ Expansion behavior is defined by the properties available in the `SwipeExpansion
 * `completionAnimation`: Specifies the expansion animation completion style.
 * `minimumTargetOverscroll`: Specifies the minimum amount of overscroll required if the configured target is less than the fully exposed action view.
 
-#### Target
+### Target
 
 The target describes a location to which the view will scroll when expansion is triggered. A trigger is simply a threshold causing expansion to occur.
 
@@ -38,18 +36,18 @@ The `SwipeExpansionStyle.Target` enumeration defines the following target option
 
 By default, the configured *target* will also act as a trigger. For instance, if a target is configured with `.percentage(0.5)`, expansion will trigger when the view is scrolled more than 50% of its superview. 
 
-#### Additional Triggers 
+### Additional Triggers 
 
 It may be desirable to add additional triggers to complement the default target trigger. For instance, destructive expansion adds a touch threshold, triggering expansion when a touch occurs towards the opposite edge of the view. The `SwipeExpansionStyle.Trigger` enumeration defines the following options:
 
 1. `.touchThreshold(CGFloat)`: The trigger a specified by a touch occuring past the supplied percentage in the superview (0.0 to 1.0). The action view must also be fully exposed for this trigger to activate.
 2. `.overscroll(CGFloat)`: The trigger is specified by the distance past the fully exposed action view (in points).
 
-#### Elastic Overscroll
+### Elastic Overscroll
 
 When `elasticOverscroll` is enabled, the action buttons will only fill 25% percent of the additional space provided to the actions view.  
 
-#### Completion Animations
+### Completion Animations
 
 The completion animation occurs on touch up if expansion is actively triggered. The `SwipeExpansionStyle.CompletionAnimation` enumeration defines the following expansion animation completion style options:
 
@@ -62,7 +60,7 @@ The `ExpansionFulfillmentStyle` allows you to configure how to resolve the activ
 
 You can use the `HandlerInvocationTiming` to configure if the action handler should be invoked `.with` the fill animation, or `.after` the fill animation completes.  Using the `.with` option behaves like the stock Mail.app, while the `.after` option behaves more like the 3rd party Mailbox and Tweetbot apps.
 
-#### Built-in Styles
+### Built-in Styles
 
 The framework provides four built-in `SwipeExpansionStyle` instances which configure the above components accordingly:
 
@@ -102,7 +100,7 @@ addditionalTriggers: [.overscroll(30)]
 completionAnimation: .fill(.manual(timing: .after))
 ```
 
-#### Button Behavior
+### Button Behavior
 
 It is also possible to customize the button expansion behavior by assigning a `expansionDelegate` to the `SwipeTableOptions` type. The delegate is invoked during the (un)expansion process and allows you to customize the display of the action being expanded, as well as the other actions in the view. 
 
