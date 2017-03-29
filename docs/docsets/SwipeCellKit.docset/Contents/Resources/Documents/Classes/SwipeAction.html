@@ -42,13 +42,13 @@
             <a href="../Enums.html">Enums</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Enums/ExpansionFulfillmentStyle.html">ExpansionFulfillmentStyle</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Enums/SwipeActionStyle.html">SwipeActionStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/SwipeActionsOrientation.html">SwipeActionsOrientation</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/SwipeExpansionStyle.html">SwipeExpansionStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/SwipeTransitionStyle.html">SwipeTransitionStyle</a>
@@ -86,6 +86,21 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/SwipeExpansionAnimationTimingParameters.html">SwipeExpansionAnimationTimingParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle.html">SwipeExpansionStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle/Target.html">– Target</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle/Trigger.html">– Trigger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle/CompletionAnimation.html">– CompletionAnimation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle/FillOptions.html">– FillOptions</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/SwipeTableOptions.html">SwipeTableOptions</a>
@@ -557,12 +572,61 @@
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwipeCellKit11SwipeAction7fulfillFT4withOS_25ExpansionFulfillmentStyle_T_"></a>
+                    <a name="//apple_ref/swift/Method/fulfill(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwipeCellKit11SwipeAction7fulfillFT4withOS_25ExpansionFulfillmentStyle_T_">fulfill(with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Calling this method performs the configured expansion completion animation including deletion, if necessary. Calling this method more than once has no effect.</p>
+
+<p>You should only call this method from the implementation of your action <code><a href="../Classes/SwipeAction.html#/s:vC12SwipeCellKit11SwipeAction7handlerGSqFTS0_V10Foundation9IndexPath_T__">handler</a></code> method.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">fulfill</span><span class="p">(</span><span class="n">with</span> <span class="nv">style</span><span class="p">:</span> <span class="kt"><a href="../Enums/ExpansionFulfillmentStyle.html">ExpansionFulfillmentStyle</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>style</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The desired style for completing the expansion action.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://github.com/jerkoch/SwipeCellKit" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-03-10)</p>
+          <p>&copy; 2017 <a class="link" href="https://github.com/jerkoch/SwipeCellKit" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-03-28)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

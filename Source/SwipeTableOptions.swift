@@ -13,7 +13,7 @@ public struct SwipeTableOptions {
     public var transitionStyle: SwipeTransitionStyle = .border
     
     /// The expansion style. Expansion is the behavior when the cell is swiped past a defined threshold.
-    public var expansionStyle: SwipeExpansionStyle = .none
+    public var expansionStyle: SwipeExpansionStyle?
     
     /// The object that is notified when expansion changes.
     ///
@@ -44,20 +44,6 @@ public struct SwipeTableOptions {
     
     /// Constructs a new `SwipeTableOptions` instance with default options.
     public init() {}
-}
-
-/// Describes the expansion style.  Expansion is the behavior when the cell is swiped past a defined threshold.
-public enum SwipeExpansionStyle {
-    /// No expansion. Elasticity is applied once all action buttons have been exposed.
-    case none
-    
-    /// The default action performs a selection-type behavior. The cell bounces back to its unopened state upon selection and the row remains in the table view.
-    case selection
-    
-    /// The default action performs a destructive behavior. The cell is removed from the table view in an animated fashion.
-    ///
-    /// - warning: The `SwipeAction` handler must update the table view's backing data model to remove the item respresenting the row.
-    case destructive
 }
 
 /// Describes the transition style. Transition is the style of how the action buttons are exposed during the swipe.

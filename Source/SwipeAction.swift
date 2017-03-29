@@ -86,6 +86,30 @@ public class SwipeAction: NSObject {
         self.style = style
         self.handler = handler
     }
+    
+    /**
+     Calling this method performs the configured expansion completion animation including deletion, if necessary. Calling this method more than once has no effect.
+ 
+     You should only call this method from the implementation of your action `handler` method.
+     
+     - parameter style: The desired style for completing the expansion action.
+     */
+    public func fulfill(with style: ExpansionFulfillmentStyle) {
+        completionHandler?(style)
+    }
+    
+    // MARK: - Internal
+    
+    internal var completionHandler: ((ExpansionFulfillmentStyle) -> Void)?
+}
+
+/// Describes how expansion should be resolved once the action has been fulfilled.
+public enum ExpansionFulfillmentStyle {
+    /// Implies the item will be deleted upon action fulfillment.
+    case delete
+
+    /// Implies the item will be reset and the actions view hidden upon action fulfillment.
+    case reset
 }
 
 // MARK: - Internal
