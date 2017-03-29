@@ -2,6 +2,12 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.6.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.6.1)
+
+#### Fixed
+
+- Issue where transitions are messed up when `expansionStyle` is set to `nil`.
+
 ---
 
 ## [1.6.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.6.0)
