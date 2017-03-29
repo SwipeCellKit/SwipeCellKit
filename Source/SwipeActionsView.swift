@@ -55,7 +55,7 @@ class SwipeActionsView: UIView {
     }
 
     var contentSize: CGSize {
-        if let expansionStyle = options.expansionStyle, !expansionStyle.elasticOverscroll || visibleWidth < preferredWidth {
+        if options.expansionStyle?.elasticOverscroll != true || visibleWidth < preferredWidth {
             return CGSize(width: visibleWidth, height: bounds.height)
         } else {
             let scrollRatio = max(0, visibleWidth - preferredWidth)
