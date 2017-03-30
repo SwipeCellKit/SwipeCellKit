@@ -195,7 +195,7 @@ class MailCell: SwipeTableViewCell {
     @IBOutlet var subjectLabel: UILabel!
     @IBOutlet var bodyLabel: UILabel!
     
-    var animator: UIViewPropertyAnimator?
+    var animator: Any?
     
     var indicatorView = IndicatorView(frame: .zero)
     
@@ -227,14 +227,15 @@ class MailCell: SwipeTableViewCell {
             self.unread = unread
         }
         
-        if animated {
-            self.animator?.stopAnimation(true)
+        if #available(iOS 10, *), animated {
+            var localAnimator = self.animator as? UIViewPropertyAnimator
+            localAnimator?.stopAnimation(true)
             
-            let animator = unread ? UIViewPropertyAnimator(duration: 1.0, dampingRatio: 0.4) : UIViewPropertyAnimator(duration: 0.3, dampingRatio: 1.0)
-            animator.addAnimations(closure)
-            animator.startAnimation()
+            localAnimator = unread ? UIViewPropertyAnimator(duration: 1.0, dampingRatio: 0.4) : UIViewPropertyAnimator(duration: 0.3, dampingRatio: 1.0)
+            localAnimator?.addAnimations(closure)
+            localAnimator?.startAnimation()
 
-            self.animator = animator
+            self.animator = localAnimator
         } else {
             closure()
         }

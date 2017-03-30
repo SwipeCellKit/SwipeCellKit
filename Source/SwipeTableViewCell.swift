@@ -16,9 +16,8 @@ import UIKit
 open class SwipeTableViewCell: UITableViewCell {
     /// The object that acts as the delegate of the `SwipeTableViewCell`.
     public weak var delegate: SwipeTableViewCellDelegate?
-
-    var feedbackGenerator: UIImpactFeedbackGenerator?
-    var animator: UIViewPropertyAnimator?
+    
+    var animator: SwipeAnimator?
 
     var state = SwipeState.center
     var originalCenter: CGFloat = 0
@@ -119,9 +118,6 @@ open class SwipeTableViewCell: UITableViewCell {
 
             originalCenter = center.x
             
-            feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-            feedbackGenerator?.prepare()
-
             if state == .center || state == .animatingToCenter {
                 let velocity = gesture.velocity(in: target)
                 let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
@@ -162,12 +158,7 @@ open class SwipeTableViewCell: UITableViewCell {
                                                                  fromOriginalCenter: CGPoint(x: originalCenter, y: 0)).x
                 }
                 
-                if expanded != actionsView.expanded {
-                    feedbackGenerator?.impactOccurred()
-                    feedbackGenerator?.prepare()
-                }
-                
-                actionsView.expanded = expanded
+                actionsView.setExpanded(expanded: expanded, feedback: true)
             } else {
                 target.center.x = gesture.elasticTranslation(in: target,
                                                              withLimit: CGSize(width: actionsView.preferredWidth, height: 0),
@@ -183,8 +174,6 @@ open class SwipeTableViewCell: UITableViewCell {
             let velocity = gesture.velocity(in: target)
             state = targetState(forVelocity: velocity)
             
-            feedbackGenerator = nil
-
             if actionsView.expanded == true, let expandedAction = actionsView.expandableAction  {
                 perform(action: expandedAction)
             } else {
@@ -277,18 +266,26 @@ open class SwipeTableViewCell: UITableViewCell {
         }
     }
     
-    func animate(duration: Double = 0.7, toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((UIViewAnimatingPosition) -> Void)? = nil) {
+    func animate(duration: Double = 0.7, toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((Bool) -> Void)? = nil) {
         stopAnimatorIfNeeded()
         
         layoutIfNeeded()
         
-        let animator: UIViewPropertyAnimator = {
+        let animator: SwipeAnimator = {
             if velocity != 0 {
-                let velocity = CGVector(dx: velocity, dy: velocity)
-                let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
-                return UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
+                if #available(iOS 10, *) {
+                    let velocity = CGVector(dx: velocity, dy: velocity)
+                    let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
+                    return UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
+                } else {
+                    return UIViewSpringAnimator(duration: duration, damping: 1.0, initialVelocity: velocity)
+                }
             } else {
-                return UIViewPropertyAnimator(duration: duration, dampingRatio: 1.0)
+                if #available(iOS 10, *) {
+                    return UIViewPropertyAnimator(duration: duration, dampingRatio: 1.0)
+                } else {
+                    return UIViewSpringAnimator(duration: duration, damping: 1.0)
+                }
             }
         }()
 
@@ -299,7 +296,7 @@ open class SwipeTableViewCell: UITableViewCell {
         })
         
         if let completion = completion {
-            animator.addCompletion(completion)
+            animator.addCompletion(completion: completion)
         }
         
         self.animator = animator
@@ -438,8 +435,8 @@ extension SwipeTableViewCell {
         let targetCenter = self.targetCenter(active: true)
         
         if animated {
-            animate(toOffset: targetCenter) { position in
-                completion?(position == .end)
+            animate(toOffset: targetCenter) { complete in
+                completion?(complete)
             }
         } else {
             center.x = targetCenter
@@ -457,7 +454,7 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
         
         if action == actionsView.expandableAction, let expansionStyle = actionsView.options.expansionStyle {
             // Trigger the expansion (may already be expanded from drag)
-            actionsView.expanded = true
+            actionsView.setExpanded(expanded: true)
 
             switch expansionStyle.completionAnimation {
             case .bounce:
