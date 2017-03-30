@@ -103,7 +103,7 @@ class UIViewPropertySpringAnimator: SwipeAnimator {
     }
     
     func startAnimation() {
-        animator?.startAnimation()
+        self.startAnimation(afterDelay: 0)
     }
     
     func startAnimation(afterDelay delay:TimeInterval) {
@@ -148,15 +148,7 @@ class UIViewSpringAnimator: SwipeAnimator {
     }
     
     func startAnimation() {
-        guard let animation = animation else { return }
-        
-        UIView.animate(withDuration: duration,
-                       delay: 0,
-                       usingSpringWithDamping: damping,
-                       initialSpringVelocity: velocity,
-                       options: .curveEaseInOut,
-                       animations: animation,
-                       completion: completion)
+        self.startAnimation(afterDelay: 0)
     }
     
     func startAnimation(afterDelay delay:TimeInterval) {
