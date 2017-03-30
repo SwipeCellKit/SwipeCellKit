@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		170BCE721E8340C000F46E18 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170BCE711E8340C000F46E18 /* SwipeAnimator.swift */; };
+		3F19AD041E8D711C006B4B3A /* SwipeFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F19AD031E8D711C006B4B3A /* SwipeFeedback.swift */; };
 		3F234AC81E44A7A400E22A38 /* SwipeCellKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 3F234AC61E44A7A400E22A38 /* SwipeCellKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3F234AD61E44A94F00E22A38 /* SwipeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F234AD21E44A94F00E22A38 /* SwipeTableViewCell.swift */; };
 		3F234AD71E44A94F00E22A38 /* SwipeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F234AD31E44A94F00E22A38 /* SwipeAction.swift */; };
@@ -26,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		170BCE711E8340C000F46E18 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
+		3F19AD031E8D711C006B4B3A /* SwipeFeedback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeFeedback.swift; sourceTree = "<group>"; };
 		3F234AC31E44A7A400E22A38 /* SwipeCellKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwipeCellKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F234AC61E44A7A400E22A38 /* SwipeCellKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwipeCellKit.h; sourceTree = "<group>"; };
 		3F234AC71E44A7A400E22A38 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				3FD016E01E6D7F7700B54FFC /* SwipeActionTransitioning.swift */,
 				3F4C721C1E7E8BC20097399A /* SwipeExpansionStyle.swift */,
 				3FD016DE1E6D778700B54FFC /* SwipeExpanding.swift */,
+				3F19AD031E8D711C006B4B3A /* SwipeFeedback.swift */,
 				3F234AD51E44A94F00E22A38 /* Extensions.swift */,
 				3F234AD01E44A8F200E22A38 /* Supporting Files */,
 			);
@@ -186,6 +189,7 @@
 				3F234AD71E44A94F00E22A38 /* SwipeAction.swift in Sources */,
 				3F3ED7101E486993009DD5D8 /* SwipeActionButton.swift in Sources */,
 				3F234AD61E44A94F00E22A38 /* SwipeTableViewCell.swift in Sources */,
+				3F19AD041E8D711C006B4B3A /* SwipeFeedback.swift in Sources */,
 				3FD016701E696D8D00B54FFC /* SwipeTransitionLayout.swift in Sources */,
 				3FA78CA11E5A5A0B00A1D8FF /* SwipeTableViewCell+Accessibility.swift in Sources */,
 				3F4C721F1E7E8C180097399A /* Swipeable.swift in Sources */,

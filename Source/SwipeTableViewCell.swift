@@ -17,16 +17,6 @@ open class SwipeTableViewCell: UITableViewCell {
     /// The object that acts as the delegate of the `SwipeTableViewCell`.
     public weak var delegate: SwipeTableViewCellDelegate?
     
-    var _feedbackGenerator: Any?
-    @available(iOS 10, *)
-    var feedbackGenerator: UIImpactFeedbackGenerator? {
-        get {
-            return _feedbackGenerator as? UIImpactFeedbackGenerator
-        }
-        set {
-            _feedbackGenerator = newValue
-        }
-    }
     var animator: SwipeAnimator?
 
     var state = SwipeState.center
@@ -128,11 +118,6 @@ open class SwipeTableViewCell: UITableViewCell {
 
             originalCenter = center.x
             
-            if #available(iOS 10.0, *) {
-                feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-                feedbackGenerator?.prepare()
-            }
-
             if state == .center || state == .animatingToCenter {
                 let velocity = gesture.velocity(in: target)
                 let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
@@ -173,12 +158,7 @@ open class SwipeTableViewCell: UITableViewCell {
                                                                  fromOriginalCenter: CGPoint(x: originalCenter, y: 0)).x
                 }
                 
-                if expanded != actionsView.expanded, #available(iOS 10.0, *) {
-                    feedbackGenerator?.impactOccurred()
-                    feedbackGenerator?.prepare()
-                }
-                
-                actionsView.expanded = expanded
+                actionsView.setExpanded(expanded: expanded, feedback: true)
             } else {
                 target.center.x = gesture.elasticTranslation(in: target,
                                                              withLimit: CGSize(width: actionsView.preferredWidth, height: 0),
@@ -194,9 +174,6 @@ open class SwipeTableViewCell: UITableViewCell {
             let velocity = gesture.velocity(in: target)
             state = targetState(forVelocity: velocity)
             
-            // Nullify the ivar directly to reduce an #available if statement
-            _feedbackGenerator = nil
-
             if actionsView.expanded == true, let expandedAction = actionsView.expandableAction  {
                 perform(action: expandedAction)
             } else {
@@ -477,7 +454,7 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
         
         if action == actionsView.expandableAction, let expansionStyle = actionsView.options.expansionStyle {
             // Trigger the expansion (may already be expanded from drag)
-            actionsView.expanded = true
+            actionsView.setExpanded(expanded: true)
 
             switch expansionStyle.completionAnimation {
             case .bounce:
