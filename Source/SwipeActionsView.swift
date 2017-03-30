@@ -66,17 +66,15 @@ class SwipeActionsView: UIView {
     var expanded: Bool = false {
         didSet {
             guard oldValue != expanded else { return }
-            
+
             let timingParameters = expansionDelegate?.animationTimingParameters(buttons: buttons.reversed(), expanding: expanded)
-                
-            expansionAnimator?.stopAnimation(on: self)
+            
+            if expansionAnimator?.isRunning == true {
+                expansionAnimator?.stopAnimation(true)
+            }
             
             if #available(iOS 10, *) {
-                expansionAnimator = UIViewPropertySpringAnimator(duration: timingParameters?.duration ?? 0.6,
-                                                                 mass: 0,
-                                                                 stiffness: 0,
-                                                                 damping: 0,
-                                                                 dampingRatio: 1.0)
+                expansionAnimator = UIViewPropertyAnimator(duration: timingParameters?.duration ?? 0.6, dampingRatio: 1.0)
             } else {
                 expansionAnimator = UIViewSpringAnimator(duration: timingParameters?.duration ?? 0.6,
                                                          damping: 1.0,

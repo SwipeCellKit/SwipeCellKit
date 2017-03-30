@@ -74,8 +74,8 @@
 		3F234AC51E44A7A400E22A38 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				170BCE711E8340C000F46E18 /* SwipeAnimator.swift */,
 				3F4C721E1E7E8C180097399A /* Swipeable.swift */,
+				170BCE711E8340C000F46E18 /* SwipeAnimator.swift */,
 				3F234AD21E44A94F00E22A38 /* SwipeTableViewCell.swift */,
 				3FA78CA01E5A5A0B00A1D8FF /* SwipeTableViewCell+Accessibility.swift */,
 				3F3ED7111E48AF37009DD5D8 /* SwipeTableViewCellDelegate.swift */,

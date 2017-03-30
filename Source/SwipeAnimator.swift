@@ -1,50 +1,29 @@
 //
-//  SwipeCellAnimator.swift
-//  SwipeCellKit
+//  SwipeAnimator.swift
 //
-//  Created by Daniel Carmo on 2017-03-22.
-//
+//  Created by Jeremy Koch
+//  Copyright © 2017 Jeremy Koch. All rights reserved.
 //
 
 import Foundation
 
 protocol SwipeAnimator {
-    
-    /**
-     Initializer used for creating a spring animation
-     
-     - parameter duration: The duration of the animation
-     
-     - parameter mass: The mass of the object to animate
-     
-     - parameter stiffness: How rigid the object is as it moves through the animation
-     
-     - parameter damping: Dampening force applied to the animating object
-     
-     - parameter ratio: The dampening ratio of the animating object
-     
-     - parameter velocity: The initial velocity of the object before applying the spring animation
-     */
-    init(duration: TimeInterval,
-         mass: CGFloat,
-         stiffness: CGFloat,
-         damping: CGFloat,
-         dampingRatio ratio: CGFloat,
-         initialVelocity velocity: CGFloat)
+    /// A Boolean value indicating whether the animation is currently running.
+    var isRunning: Bool { get }
     
     /**
      The animation to be run by the SwipeAnimator
      
      - parameter animation: The closure to be executed by the animator
      */
-    func addAnimations(_ animation: @escaping () -> Swift.Void)
+    func addAnimations(_ animation: @escaping () -> Void)
     
     /**
      Completion handler for the animation that is going to be started
      
      - parameter completion: The closure to be execute on completion of the animator
      */
-    func addCompletion(_ completion: @escaping (Bool) -> Swift.Void)
+    func addCompletion(completion: @escaping (Bool) -> Void)
     
     /**
      Starts the defined animation
@@ -59,92 +38,54 @@ protocol SwipeAnimator {
     func startAnimation(afterDelay delay: TimeInterval)
     
     /**
-     Stops the current animation
+     Stops the animations at their current positions.
      
-     - parameter view: Required parameter for stopping animations for iOS 9 or less
+     - parameter withoutFinishing: A Boolean indicating whether any final actions should be performed.
      */
-    func stopAnimation(on view:UIView?)
+    func stopAnimation(_ withoutFinishing: Bool)
 }
 
-@available(iOS 10, *)
-class UIViewPropertySpringAnimator: SwipeAnimator {
-    
-    var animator: UIViewPropertyAnimator?
-    
-    required init(duration: TimeInterval,
-                  mass: CGFloat,
-                  stiffness: CGFloat,
-                  damping: CGFloat,
-                  dampingRatio ratio: CGFloat,
-                  initialVelocity velocity: CGFloat = 0) {
-        
-        if velocity != 0 {
-            let velocity = CGVector(dx: velocity, dy: velocity)
-            let parameters = UISpringTimingParameters(mass: mass,
-                                                      stiffness: stiffness,
-                                                      damping: damping,
-                                                      initialVelocity: velocity)
-            
-            animator = UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
-            
-        } else {
-            animator = UIViewPropertyAnimator(duration: duration, dampingRatio: ratio)
-        }
-    }
-    
-    func addAnimations(_ animation: @escaping () -> Void) {
-        animator?.addAnimations(animation)
-    }
-    
-    func addCompletion(_ completion: @escaping (Bool) -> Void) {
-        animator?.addCompletion { (position) in
+@available(iOS 10.0, *)
+extension UIViewPropertyAnimator: SwipeAnimator {
+    func addCompletion(completion: @escaping (Bool) -> Void) {
+        addCompletion { position in
             completion(position == .end)
-        }
-    }
-    
-    func startAnimation() {
-        self.startAnimation(afterDelay: 0)
-    }
-    
-    func startAnimation(afterDelay delay:TimeInterval) {
-        animator?.startAnimation(afterDelay: delay)
-    }
-    
-    func stopAnimation(on view:UIView? = nil) {
-        if animator?.isRunning == true {
-            animator?.stopAnimation(true)
         }
     }
 }
 
 class UIViewSpringAnimator: SwipeAnimator {
+    var isRunning: Bool = false
     
     let duration:TimeInterval
     let damping:CGFloat
     let velocity:CGFloat
     
-    var animation:(() -> Swift.Void)?
-    var completion:((Bool) -> Swift.Void)?
+    var animations:(() -> Void)?
+    var completion:((Bool) -> Void)?
     
-    // Maybe I can use the extra mass/stiffness/ratio in some calculation for the ratio?
     required init(duration: TimeInterval,
-                  mass: CGFloat = 0,
-                  stiffness: CGFloat = 0,
                   damping: CGFloat,
-                  dampingRatio ratio: CGFloat = 0,
-                  initialVelocity velocity: CGFloat) {
-        
+                  initialVelocity velocity: CGFloat = 0) {
         self.duration = duration
         self.damping = damping
         self.velocity = velocity
     }
     
-    func addAnimations(_ animation: @escaping () -> Void) {
-        self.animation = animation
+    func addAnimations(_ animations: @escaping () -> Void) {
+        self.animations = animations
     }
     
-    func addCompletion(_ completion: @escaping (Bool) -> Void) {
-        self.completion = completion
+    func addCompletion(completion: @escaping (Bool) -> Void) {
+        self.completion = { [weak self] finished in
+            guard self?.isRunning == true else { return }
+            
+            self?.isRunning = false
+            self?.animations = nil
+            self?.completion = nil
+            
+            completion(finished)
+        }
     }
     
     func startAnimation() {
@@ -152,19 +93,20 @@ class UIViewSpringAnimator: SwipeAnimator {
     }
     
     func startAnimation(afterDelay delay:TimeInterval) {
-        guard let animation = animation else { return }
+        guard let animations = animations else { return }
+        
+        isRunning = true
         
         UIView.animate(withDuration: duration,
                        delay: delay,
                        usingSpringWithDamping: damping,
                        initialSpringVelocity: velocity,
-                       options: .curveEaseInOut,
-                       animations: animation,
+                       options: [.curveEaseInOut, .allowUserInteraction],
+                       animations: animations,
                        completion: completion)
     }
     
-    func stopAnimation(on view:UIView?) {
-        guard let view = view else { return }
-        view.layer.removeAllAnimations()
+    func stopAnimation(_ withoutFinishing: Bool) {
+        isRunning = false
     }
 }
