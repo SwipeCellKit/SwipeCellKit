@@ -2,6 +2,20 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.7.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.7.0)
+
+#### Added
+
+- Support for iOS 9. Thanks to @DMCApps!
+- Showcase link in the README to track apps using the framework. Please submit a pull request to add your app!
+
+#### Updated
+
+- The *Advanced Customization* section in the README and moved it to a separate file.
+- The *Requirements* section in the README to reflect iOS 9 support.
+
+---
+
 ## [1.6.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.6.1)
 
 #### Fixed
