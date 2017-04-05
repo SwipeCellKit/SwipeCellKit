@@ -7,7 +7,7 @@ env:
 
    - PROJECT="SwipeCellKit.xcodeproj"
    - IOS_SCHEME="SwipeCellKit"
-   - IOS_SDK=iphonesimulator10.2  
+   - IOS_SDK=iphonesimulator10.3  
 
    matrix:
    - DESTINATION="OS=9.0,name=iPhone 6 Plus" SDK="$IOS_SDK" SCHEME="$IOS_SCHEME" BUILD_EXAMPLE="YES" POD_LINT="YES"
