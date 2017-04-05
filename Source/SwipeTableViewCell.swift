@@ -509,6 +509,7 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
                     self?.reset()
                 }
             case .reset:
+                self?.mask = nil
                 self?.hideSwipe(animated: true)
             }
         }
