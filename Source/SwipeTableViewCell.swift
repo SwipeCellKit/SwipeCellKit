@@ -481,10 +481,6 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
         guard let actionsView = actionsView,
             let tableView = tableView,
             let indexPath = tableView.indexPath(for: self) else { return }
-
-        let mask = UIView(frame: CGRect(x: min(0, actionsView.frame.minX), y: 0, width: bounds.width + actionsView.bounds.width, height: bounds.height))
-        mask.backgroundColor = UIColor.white
-        self.mask = mask
         
         let newCenter = bounds.midX - (bounds.width + actionsView.minimumButtonWidth) * actionsView.orientation.scale
 
@@ -495,11 +491,13 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             
             switch style {
             case .delete:
+                self?.mask = actionsView.createDeletionMask()
+                
                 tableView.deleteRows(at: [indexPath], with: .none)
                 
                 UIView.animate(withDuration: 0.3, animations: {
                     self?.center.x = newCenter
-                    mask.frame.size.height = 0
+                    self?.mask?.frame.size.height = 0
                     
                     if fillOption.timing == .after {
                         actionsView.alpha = 0
@@ -509,7 +507,6 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
                     self?.reset()
                 }
             case .reset:
-                self?.mask = nil
                 self?.hideSwipe(animated: true)
             }
         }

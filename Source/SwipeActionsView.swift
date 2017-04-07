@@ -208,6 +208,12 @@ class SwipeActionsView: UIView {
         expansionDelegate?.actionButton(expandedButton, didChange: expanded, otherActionButtons: buttons.dropLast().reversed())
     }
     
+    func createDeletionMask() -> UIView {
+        let mask = UIView(frame: CGRect(x: min(0, frame.minX), y: 0, width: bounds.width * 2, height: bounds.height))
+        mask.backgroundColor = UIColor.white
+        return mask
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         
