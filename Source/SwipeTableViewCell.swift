@@ -39,7 +39,7 @@ open class SwipeTableViewCell: UITableViewCell {
         return gesture
     }()
     
-    let elasticScrollRatio: CGFloat = 0.4
+    public var elasticScrollRatio: CGFloat = 0.4
     var scrollRatio: CGFloat = 1.0
     
     /// :nodoc:
@@ -155,7 +155,8 @@ open class SwipeTableViewCell: UITableViewCell {
                 } else {
                     target.center.x = gesture.elasticTranslation(in: target,
                                                                  withLimit: CGSize(width: targetOffset, height: 0),
-                                                                 fromOriginalCenter: CGPoint(x: originalCenter, y: 0)).x
+                                                                 fromOriginalCenter: CGPoint(x: originalCenter, y: 0),
+                                                                 applyingRatio: elasticScrollRatio).x
                 }
                 
                 actionsView.setExpanded(expanded: expanded, feedback: true)
