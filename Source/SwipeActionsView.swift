@@ -107,7 +107,7 @@ class SwipeActionsView: UIView {
         let buttons: [SwipeActionButton] = actions.map({ action in
             let actionButton = SwipeActionButton(action: action)
             actionButton.addTarget(self, action: #selector(actionTapped(button:)), for: .touchUpInside)
-            actionButton.autoresizingMask = [.flexibleHeight]
+            actionButton.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
             actionButton.spacing = options.buttonSpacing ?? 8
             actionButton.contentEdgeInsets = buttonEdgeInsets(fromOptions: options)
             return actionButton
@@ -118,15 +118,15 @@ class SwipeActionsView: UIView {
         
         buttons.enumerated().forEach { (index, button) in
             let action = actions[index]
-            let frame = CGRect(origin: .zero, size: CGSize(width: size.width * 2, height: bounds.size.height))
+            let frame = CGRect(origin: .zero, size: CGSize(width: bounds.width, height: bounds.height))
             let wrapperView = SwipeActionButtonWrapperView(frame: frame, action: action, orientation: orientation, contentWidth: minimumButtonWidth)
-            wrapperView.autoresizingMask = [.flexibleHeight]
+            wrapperView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
             wrapperView.addSubview(button)
             
             if let effect = action.backgroundEffect {
                 let effectView = UIVisualEffectView(effect: effect)
                 effectView.frame = wrapperView.frame
-                effectView.autoresizingMask = [.flexibleHeight]
+                effectView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
                 effectView.contentView.addSubview(wrapperView)
                 addSubview(effectView)
             } else {
