@@ -50,6 +50,12 @@ open class SwipeTableViewCell: UITableViewCell {
     }
     
     /// :nodoc:
+    open override var frame: CGRect {
+        set { super.frame = state.isActive ? CGRect(origin: CGPoint(x: frame.minX, y: newValue.minY), size: newValue.size) : newValue }
+        get { return super.frame }
+    }
+    
+    /// :nodoc:
     override public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -119,6 +125,8 @@ open class SwipeTableViewCell: UITableViewCell {
             originalCenter = center.x
             
             if state == .center || state == .animatingToCenter {
+                state = .dragging
+
                 let velocity = gesture.velocity(in: target)
                 let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
 
@@ -209,7 +217,7 @@ open class SwipeTableViewCell: UITableViewCell {
         originalLayoutMargins = super.layoutMargins
         
         // Remove highlight and deselect any selected cells
-        isHighlighted = false
+        super.setHighlighted(false, animated: false)
         let selectedIndexPaths = tableView.indexPathsForSelectedRows
         selectedIndexPaths?.forEach { tableView.deselectRow(at: $0, animated: false) }
         

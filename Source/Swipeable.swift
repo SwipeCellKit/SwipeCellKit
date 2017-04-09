@@ -23,6 +23,7 @@ enum SwipeState: Int {
     case center = 0
     case left
     case right
+    case dragging
     case animatingToCenter
     
     init(orientation: SwipeActionsOrientation) {
