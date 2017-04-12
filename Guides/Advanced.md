@@ -24,6 +24,7 @@ Expansion behavior is defined by the properties available in the `SwipeExpansion
 * `elasticOverscroll`: Specifies if buttons should expand to fully fill overscroll, or expand at a percentage relative to the overscroll.
 * `completionAnimation`: Specifies the expansion animation completion style.
 * `minimumTargetOverscroll`: Specifies the minimum amount of overscroll required if the configured target is less than the fully exposed action view.
+* `targetOverscrollElasticity`: The amount of elasticity applied when dragging past the expansion target.
 
 ### Target
 
