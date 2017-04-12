@@ -57,6 +57,11 @@ public struct SwipeExpansionStyle {
     /// Specifies the minimum amount of overscroll required if the configured target is less than the fully exposed action view.
     public var minimumTargetOverscroll: CGFloat = 20
     
+    /// The amount of elasticity applied when dragging past the expansion target.
+    ///
+    /// - note: Default value is 0.2. Valid range is from 0.0 for no movement past the expansion target, to 1.0 for unrestricted movement with dragging.
+    public var targetOverscrollElasticity: CGFloat = 0.2
+    
     /**
      Contructs a new `SwipeExpansionStyle` instance.
      

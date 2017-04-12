@@ -163,7 +163,8 @@ open class SwipeTableViewCell: UITableViewCell {
                 } else {
                     target.center.x = gesture.elasticTranslation(in: target,
                                                                  withLimit: CGSize(width: targetOffset, height: 0),
-                                                                 fromOriginalCenter: CGPoint(x: originalCenter, y: 0)).x
+                                                                 fromOriginalCenter: CGPoint(x: originalCenter, y: 0),
+                                                                 applyingRatio: expansionStyle.targetOverscrollElasticity).x
                 }
                 
                 actionsView.setExpanded(expanded: expanded, feedback: true)
