@@ -125,8 +125,6 @@ open class SwipeTableViewCell: UITableViewCell {
             originalCenter = center.x
             
             if state == .center || state == .animatingToCenter {
-                state = .dragging
-
                 let velocity = gesture.velocity(in: target)
                 let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
 
@@ -259,6 +257,8 @@ open class SwipeTableViewCell: UITableViewCell {
         }
         
         self.actionsView = actionsView
+
+        state = .dragging
         
         notifyEditingStateChange(active: true)
     }
