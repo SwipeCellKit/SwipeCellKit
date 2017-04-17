@@ -396,61 +396,6 @@ extension SwipeTableViewCell {
         actionsView?.removeFromSuperview()
         actionsView = nil
     }
-    
-    /**
-     Hides the swipe actions and returns the cell to center.
-     
-     - parameter animated: Specify `true` to animate the hiding of the swipe actions or `false` to hide it immediately.
-     */
-    public func hideSwipe(animated: Bool) {
-        guard state == .left || state == .right else { return }
-
-        state = .animatingToCenter
-        
-        tableView?.setGestureEnabled(true)
-
-        let targetCenter = self.targetCenter(active: false)
-        
-        if animated {
-            animate(toOffset: targetCenter) { _ in
-                self.reset()
-            }
-        } else {
-            center = CGPoint(x: targetCenter, y: self.center.y)
-            reset()
-        }
-        
-        notifyEditingStateChange(active: false)
-    }
-    
-    /**
-     Shows the swipe actions for the specified orientation.
-
-     - parameter orientation: The side of the cell on which to show the swipe actions.
-
-     - parameter animated: Specify `true` to animate the showing of the swipe actions or `false` to show them immediately.
-     
-     - parameter completion: The closure to be executed once the animation has finished. A `Boolean` argument indicates whether or not the animations actually finished before the completion handler was called.
-    */
-    public func showSwipe(orientation: SwipeActionsOrientation, animated: Bool = true, completion: ((Bool) -> Void)? = nil) {
-        let targetState = SwipeState(orientation: orientation)
-        
-        guard state != targetState, showActionsView(for: orientation) else { return }
-        
-        tableView?.hideSwipeCell()
-
-        state = targetState
-
-        let targetCenter = self.targetCenter(active: true)
-        
-        if animated {
-            animate(toOffset: targetCenter) { complete in
-                completion?(complete)
-            }
-        } else {
-            center.x = targetCenter
-        }
-    }
 }
 
 extension SwipeTableViewCell: SwipeActionsViewDelegate {
