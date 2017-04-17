@@ -170,9 +170,36 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC12SwipeCellKit18SwipeTableViewCell9hideSwipeFT8animatedSb_T_"></a>
-                    <a name="//apple_ref/swift/Method/hideSwipe(animated:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwipeCellKit18SwipeTableViewCell9hideSwipeFT8animatedSb_T_">hideSwipe(animated:)</a>
+                    <a name="/s:vC12SwipeCellKit18SwipeTableViewCell11swipeOffsetV12CoreGraphics7CGFloat"></a>
+                    <a name="//apple_ref/swift/Property/swipeOffset" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwipeCellKit18SwipeTableViewCell11swipeOffsetV12CoreGraphics7CGFloat">swipeOffset</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The point at which the origin of the cell is offset from the non-swiped origin.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">swipeOffset</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwipeCellKit18SwipeTableViewCell9hideSwipeFT8animatedSb10completionGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/hideSwipe(animated:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwipeCellKit18SwipeTableViewCell9hideSwipeFT8animatedSb10completionGSqFSbT___T_">hideSwipe(animated:completion:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -187,7 +214,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">hideSwipe</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">hideSwipe</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -204,6 +231,19 @@
                               <td>
                                 <div>
                                   <p>Specify <code>true</code> to animate the hiding of the swipe actions or <code>false</code> to hide it immediately.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure to be executed once the animation has finished. A <code>Boolean</code> argument indicates whether or not the animations actually finished before the completion handler was called.</p>
 
                                 </div>
                               </td>
@@ -287,12 +327,39 @@
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwipeCellKit18SwipeTableViewCell14setSwipeOffsetFTV12CoreGraphics7CGFloat8animatedSb10completionGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/setSwipeOffset(_:animated:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwipeCellKit18SwipeTableViewCell14setSwipeOffsetFTV12CoreGraphics7CGFloat8animatedSb10completionGSqFSbT___T_">setSwipeOffset(_:animated:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The point at which the origin of the cell is offset from the non-swiped origin.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">setSwipeOffset</span><span class="p">(</span><span class="n">_</span> <span class="nv">offset</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://twitter.com/jerkoch" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-04-01)</p>
+          <p>&copy; 2017 <a class="link" href="https://twitter.com/jerkoch" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-04-17)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
