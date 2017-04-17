@@ -2,6 +2,21 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.8.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.8.0)
+
+#### Added
+
+- New `targetOverscrollElasticity` property in `SwipeExpansionStyle` to support customization of elasticity when dragging past the expansion target. (#30)
+- New `swipeOffset` property and `setSwipeOffset(_:animated:completion:)` in `SwipeTableViewCell` to support programmatically setting the swipe offset. (#19)
+- Add support for relayout of action buttons if cell frame changes while swiped (ie. rotation/tableview resizing). Now that active/swiped `SwipeTableViewCells` no longer reset to center when the parent `UITableView` performs layout (#28), better support for `UITableView` frame/bounds changes are required.  The `UITableView` frame/bounds may change during rotation or whenever its parent view frame changes.  The `SwipeActionsView` was already using auto layout to resize appropriately, but its button (and wrapper) subviews were using constraints derived from the default autoresizingMask.  This change ensures the `SwipeActionButtonWrapperView` flexes with its parent `SwipeActionsView`, and button subviews pin to the appropriate left/right side of their wrapper view depending on orientation.
+
+#### Fixed
+
+- Fix issue where mask was not removed when using `.reset` style action fulfillment. (#27)
+- Fix to adjust the cell's new frame origin `x` value when it's already active. This ensures a swiped cell is not reset to center whenever the `UITableView` performs layout on it's cell subviews.
+
+---
+
 ## [1.7.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.7.0)
 
 #### Added
