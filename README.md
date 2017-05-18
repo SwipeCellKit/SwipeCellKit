@@ -191,7 +191,7 @@ See the [Advanced Guide](https://github.com/jerkoch/SwipeCellKit/blob/develop/Gu
 
 ## Credits
 
-Created and maintained by [**@jerkoch**](https://twitter.com/jerkoch).
+Maintained by [**@mkurabi**](https://twitter.com/mkurabi).
 
 ## Showcase
 
