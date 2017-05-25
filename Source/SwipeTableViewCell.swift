@@ -73,7 +73,7 @@ open class SwipeTableViewCell: UITableViewCell {
         tableView?.panGestureRecognizer.removeTarget(self, action: nil)
     }
     
-    func configure() {
+    open func configure() {
         clipsToBounds = false
         
         addGestureRecognizer(tapGestureRecognizer)
