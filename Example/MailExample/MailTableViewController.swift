@@ -11,7 +11,7 @@ import SwipeCellKit
 class MailTableViewController: UITableViewController {
     var emails: [Email] = []
     
-    var defaultOptions = SwipeTableOptions()
+    var defaultOptions = SwipeOptions()
     var isSwipeRightEnabled = true
     var buttonDisplayMode: ButtonDisplayMode = .titleAndImage
     var buttonStyle: ButtonStyle = .backgroundColor
@@ -157,8 +157,8 @@ extension MailTableViewController: SwipeTableViewCellDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
-        var options = SwipeTableOptions()
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
         options.expansionStyle = orientation == .left ? .selection : .destructive
         options.transitionStyle = defaultOptions.transitionStyle
         
