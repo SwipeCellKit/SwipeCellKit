@@ -1,5 +1,5 @@
 //
-//  MailViewController.swift
+//  MailTableViewController.swift
 //
 //  Created by Jeremy Koch
 //  Copyright © 2017 Jeremy Koch. All rights reserved.
@@ -8,7 +8,7 @@
 import UIKit
 import SwipeCellKit
 
-class MailViewController: UITableViewController {
+class MailTableViewController: UITableViewController {
     var emails: [Email] = []
     
     var defaultOptions = SwipeTableOptions()
@@ -107,7 +107,7 @@ class MailViewController: UITableViewController {
     }
 }
 
-extension MailViewController: SwipeTableViewCellDelegate {
+extension MailTableViewController: SwipeTableViewCellDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         let email = emails[indexPath.row]
 
