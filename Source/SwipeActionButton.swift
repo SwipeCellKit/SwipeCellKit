@@ -10,6 +10,7 @@ import UIKit
 class SwipeActionButton: UIButton {
     var spacing: CGFloat = 8
     var shouldHighlight = true
+    var highlightedBackgroundColor: UIColor?
 
     var maximumImageHeight: CGFloat = 0
     var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
@@ -32,6 +33,7 @@ class SwipeActionButton: UIButton {
         contentHorizontalAlignment = .center
         
         tintColor = action.textColor ?? .white
+        highlightedBackgroundColor = action.highlightedBackgroundColor ?? UIColor.black.withAlphaComponent(0.1)
 
         titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFontWeightMedium)
         titleLabel?.textAlignment = .center
@@ -50,7 +52,7 @@ class SwipeActionButton: UIButton {
         didSet {
             guard shouldHighlight else { return }
             
-            backgroundColor = isHighlighted ? UIColor.black.withAlphaComponent(0.1) : .clear
+            backgroundColor = isHighlighted ? highlightedBackgroundColor : .clear
         }
     }
     
