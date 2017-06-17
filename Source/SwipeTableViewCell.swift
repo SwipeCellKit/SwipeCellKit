@@ -334,7 +334,8 @@ open class SwipeTableViewCell: UITableViewCell {
     // `SwipeTableCell`.
     /// :nodoc:
     override open func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        guard let superview = superview else {return false}
+        guard let superview = superview else { return false }
+     
         let point = convert(point, to: superview)
 
         if !UIAccessibilityIsVoiceOverRunning() {
