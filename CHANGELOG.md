@@ -2,6 +2,20 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.9.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.9.0)
+
+#### Added
+
+- Added highlighted background color for action button. (#52)
+
+#### Fixed
+
+- Correctly setting the parents project to support iOS 9.0+. (#40)
+- Fix issue where using non-`SwipeTableViewCell` within a `UITableView` interfered with `didSelectRowAtIndexPath`. This was caused by the assumption all cells in a UITableView extend `SwipeTableViewCell`. (#37) (#43)
+- Add protection against `superview` in `point(inside:)` being `nil` and crashing. (#46)
+
+---
+
 ## [1.8.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/1.8.0)
 
 #### Added
