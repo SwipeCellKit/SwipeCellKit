@@ -116,7 +116,9 @@ class SwipeActionsView: UIView {
         let maximum = options.maximumButtonWidth ?? (size.width - 30) / CGFloat(actions.count)
         minimumButtonWidth = buttons.reduce(options.minimumButtonWidth ?? 74, { initial, next in max(initial, next.preferredWidth(maximum: maximum)) })
         
-        buttons.enumerated().forEach { (index, button) in
+        buttons.enumerated().forEach { (args) in
+            let (index, button) = args
+            
             let action = actions[index]
             let frame = CGRect(origin: .zero, size: CGSize(width: bounds.width, height: bounds.height))
             let wrapperView = SwipeActionButtonWrapperView(frame: frame, action: action, orientation: orientation, contentWidth: minimumButtonWidth)
@@ -142,7 +144,7 @@ class SwipeActionsView: UIView {
         return buttons
     }
     
-    func actionTapped(button: SwipeActionButton) {
+    @objc func actionTapped(button: SwipeActionButton) {
         guard let index = buttons.index(of: button) else { return }
 
         delegate?.swipeActionsView(self, didSelect: actions[index])
@@ -189,7 +191,9 @@ class SwipeActionsView: UIView {
     
     func notifyVisibleWidthChanged(oldWidths: [CGFloat], newWidths: [CGFloat]) {
         DispatchQueue.main.async {
-            oldWidths.enumerated().forEach { index, oldWidth in
+            oldWidths.enumerated().forEach { (args) in
+                let (index, oldWidth) = args
+                
                 let newWidth = newWidths[index]
                 
                 if oldWidth != newWidth {

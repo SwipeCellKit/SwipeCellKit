@@ -110,7 +110,9 @@ public struct ScaleAndAlphaExpansion: SwipeExpanding {
     public func actionButton(_ button: UIButton, didChange expanding: Bool, otherActionButtons: [UIButton]) {
         let buttons = expanding ? otherActionButtons : otherActionButtons.reversed()
         
-        buttons.enumerated().forEach { index, button in
+        buttons.enumerated().forEach { (args) in
+            let (index, button) = args
+            
             UIView.animate(withDuration: duration, delay: interButtonDelay * Double(expanding ? index : index + 1), options: [], animations: {
                 button.transform = expanding ? .init(scaleX: self.scale, y: self.scale) : .identity
                 button.alpha = expanding ? 0.0 : 1.0
