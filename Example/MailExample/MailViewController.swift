@@ -216,10 +216,12 @@ class MailCell: SwipeTableViewCell {
         contentView.addSubview(indicatorView)
  
         let size: CGFloat = 12
-        indicatorView.widthAnchor.constraint(equalToConstant: size).isActive = true
-        indicatorView.heightAnchor.constraint(equalTo: indicatorView.widthAnchor).isActive = true
-        indicatorView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12).isActive = true
-        indicatorView.centerYAnchor.constraint(equalTo: fromLabel.centerYAnchor).isActive = true
+        addConstraints([
+            NSLayoutConstraint(item: indicatorView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: size),
+            NSLayoutConstraint(item: indicatorView, attribute: .height, relatedBy: .equal, toItem: indicatorView, attribute: .width, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: indicatorView, attribute: .left, relatedBy: .equal, toItem: contentView, attribute: .left, multiplier: 1, constant: 12),
+            NSLayoutConstraint(item: indicatorView, attribute: .centerY, relatedBy: .equal, toItem: fromLabel, attribute: .centerY, multiplier: 1, constant: 0)
+        ])
     }
     
     func setUnread(_ unread: Bool, animated: Bool) {
