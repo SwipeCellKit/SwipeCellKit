@@ -121,7 +121,7 @@
         <section>
           <section class="section">
             
-            <a href='#customizing-transitions' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='customizing-transitions'>Customizing Transitions</h2>
+            <h2 id='customizing-transitions' class='heading'>Customizing Transitions</h2>
 
 <p>You can customize the transition behavior of individual actions by assigning a <code>transitionDelegate</code> to the <code>SwipeAction</code> type. </p>
 
@@ -135,7 +135,7 @@
 <p>The <code>ScaleTransition</code> type provides a static <code>default</code> configuration, but it can also be initiantiated with custom parameters to suit your needs.</p>
 
 <p>You can also easily provide your own completely custom transition behavior by adopting the <code>SwipeActionTransitioning</code> protocol.  The supplied <code>SwipeActionTransitioningContext</code> to the delegate methods reflect the current swipe state as the gesture is performed.</p>
-<a href='#customizing-expansion' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='customizing-expansion'>Customizing Expansion</h2>
+<h2 id='customizing-expansion' class='heading'>Customizing Expansion</h2>
 
 <p>Expansion behavior is defined by the properties available in the <code>SwipeExpansionStyle</code> type: </p>
 
@@ -147,7 +147,7 @@
 <li><code>minimumTargetOverscroll</code>: Specifies the minimum amount of overscroll required if the configured target is less than the fully exposed action view.</li>
 <li><code>targetOverscrollElasticity</code>: The amount of elasticity applied when dragging past the expansion target.</li>
 </ul>
-<a href='#target' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='target'>Target</h3>
+<h3 id='target' class='heading'>Target</h3>
 
 <p>The target describes a location to which the view will scroll when expansion is triggered. A trigger is simply a threshold causing expansion to occur.</p>
 
@@ -159,7 +159,7 @@
 </ol>
 
 <p>By default, the configured <em>target</em> will also act as a trigger. For instance, if a target is configured with <code>.percentage(0.5)</code>, expansion will trigger when the view is scrolled more than 50% of its superview. </p>
-<a href='#additional-triggers' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='additional-triggers'>Additional Triggers</h3>
+<h3 id='additional-triggers' class='heading'>Additional Triggers</h3>
 
 <p>It may be desirable to add additional triggers to complement the default target trigger. For instance, destructive expansion adds a touch threshold, triggering expansion when a touch occurs towards the opposite edge of the view. The <code>SwipeExpansionStyle.Trigger</code> enumeration defines the following options:</p>
 
@@ -167,10 +167,10 @@
 <li><code>.touchThreshold(CGFloat)</code>: The trigger a specified by a touch occuring past the supplied percentage in the superview (0.0 to 1.0). The action view must also be fully exposed for this trigger to activate.</li>
 <li><code>.overscroll(CGFloat)</code>: The trigger is specified by the distance past the fully exposed action view (in points).</li>
 </ol>
-<a href='#elastic-overscroll' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='elastic-overscroll'>Elastic Overscroll</h3>
+<h3 id='elastic-overscroll' class='heading'>Elastic Overscroll</h3>
 
 <p>When <code>elasticOverscroll</code> is enabled, the action buttons will only fill 25% percent of the additional space provided to the actions view.  </p>
-<a href='#completion-animations' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='completion-animations'>Completion Animations</h3>
+<h3 id='completion-animations' class='heading'>Completion Animations</h3>
 
 <p>The completion animation occurs on touch up if expansion is actively triggered. The <code>SwipeExpansionStyle.CompletionAnimation</code> enumeration defines the following expansion animation completion style options:</p>
 
@@ -184,7 +184,7 @@
 <p>The <code>ExpansionFulfillmentStyle</code> allows you to configure how to resolve the actively filled state . The built-in <code>.destructive</code>, and <code>.destructiveAfterFill</code> expansion styles configure the <code>ExpansionFulfillmentStyle</code> to automatically perform the <code>.delete</code> when the action handler is invoked. This is done by created a <code>FillOptions</code> instance using the static <code>automatic(_ style:timing:)</code> method.  When you need to determine this behavior at runtime or coordinate deletion with other animations, you can create a <code>FillOptions</code> instance using the static <code>manual(timing:)</code> function and call <code>action.fulfull(style:)</code> asynchronously after your action handler is invoked.</p>
 
 <p>You can use the <code>HandlerInvocationTiming</code> to configure if the action handler should be invoked <code>.with</code> the fill animation, or <code>.after</code> the fill animation completes.  Using the <code>.with</code> option behaves like the stock Mail.app, while the <code>.after</code> option behaves more like the 3rd party Mailbox and Tweetbot apps.</p>
-<a href='#built-in-styles' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='built-in-styles'>Built-in Styles</h3>
+<h3 id='built-in-styles' class='heading'>Built-in Styles</h3>
 
 <p>The framework provides four built-in <code>SwipeExpansionStyle</code> instances which configure the above components accordingly:</p>
 
@@ -223,7 +223,7 @@ elasticOverscroll: false
 addditionalTriggers: [.overscroll(30)]
 completionAnimation: .fill(.manual(timing: .after))
 </code></pre>
-<a href='#button-behavior' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='button-behavior'>Button Behavior</h3>
+<h3 id='button-behavior' class='heading'>Button Behavior</h3>
 
 <p>It is also possible to customize the button expansion behavior by assigning a <code>expansionDelegate</code> to the <code>SwipeTableOptions</code> type. The delegate is invoked during the (un)expansion process and allows you to customize the display of the action being expanded, as well as the other actions in the view. </p>
 
@@ -241,8 +241,8 @@ completionAnimation: .fill(.manual(timing: .after))
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://twitter.com/jerkoch" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-04-17)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://twitter.com/jerkoch" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-06-17)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

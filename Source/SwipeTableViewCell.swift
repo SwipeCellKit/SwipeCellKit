@@ -334,7 +334,9 @@ open class SwipeTableViewCell: UITableViewCell {
     // `SwipeTableCell`.
     /// :nodoc:
     override open func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let point = convert(point, to: superview!)
+        guard let superview = superview else { return false }
+     
+        let point = convert(point, to: superview)
 
         if !UIAccessibilityIsVoiceOverRunning() {
             for cell in tableView?.swipeCells ?? [] {
@@ -493,15 +495,14 @@ extension SwipeTableViewCell {
                 tableView?.hideSwipeCell()
             }
 
-            if let cells = tableView?.visibleCells as? [SwipeTableViewCell] {
-                let cell = cells.first(where: { $0.state.isActive })
-                return cell == nil ? false : true
-            }
+            let cell = tableView?.swipeCells.first(where: { $0.state.isActive })
+            return cell == nil ? false : true
         }
         
         if gestureRecognizer == panGestureRecognizer,
             let view = gestureRecognizer.view,
-            let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
+            let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer
+        {
             let translation = gestureRecognizer.translation(in: view)
             return abs(translation.y) <= abs(translation.x)
         }
