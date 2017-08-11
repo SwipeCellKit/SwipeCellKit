@@ -114,7 +114,7 @@ open class SwipeTableViewCell: UITableViewCell {
         }
     }
     
-    func handlePan(gesture: UIPanGestureRecognizer) {
+    @objc func handlePan(gesture: UIPanGestureRecognizer) {
         guard isEditing == false else { return }
         guard let target = gesture.view else { return }
         
@@ -282,6 +282,7 @@ open class SwipeTableViewCell: UITableViewCell {
         
         let animator: SwipeAnimator = {
             if velocity != 0 {
+                
                 if #available(iOS 10, *) {
                     let velocity = CGVector(dx: velocity, dy: velocity)
                     let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
@@ -319,11 +320,11 @@ open class SwipeTableViewCell: UITableViewCell {
         }
     }
 
-    func handleTap(gesture: UITapGestureRecognizer) {
+    @objc func handleTap(gesture: UITapGestureRecognizer) {
         hideSwipe(animated: true)
     }
     
-    func handleTablePan(gesture: UIPanGestureRecognizer) {
+    @objc func handleTablePan(gesture: UIPanGestureRecognizer) {
         if gesture.state == .began {
             hideSwipe(animated: true)
         }
