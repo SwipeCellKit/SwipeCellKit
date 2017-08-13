@@ -26,8 +26,6 @@ extension SwipeTableViewCell {
         
         state = .animatingToCenter
         
-        tableView?.setGestureEnabled(true)
-        
         let targetCenter = self.targetCenter(active: false)
         
         if animated {
