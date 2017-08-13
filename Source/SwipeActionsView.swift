@@ -142,7 +142,7 @@ class SwipeActionsView: UIView {
         return buttons
     }
     
-    func actionTapped(button: SwipeActionButton) {
+    @objc func actionTapped(button: SwipeActionButton) {
         guard let index = buttons.index(of: button) else { return }
 
         delegate?.swipeActionsView(self, didSelect: actions[index])
