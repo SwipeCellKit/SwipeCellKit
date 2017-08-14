@@ -6,7 +6,7 @@
 [![license MIT](https://img.shields.io/cocoapods/l/SwipeCellKit.svg)][mitLink] 
 [![Platform](https://img.shields.io/cocoapods/p/SwipeCellKit.svg)][docsLink] 
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Twitter](https://img.shields.io/badge/twitter-@jerkoch-blue.svg?style=flat)](https://twitter.com/mkurabi)
+[![Twitter](https://img.shields.io/badge/twitter-@mkurabi-blue.svg?style=flat)](https://twitter.com/mkurabi)
 
 *Swipeable UITableViewCell based on the stock Mail.app, implemented in Swift.*
 
