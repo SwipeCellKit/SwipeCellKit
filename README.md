@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/jerkoch/SwipeCellKit.svg)](https://travis-ci.org/jerkoch/SwipeCellKit) 
 [![Version Status](https://img.shields.io/cocoapods/v/SwipeCellKit.svg)][podLink] 
 [![Swift 3.0](https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![Swift 4.0](https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![license MIT](https://img.shields.io/cocoapods/l/SwipeCellKit.svg)][mitLink] 
 [![Platform](https://img.shields.io/cocoapods/p/SwipeCellKit.svg)][docsLink] 
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
@@ -207,5 +208,5 @@ We're interested in knowing [who's using *SwipeCellKit*](https://github.com/Swip
 *Please provide attribution, it is greatly appreciated.*
 
 [podLink]:https://cocoapods.org/pods/SwipeCellKit
-[docsLink]:http://www.jerkoch.com/SwipeCellKit
+[docsLink]:https://swipecellkit.github.io/SwipeCellKit/
 [mitLink]:http://opensource.org/licenses/MIT
