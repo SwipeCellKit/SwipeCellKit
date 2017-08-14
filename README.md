@@ -208,5 +208,5 @@ We're interested in knowing [who's using *SwipeCellKit*](https://github.com/Swip
 *Please provide attribution, it is greatly appreciated.*
 
 [podLink]:https://cocoapods.org/pods/SwipeCellKit
-[docsLink]:http://www.jerkoch.com/SwipeCellKit
+[docsLink]:https://swipecellkit.github.io/SwipeCellKit/
 [mitLink]:http://opensource.org/licenses/MIT
