@@ -9,6 +9,7 @@ import UIKit
 
 class SwipeActionButton: UIButton {
     var spacing: CGFloat = 8
+    var bottomSpacing: CGFloat = 0
     var shouldHighlight = true
     var highlightedBackgroundColor: UIColor?
 
@@ -72,13 +73,13 @@ class SwipeActionButton: UIButton {
     
     override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
         var rect = contentRect.center(size: titleBoundingRect(with: contentRect.size).size)
-        rect.origin.y = alignmentRect.minY + maximumImageHeight + currentSpacing
+        rect.origin.y = alignmentRect.minY + maximumImageHeight + currentSpacing - bottomSpacing
         return rect.integral
     }
     
     override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
         var rect = contentRect.center(size: currentImage?.size ?? .zero)
-        rect.origin.y = alignmentRect.minY + (maximumImageHeight - rect.height) / 2
+        rect.origin.y = alignmentRect.minY + (maximumImageHeight - rect.height) / 2 - bottomSpacing
         return rect
     }
 }

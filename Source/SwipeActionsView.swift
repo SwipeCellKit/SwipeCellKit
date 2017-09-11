@@ -109,6 +109,7 @@ class SwipeActionsView: UIView {
             actionButton.addTarget(self, action: #selector(actionTapped(button:)), for: .touchUpInside)
             actionButton.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
             actionButton.spacing = options.buttonSpacing ?? 8
+            actionButton.bottomSpacing = options.buttonBottomSpacing ?? 0
             actionButton.contentEdgeInsets = buttonEdgeInsets(fromOptions: options)
             return actionButton
         })
