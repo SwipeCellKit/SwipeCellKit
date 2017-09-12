@@ -76,7 +76,7 @@ The expansion style describes the behavior when the cell is swiped past a define
 
 * Swift 3.0
 * Xcode 8
-* iOS 9.0+
+* iOS 8.0+
 
 ## Installation
 
