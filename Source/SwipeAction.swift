@@ -46,6 +46,11 @@ public class SwipeAction: NSObject {
     /// - note: If you do not specify a color, white is used.
     public var textColor: UIColor?
     
+    /// The highlighted text color of the action button.
+    ///
+    /// - note: If you do not specify a color, `textColor` is used.
+    public var highlightedTextColor: UIColor?
+    
     /// The image used for the action button.
     ///
     /// - note: You must specify a title or an image.

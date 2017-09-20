@@ -33,6 +33,7 @@ class SwipeActionButton: UIButton {
         contentHorizontalAlignment = .center
         
         tintColor = action.textColor ?? .white
+        let highlightedTextColor = action.highlightedTextColor ?? tintColor
         highlightedBackgroundColor = action.highlightedBackgroundColor ?? UIColor.black.withAlphaComponent(0.1)
 
         titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
@@ -44,6 +45,7 @@ class SwipeActionButton: UIButton {
         
         setTitle(action.title, for: .normal)
         setTitleColor(tintColor, for: .normal)
+        setTitleColor(highlightedTextColor, for: .highlighted)
         setImage(action.image, for: .normal)
         setImage(action.highlightedImage ?? action.image, for: .highlighted)
     }
