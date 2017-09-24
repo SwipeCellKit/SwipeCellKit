@@ -115,7 +115,6 @@ open class SwipeTableViewCell: UITableViewCell {
     }
     
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
-        guard isEditing == false else { return }
         guard let target = gesture.view else { return }
         
         switch gesture.state {
