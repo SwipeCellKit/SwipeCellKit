@@ -114,7 +114,7 @@ open class SwipeTableViewCell: UITableViewCell {
         }
     }
     
-    func handlePan(gesture: UIPanGestureRecognizer) {
+    @objc func handlePan(gesture: UIPanGestureRecognizer) {
         guard isEditing == false else { return }
         guard let target = gesture.view else { return }
         
@@ -220,9 +220,6 @@ open class SwipeTableViewCell: UITableViewCell {
         let selectedIndexPaths = tableView.indexPathsForSelectedRows
         selectedIndexPaths?.forEach { tableView.deselectRow(at: $0, animated: false) }
         
-        // Temporarily remove table gestures
-        tableView.setGestureEnabled(false)
-        
         configureActionsView(with: actions, for: orientation)
         
         return true
@@ -319,11 +316,11 @@ open class SwipeTableViewCell: UITableViewCell {
         }
     }
 
-    func handleTap(gesture: UITapGestureRecognizer) {
+    @objc func handleTap(gesture: UITapGestureRecognizer) {
         hideSwipe(animated: true)
     }
     
-    func handleTablePan(gesture: UIPanGestureRecognizer) {
+    @objc func handleTablePan(gesture: UIPanGestureRecognizer) {
         if gesture.state == .began {
             hideSwipe(animated: true)
         }
@@ -392,8 +389,6 @@ extension SwipeTableViewCell {
 
     func reset() {
         state = .center
-        
-        tableView?.setGestureEnabled(true)
         
         actionsView?.removeFromSuperview()
         actionsView = nil
