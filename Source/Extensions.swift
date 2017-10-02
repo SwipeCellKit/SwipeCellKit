@@ -15,6 +15,18 @@ extension UITableView {
     func hideSwipeCell() {
         swipeCells.forEach { $0.hideSwipe(animated: true) }
     }
+    
+    func setGestureEnabled(_ enabled: Bool) {
+        if #available(iOS 11, *) {
+            // Workaround for iOS 11+, do nothing
+        } else {
+            gestureRecognizers?.forEach {
+                guard $0 != panGestureRecognizer else { return }
+                
+                $0.isEnabled = enabled
+            }
+        }
+    }
 }
 
 extension UIPanGestureRecognizer {
