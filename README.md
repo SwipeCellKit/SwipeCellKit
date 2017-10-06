@@ -151,7 +151,7 @@ Three built-in transition styles are provided by `SwipeTransitionStyle`:
 
 See [Customizing Transitions](https://github.com/SwipeCellKit/SwipeCellKit/blob/develop/Guides/Advanced.md) for more details on customizing button appearance as the swipe is performed.
 
-## Transition Delegate
+#### Transition Delegate
 
 Transition for a `SwipeAction` can be observered by setting a `SwipeActionTransitioning` on the `transitionDelegate` property. This allows you to observe what percentage is visible and access to the underlying `UIButton` for that `SwipeAction`. 
 
