@@ -4,10 +4,13 @@
 
 ## [2.0.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.0.0)
 
-#### Fixed
+#### Added
 
 - Add Swift 4 support
 - New `highlightedTextColor` property on `SwipeAction`. (#88)
+
+#### Fixed
+
 - Fix issue where swipe actions intermittently were not displayed when cell is swiped. (#85)
 
 ---
