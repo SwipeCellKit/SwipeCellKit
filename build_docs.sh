@@ -2,9 +2,9 @@
 
 jazzy \
     --clean \
-    --author 'Jeremy Koch' \
-    --author_url 'https://twitter.com/jerkoch' \
-    --github_url 'https://github.com/jerkoch/SwipeCellKit' \
+    --author 'Mohammad Kurabi' \
+    --author_url 'https://twitter.com/mkurabi' \
+    --github_url 'https://github.com/SwipeCellKit/SwipeCellKit' \
     --module 'SwipeCellKit' \
     --source-directory . \
     --readme 'README.md' \

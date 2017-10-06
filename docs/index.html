@@ -14,7 +14,7 @@
     <header>
       <div class="content-wrapper">
         <p><a href="index.html">SwipeCellKit Docs</a> (100% documented)</p>
-        <p class="header-right"><a href="https://github.com/jerkoch/SwipeCellKit"><img src="img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="https://github.com/SwipeCellKit/SwipeCellKit"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -47,7 +47,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Enums.html">Enums</a>
+            <a href="Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Enums/ExpansionFulfillmentStyle.html">ExpansionFulfillmentStyle</a>
@@ -81,7 +81,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Structs.html">Structs</a>
+            <a href="Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Structs/ScaleAndAlphaExpansion.html">ScaleAndAlphaExpansion</a>
@@ -125,11 +125,11 @@
 
 <p><a href="https://travis-ci.org/jerkoch/SwipeCellKit"><img src="https://travis-ci.org/jerkoch/SwipeCellKit.svg" alt="Build Status"></a> 
 <a href="https://cocoapods.org/pods/SwipeCellKit"><img src="https://img.shields.io/cocoapods/v/SwipeCellKit.svg" alt="Version Status"></a> 
-<a href="https://developer.apple.com/swift/"><img src="https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat" alt="Swift 3.0"></a>
+<a href="https://developer.apple.com/swift/"><img src="https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat" alt="Swift 4.0"></a>
 <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/cocoapods/l/SwipeCellKit.svg" alt="license MIT"></a> 
-<a href="http://www.jerkoch.com/SwipeCellKit"><img src="https://img.shields.io/cocoapods/p/SwipeCellKit.svg" alt="Platform"></a> 
+<a href="https://swipecellkit.github.io/SwipeCellKit/"><img src="https://img.shields.io/cocoapods/p/SwipeCellKit.svg" alt="Platform"></a> 
 <a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible"></a>
-<a href="https://twitter.com/jerkoch"><img src="https://img.shields.io/badge/twitter-@jerkoch-blue.svg?style=flat" alt="Twitter"></a></p>
+<a href="https://twitter.com/mkurabi"><img src="https://img.shields.io/badge/twitter-@mkurabi-blue.svg?style=flat" alt="Twitter"></a></p>
 
 <p><em>Swipeable UITableViewCell based on the stock Mail.app, implemented in Swift.</em></p>
 
@@ -185,8 +185,8 @@
 <h2 id='requirements' class='heading'>Requirements</h2>
 
 <ul>
-<li>Swift 3.0</li>
-<li>Xcode 8</li>
+<li>Swift 4.0</li>
+<li>Xcode 9</li>
 <li>iOS 9.0+</li>
 </ul>
 <h2 id='installation' class='heading'>Installation</h2>
@@ -197,17 +197,17 @@
 <span class="n">pod</span> <span class="s1">'SwipeCellKit'</span>
 
 <span class="c1"># Get the latest on develop</span>
-<span class="n">pod</span> <span class="s1">'SwipeCellKit'</span><span class="p">,</span> <span class="ss">:git</span> <span class="o">=&gt;</span> <span class="s1">'https://github.com/jerkoch/SwipeCellKit.git'</span><span class="p">,</span> <span class="ss">:branch</span> <span class="o">=&gt;</span> <span class="s1">'develop'</span>
+<span class="n">pod</span> <span class="s1">'SwipeCellKit'</span><span class="p">,</span> <span class="ss">:git</span> <span class="o">=&gt;</span> <span class="s1">'https://github.com/SwipeCellKit/SwipeCellKit.git'</span><span class="p">,</span> <span class="ss">:branch</span> <span class="o">=&gt;</span> <span class="s1">'develop'</span>
 </code></pre>
 <h4 id='a-href-https-github-com-carthage-carthage-carthage-a' class='heading'><a href="https://github.com/Carthage/Carthage">Carthage</a></h4>
-<pre class="highlight shell"><code>github <span class="s2">"jerkoch/SwipeCellKit"</span>
+<pre class="highlight shell"><code>github <span class="s2">"SwipeCellKit/SwipeCellKit"</span>
 </code></pre>
 <h2 id='documentation' class='heading'>Documentation</h2>
 
-<p>Read the <a href="http://www.jerkoch.com/SwipeCellKit">docs</a>. Generated with <a href="https://github.com/realm/jazzy">jazzy</a>. Hosted by <a href="https://pages.github.com">GitHub Pages</a>.</p>
+<p>Read the <a href="https://swipecellkit.github.io/SwipeCellKit/">docs</a>. Generated with <a href="https://github.com/realm/jazzy">jazzy</a>. Hosted by <a href="https://pages.github.com">GitHub Pages</a>.</p>
 <h2 id='usage' class='heading'>Usage</h2>
 
-<p>Set the <code>delegate</code> property on <code>SwipeTableViewCell</code>:</p>
+<p>Set the <code>delegate</code> property on <code><a href="Classes/SwipeTableViewCell.html">SwipeTableViewCell</a></code>:</p>
 <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">cellForRowAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UITableViewCell</span> <span class="p">{</span>
     <span class="k">let</span> <span class="nv">cell</span> <span class="o">=</span> <span class="n">tableView</span><span class="o">.</span><span class="nf">dequeueReusableCell</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"Cell"</span><span class="p">)</span> <span class="k">as!</span> <span class="kt">SwipeTableViewCell</span>
     <span class="n">cell</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="k">self</span>
@@ -215,7 +215,7 @@
 <span class="p">}</span>
 </code></pre>
 
-<p>Adopt the <code>SwipeTableViewCellDelegate</code> protocol:</p>
+<p>Adopt the <code><a href="Protocols/SwipeTableViewCellDelegate.html">SwipeTableViewCellDelegate</a></code> protocol:</p>
 <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">editActionsForRowAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span> <span class="k">for</span> <span class="nv">orientation</span><span class="p">:</span> <span class="kt">SwipeActionsOrientation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">SwipeAction</span><span class="p">]?</span> <span class="p">{</span>
     <span class="k">guard</span> <span class="n">orientation</span> <span class="o">==</span> <span class="o">.</span><span class="k">right</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
 
@@ -240,7 +240,7 @@
 </code></pre>
 <h3 id='transitions' class='heading'>Transitions</h3>
 
-<p>Three built-in transition styles are provided by <code>SwipeTransitionStyle</code>:  </p>
+<p>Three built-in transition styles are provided by <code><a href="Enums/SwipeTransitionStyle.html">SwipeTransitionStyle</a></code>:  </p>
 
 <ul>
 <li>.border: The visible action area is equally divide between all action buttons.</li>
@@ -248,10 +248,13 @@
 <li>.reveal: The visible action area sits behind the cell, pinned to the edge of the table view, and is revealed as the cell is dragged aside.</li>
 </ul>
 
-<p>See <a href="https://github.com/jerkoch/SwipeCellKit/blob/develop/Guides/Advanced.md">Customizing Transitions</a> for more details on customizing button appearance as the swipe is performed.</p>
+<p>See <a href="https://github.com/SwipeCellKit/SwipeCellKit/blob/develop/Guides/Advanced.md">Customizing Transitions</a> for more details on customizing button appearance as the swipe is performed.</p>
+<h4 id='transition-delegate' class='heading'>Transition Delegate</h4>
+
+<p>Transition for a <code><a href="Classes/SwipeAction.html">SwipeAction</a></code> can be observered by setting a <code><a href="Protocols/SwipeActionTransitioning.html">SwipeActionTransitioning</a></code> on the <code>transitionDelegate</code> property. This allows you to observe what percentage is visible and access to the underlying <code>UIButton</code> for that <code><a href="Classes/SwipeAction.html">SwipeAction</a></code>. </p>
 <h3 id='expansion' class='heading'>Expansion</h3>
 
-<p>Four built-in expansion styles are provided by <code>SwipeExpansionStyle</code>:  </p>
+<p>Four built-in expansion styles are provided by <code><a href="Structs/SwipeExpansionStyle.html">SwipeExpansionStyle</a></code>:  </p>
 
 <ul>
 <li>.selection</li>
@@ -260,11 +263,11 @@
 <li>.fill</li>
 </ul>
 
-<p>Much effort has gone into making <code>SwipeExpansionStyle</code> extremely customizable. If these built-in styles do not meet your needs, see <a href="https://github.com/jerkoch/SwipeCellKit/blob/develop/Guides/Advanced.md">Customizing Expansion</a> for more details on creating custom styles.</p>
+<p>Much effort has gone into making <code><a href="Structs/SwipeExpansionStyle.html">SwipeExpansionStyle</a></code> extremely customizable. If these built-in styles do not meet your needs, see <a href="https://github.com/SwipeCellKit/SwipeCellKit/blob/develop/Guides/Advanced.md">Customizing Expansion</a> for more details on creating custom styles.</p>
 
-<p>The built-in <code>.fill</code> expansion style requires manual action fulfillment. This means your action handler must call <code>SwipeAction.fulfill(style:)</code> at some point during or after invocation to resolve the fill expansion. The supplied <code>ExpansionFulfillmentStyle</code> allows you to delete or reset the cell at some later point (possibly after further user interaction).</p>
+<p>The built-in <code>.fill</code> expansion style requires manual action fulfillment. This means your action handler must call <code>SwipeAction.fulfill(style:)</code> at some point during or after invocation to resolve the fill expansion. The supplied <code><a href="Enums/ExpansionFulfillmentStyle.html">ExpansionFulfillmentStyle</a></code> allows you to delete or reset the cell at some later point (possibly after further user interaction).</p>
 
-<p>The built-in <code>.destructive</code>, and <code>.destructiveAfterFill</code> expansion styles are configured to automatically perform row deletion when the action handler is invoked (automatic fulfillment).  Your deletion behavior may require coordination with other row animations (eg. inside <code>beginUpdates</code> and <code>endUpdates</code>). In this case, you can easily create a custom <code>SwipeExpansionStyle</code> which requires manual fulfillment to trigger deletion:</p>
+<p>The built-in <code>.destructive</code>, and <code>.destructiveAfterFill</code> expansion styles are configured to automatically perform row deletion when the action handler is invoked (automatic fulfillment).  Your deletion behavior may require coordination with other row animations (eg. inside <code>beginUpdates</code> and <code>endUpdates</code>). In this case, you can easily create a custom <code><a href="Structs/SwipeExpansionStyle.html">SwipeExpansionStyle</a></code> which requires manual fulfillment to trigger deletion:</p>
 <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">options</span> <span class="o">=</span> <span class="kt">SwipeTableOptions</span><span class="p">()</span>
 <span class="n">options</span><span class="o">.</span><span class="n">expansionStyle</span> <span class="o">=</span> <span class="o">.</span><span class="nf">destructive</span><span class="p">(</span><span class="nv">automaticallyDelete</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
 </code></pre>
@@ -285,13 +288,13 @@
 </code></pre>
 <h2 id='advanced' class='heading'>Advanced</h2>
 
-<p>See the <a href="https://github.com/jerkoch/SwipeCellKit/blob/develop/Guides/Advanced.md">Advanced Guide</a> for more details on customization.</p>
+<p>See the <a href="https://github.com/SwipeCellKit/SwipeCellKit/blob/develop/Guides/Advanced.md">Advanced Guide</a> for more details on customization.</p>
 <h2 id='credits' class='heading'>Credits</h2>
 
 <p>Maintained by <a href="https://twitter.com/mkurabi"><strong>@mkurabi</strong></a>.</p>
 <h2 id='showcase' class='heading'>Showcase</h2>
 
-<p>We&rsquo;re interested in knowing <a href="https://github.com/jerkoch/SwipeCellKit/blob/develop/SHOWCASE.md">who&rsquo;s using <em>SwipeCellKit</em></a> in their app. Please submit a pull request to add your app! </p>
+<p>We&rsquo;re interested in knowing <a href="https://github.com/SwipeCellKit/SwipeCellKit/blob/develop/SHOWCASE.md">who&rsquo;s using <em>SwipeCellKit</em></a> in their app. Please submit a pull request to add your app! </p>
 <h2 id='license' class='heading'>License</h2>
 
 <p><code>SwipeCellKit</code> is released under an <a href="http://opensource.org/licenses/MIT">MIT License</a>. See <code>LICENSE</code> for details.</p>
@@ -301,8 +304,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://twitter.com/jerkoch" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-06-17)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://twitter.com/mkurabi" target="_blank" rel="external">Mohammad Kurabi</a>. All rights reserved. (Last updated: 2017-10-06)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

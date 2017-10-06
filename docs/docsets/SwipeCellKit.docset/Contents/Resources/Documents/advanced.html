@@ -14,7 +14,7 @@
     <header>
       <div class="content-wrapper">
         <p><a href="index.html">SwipeCellKit Docs</a> (100% documented)</p>
-        <p class="header-right"><a href="https://github.com/jerkoch/SwipeCellKit"><img src="img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="https://github.com/SwipeCellKit/SwipeCellKit"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -47,7 +47,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Enums.html">Enums</a>
+            <a href="Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Enums/ExpansionFulfillmentStyle.html">ExpansionFulfillmentStyle</a>
@@ -81,7 +81,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Structs.html">Structs</a>
+            <a href="Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Structs/ScaleAndAlphaExpansion.html">ScaleAndAlphaExpansion</a>
@@ -123,21 +123,21 @@
             
             <h2 id='customizing-transitions' class='heading'>Customizing Transitions</h2>
 
-<p>You can customize the transition behavior of individual actions by assigning a <code>transitionDelegate</code> to the <code>SwipeAction</code> type. </p>
+<p>You can customize the transition behavior of individual actions by assigning a <code>transitionDelegate</code> to the <code><a href="Classes/SwipeAction.html">SwipeAction</a></code> type. </p>
 
-<p>The provided <code>ScaleTransition</code> type monitors the action button&rsquo;s visibility as it crosses the <code>threshold</code>, and animates between <code>initialScale</code> and <code>identity</code>.  This provides a <q>pop-like</q> effect as the action buttons are exposed more than 50% of their target width. </p>
+<p>The provided <code><a href="Structs/ScaleTransition.html">ScaleTransition</a></code> type monitors the action button&rsquo;s visibility as it crosses the <code>threshold</code>, and animates between <code>initialScale</code> and <code>identity</code>.  This provides a <q>pop-like</q> effect as the action buttons are exposed more than 50% of their target width. </p>
 
 <p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Transition-Delegate.gif" /></p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">action</span> <span class="o">=</span> <span class="kt">SwipeAction</span><span class="p">(</span><span class="nv">style</span><span class="p">:</span> <span class="o">.</span><span class="k">default</span><span class="p">,</span> <span class="nv">title</span><span class="p">:</span> <span class="s">"More"</span><span class="p">)</span> <span class="p">{</span> <span class="n">action</span><span class="p">,</span> <span class="n">indexPath</span> <span class="k">in</span> <span class="k">return</span> <span class="p">}</span>
 <span class="n">action</span><span class="o">.</span><span class="n">transitionDelegate</span> <span class="o">=</span> <span class="kt">ScaleTransition</span><span class="o">.</span><span class="k">default</span>
 </code></pre>
 
-<p>The <code>ScaleTransition</code> type provides a static <code>default</code> configuration, but it can also be initiantiated with custom parameters to suit your needs.</p>
+<p>The <code><a href="Structs/ScaleTransition.html">ScaleTransition</a></code> type provides a static <code>default</code> configuration, but it can also be initiantiated with custom parameters to suit your needs.</p>
 
-<p>You can also easily provide your own completely custom transition behavior by adopting the <code>SwipeActionTransitioning</code> protocol.  The supplied <code>SwipeActionTransitioningContext</code> to the delegate methods reflect the current swipe state as the gesture is performed.</p>
+<p>You can also easily provide your own completely custom transition behavior by adopting the <code><a href="Protocols/SwipeActionTransitioning.html">SwipeActionTransitioning</a></code> protocol.  The supplied <code><a href="Structs/SwipeActionTransitioningContext.html">SwipeActionTransitioningContext</a></code> to the delegate methods reflect the current swipe state as the gesture is performed.</p>
 <h2 id='customizing-expansion' class='heading'>Customizing Expansion</h2>
 
-<p>Expansion behavior is defined by the properties available in the <code>SwipeExpansionStyle</code> type: </p>
+<p>Expansion behavior is defined by the properties available in the <code><a href="Structs/SwipeExpansionStyle.html">SwipeExpansionStyle</a></code> type: </p>
 
 <ul>
 <li><code>target</code>: The relative target expansion threshold. Expansion will occur at the specified value.</li>
@@ -151,7 +151,7 @@
 
 <p>The target describes a location to which the view will scroll when expansion is triggered. A trigger is simply a threshold causing expansion to occur.</p>
 
-<p>The <code>SwipeExpansionStyle.Target</code> enumeration defines the following target options:</p>
+<p>The <code><a href="Structs/SwipeExpansionStyle/Target.html">SwipeExpansionStyle.Target</a></code> enumeration defines the following target options:</p>
 
 <ol>
 <li><code>.percentage(CGFloat)</code>: Percentage of superview&rsquo;s width (0.0 to 1.0).</li>
@@ -161,7 +161,7 @@
 <p>By default, the configured <em>target</em> will also act as a trigger. For instance, if a target is configured with <code>.percentage(0.5)</code>, expansion will trigger when the view is scrolled more than 50% of its superview. </p>
 <h3 id='additional-triggers' class='heading'>Additional Triggers</h3>
 
-<p>It may be desirable to add additional triggers to complement the default target trigger. For instance, destructive expansion adds a touch threshold, triggering expansion when a touch occurs towards the opposite edge of the view. The <code>SwipeExpansionStyle.Trigger</code> enumeration defines the following options:</p>
+<p>It may be desirable to add additional triggers to complement the default target trigger. For instance, destructive expansion adds a touch threshold, triggering expansion when a touch occurs towards the opposite edge of the view. The <code><a href="Structs/SwipeExpansionStyle/Trigger.html">SwipeExpansionStyle.Trigger</a></code> enumeration defines the following options:</p>
 
 <ol>
 <li><code>.touchThreshold(CGFloat)</code>: The trigger a specified by a touch occuring past the supplied percentage in the superview (0.0 to 1.0). The action view must also be fully exposed for this trigger to activate.</li>
@@ -172,21 +172,21 @@
 <p>When <code>elasticOverscroll</code> is enabled, the action buttons will only fill 25% percent of the additional space provided to the actions view.  </p>
 <h3 id='completion-animations' class='heading'>Completion Animations</h3>
 
-<p>The completion animation occurs on touch up if expansion is actively triggered. The <code>SwipeExpansionStyle.CompletionAnimation</code> enumeration defines the following expansion animation completion style options:</p>
+<p>The completion animation occurs on touch up if expansion is actively triggered. The <code><a href="Structs/SwipeExpansionStyle/CompletionAnimation.html">SwipeExpansionStyle.CompletionAnimation</a></code> enumeration defines the following expansion animation completion style options:</p>
 
 <ol>
 <li><code>.fill(FillOptions)</code>: The default expansion button will completely expand to fill the previous place of the cell.</li>
 <li><code>.bounce</code>: The expansion will bounce back from the trigger point and hide the action view, resetting the cell.</li>
 </ol>
 
-<p>For fill expansions, you can use the <code>FillOptions</code> type to configure the behavior of the fill completion animation along with the timing of the invocation of the action handler. These options are defined by the <code>ExpansionFulfillmentStyle</code> and <code>HandlerInvocationTiming</code>. </p>
+<p>For fill expansions, you can use the <code>FillOptions</code> type to configure the behavior of the fill completion animation along with the timing of the invocation of the action handler. These options are defined by the <code><a href="Enums/ExpansionFulfillmentStyle.html">ExpansionFulfillmentStyle</a></code> and <code>HandlerInvocationTiming</code>. </p>
 
-<p>The <code>ExpansionFulfillmentStyle</code> allows you to configure how to resolve the actively filled state . The built-in <code>.destructive</code>, and <code>.destructiveAfterFill</code> expansion styles configure the <code>ExpansionFulfillmentStyle</code> to automatically perform the <code>.delete</code> when the action handler is invoked. This is done by created a <code>FillOptions</code> instance using the static <code>automatic(_ style:timing:)</code> method.  When you need to determine this behavior at runtime or coordinate deletion with other animations, you can create a <code>FillOptions</code> instance using the static <code>manual(timing:)</code> function and call <code>action.fulfull(style:)</code> asynchronously after your action handler is invoked.</p>
+<p>The <code><a href="Enums/ExpansionFulfillmentStyle.html">ExpansionFulfillmentStyle</a></code> allows you to configure how to resolve the actively filled state . The built-in <code>.destructive</code>, and <code>.destructiveAfterFill</code> expansion styles configure the <code><a href="Enums/ExpansionFulfillmentStyle.html">ExpansionFulfillmentStyle</a></code> to automatically perform the <code>.delete</code> when the action handler is invoked. This is done by created a <code>FillOptions</code> instance using the static <code>automatic(_ style:timing:)</code> method.  When you need to determine this behavior at runtime or coordinate deletion with other animations, you can create a <code>FillOptions</code> instance using the static <code>manual(timing:)</code> function and call <code>action.fulfull(style:)</code> asynchronously after your action handler is invoked.</p>
 
 <p>You can use the <code>HandlerInvocationTiming</code> to configure if the action handler should be invoked <code>.with</code> the fill animation, or <code>.after</code> the fill animation completes.  Using the <code>.with</code> option behaves like the stock Mail.app, while the <code>.after</code> option behaves more like the 3rd party Mailbox and Tweetbot apps.</p>
 <h3 id='built-in-styles' class='heading'>Built-in Styles</h3>
 
-<p>The framework provides four built-in <code>SwipeExpansionStyle</code> instances which configure the above components accordingly:</p>
+<p>The framework provides four built-in <code><a href="Structs/SwipeExpansionStyle.html">SwipeExpansionStyle</a></code> instances which configure the above components accordingly:</p>
 
 <ol>
 <li><code>.selection</code></li>
@@ -225,24 +225,24 @@ completionAnimation: .fill(.manual(timing: .after))
 </code></pre>
 <h3 id='button-behavior' class='heading'>Button Behavior</h3>
 
-<p>It is also possible to customize the button expansion behavior by assigning a <code>expansionDelegate</code> to the <code>SwipeTableOptions</code> type. The delegate is invoked during the (un)expansion process and allows you to customize the display of the action being expanded, as well as the other actions in the view. </p>
+<p>It is also possible to customize the button expansion behavior by assigning a <code>expansionDelegate</code> to the <code><a href="Structs/SwipeTableOptions.html">SwipeTableOptions</a></code> type. The delegate is invoked during the (un)expansion process and allows you to customize the display of the action being expanded, as well as the other actions in the view. </p>
 
-<p>The provided <code>ScaleAndAlphaExpansion</code> type is useful for actions with clear backgrounds. When expansion occurs, the <code>ScaleAndAlphaExpansion</code> type automatically scales and fades the remaining actions in and out of the view. By default, if the expanded action has a clear background, the default <code>ScaleAndAlphaExpansion</code> will be automatically applied by the system.</p>
+<p>The provided <code><a href="Structs/ScaleAndAlphaExpansion.html">ScaleAndAlphaExpansion</a></code> type is useful for actions with clear backgrounds. When expansion occurs, the <code><a href="Structs/ScaleAndAlphaExpansion.html">ScaleAndAlphaExpansion</a></code> type automatically scales and fades the remaining actions in and out of the view. By default, if the expanded action has a clear background, the default <code><a href="Structs/ScaleAndAlphaExpansion.html">ScaleAndAlphaExpansion</a></code> will be automatically applied by the system.</p>
 
 <p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Expansion-Delegate.gif" /></p>
 <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">options</span> <span class="o">=</span> <span class="kt">SwipeTableOptions</span><span class="p">()</span>
 <span class="n">options</span><span class="o">.</span><span class="n">expansionDelegate</span> <span class="o">=</span> <span class="kt">ScaleAndAlphaExpansion</span><span class="o">.</span><span class="k">default</span>
 </code></pre>
 
-<p>The <code>ScaleAndAlphaExpansion</code> type provides a static <code>default</code> configuration, but it can also be instantiated with custom parameters to suit your needs.</p>
+<p>The <code><a href="Structs/ScaleAndAlphaExpansion.html">ScaleAndAlphaExpansion</a></code> type provides a static <code>default</code> configuration, but it can also be instantiated with custom parameters to suit your needs.</p>
 
-<p>You can also provide your own completely custom expansion behavior by adopting the <code>SwipeExpanding</code> protocol. The protocol allows you to customize the animation timing parameters prior to initiating the (un)expansion animation, as well as customizing the action during (un)expansion.</p>
+<p>You can also provide your own completely custom expansion behavior by adopting the <code><a href="Protocols/SwipeExpanding.html">SwipeExpanding</a></code> protocol. The protocol allows you to customize the animation timing parameters prior to initiating the (un)expansion animation, as well as customizing the action during (un)expansion.</p>
 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://twitter.com/jerkoch" target="_blank" rel="external">Jeremy Koch</a>. All rights reserved. (Last updated: 2017-06-17)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://twitter.com/mkurabi" target="_blank" rel="external">Mohammad Kurabi</a>. All rights reserved. (Last updated: 2017-10-06)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
