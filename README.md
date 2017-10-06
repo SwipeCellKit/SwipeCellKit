@@ -88,9 +88,6 @@ use_frameworks!
 # Latest release in CocoaPods
 pod 'SwipeCellKit'
 
-# Latest Swift 4 release in CocoaPods
-pod 'SwipeCellKit', :git => 'https://github.com/SwipeCellKit/SwipeCellKit.git', :branch => 'swift4'
-
 # Get the latest on develop
 pod 'SwipeCellKit', :git => 'https://github.com/SwipeCellKit/SwipeCellKit.git', :branch => 'develop'
 ````
