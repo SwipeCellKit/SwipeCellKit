@@ -6,7 +6,7 @@
 
 #### Fixed
 
-- Fix issue where swipe actions intermittently were not displayed correctly when cell is swiped. (#126)
+- Fix issue where swipe actions intermittently on iOS 11.2 were not displayed correctly when cell is swiped. (#126)
 
 ---
 
