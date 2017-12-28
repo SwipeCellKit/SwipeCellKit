@@ -2,6 +2,14 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.0.0)
+
+#### Fixed
+
+- Fix issue where swipe actions intermittently on iOS 11.2 were not displayed correctly when cell is swiped. (#126)
+
+---
+
 ## [2.0.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.0.0)
 
 #### Added
