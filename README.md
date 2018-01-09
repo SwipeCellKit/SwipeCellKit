@@ -180,12 +180,7 @@ options.expansionStyle = .destructive(automaticallyDelete: false)
 let delete = SwipeAction(style: .destructive, title: nil) { action, indexPath in
     // Update model
     self.emails.remove(at: indexPath.row)
-
-    // Coordinate table view update animations
-    self.tableView.beginUpdates()
-    self.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
     action.fulfill(with: .delete)
-    self.tableView.endUpdates()
 }
 ````
 
