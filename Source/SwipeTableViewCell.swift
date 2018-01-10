@@ -16,10 +16,10 @@ import UIKit
 open class SwipeTableViewCell: UITableViewCell {
     /// The object that acts as the delegate of the `SwipeTableViewCell`.
     public weak var delegate: SwipeTableViewCellDelegate?
-    
+
     var animator: SwipeAnimator?
 
-    var state = SwipeState.center
+    open var state = SwipeState.center
     var originalCenter: CGFloat = 0
     
     weak var tableView: UITableView?
@@ -128,7 +128,10 @@ open class SwipeTableViewCell: UITableViewCell {
                 let velocity = gesture.velocity(in: target)
                 let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
 
-                showActionsView(for: orientation)
+                if !showActionsView(for: orientation) {
+                    panGestureRecognizer.isEnabled = false
+                    panGestureRecognizer.isEnabled = true
+                }
             }
             
         case .changed:
