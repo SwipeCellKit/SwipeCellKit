@@ -11,7 +11,7 @@ import UIKit
  The `SwipeTableViewCell` class extends `UITableViewCell` and provides more flexible options for cell swiping behavior.
  
  
- The default behavior closely matches the stock Mail.app. If you want to customize the transition style (ie. how the action buttons are exposed), or the expansion style (the behavior when the row is swiped passes a defined threshold), you can return the appropriately configured `SwipeTableOptions` via the `SwipeTableViewCellDelegate` delegate.
+ The default behavior closely matches the stock Mail.app. If you want to customize the transition style (ie. how the action buttons are exposed), or the expansion style (the behavior when the row is swiped passes a defined threshold), you can return the appropriately configured `SwipeOptions` via the `SwipeTableViewCellDelegate` delegate.
  */
 open class SwipeTableViewCell: UITableViewCell {
     /// The object that acts as the delegate of the `SwipeTableViewCell`.
@@ -229,7 +229,7 @@ open class SwipeTableViewCell: UITableViewCell {
         guard let tableView = tableView,
             let indexPath = tableView.indexPath(for: self) else { return }
         
-        let options = delegate?.tableView(tableView, editActionsOptionsForRowAt: indexPath, for: orientation) ?? SwipeTableOptions()
+        let options = delegate?.tableView(tableView, editActionsOptionsForRowAt: indexPath, for: orientation) ?? SwipeOptions()
         
         self.actionsView?.removeFromSuperview()
         self.actionsView = nil
