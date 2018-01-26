@@ -37,3 +37,29 @@ extension UIPanGestureRecognizer {
         return CGPoint(x: x, y: y)
     }
 }
+
+extension UILabel {
+    var adjustedFontSize: CGFloat {
+        get {
+            guard let text = text as NSString? else { return font.pointSize }
+            var currentFont: UIFont = font
+            let originalFontSize = currentFont.pointSize
+            var currentSize: CGSize = text.size(withAttributes: [NSAttributedStringKey.font: currentFont])
+            
+            while currentSize.width > frame.size.width && currentFont.pointSize > (originalFontSize * minimumScaleFactor) {
+                currentFont = currentFont.withSize(currentFont.pointSize - 1)
+                currentSize = text.size(withAttributes: [NSAttributedStringKey.font: currentFont])
+            }
+            
+            return currentFont.pointSize
+        }
+    }
+}
+
+extension CGRect {
+    func center(size: CGSize) -> CGRect {
+        let dx = width - size.width
+        let dy = height - size.height
+        return CGRect(x: origin.x + dx * 0.5, y: origin.y + dy * 0.5, width: size.width, height: size.height)
+    }
+}

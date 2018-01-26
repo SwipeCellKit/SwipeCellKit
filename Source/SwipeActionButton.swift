@@ -67,8 +67,11 @@ class SwipeActionButton: UIButton {
     }
     
     func titleBoundingRect(with size: CGSize) -> CGRect {
-        guard let title = currentTitle, let font = titleLabel?.font else { return .zero }
-        
+        guard let title = currentTitle, let label = titleLabel, var font = label.font else { return .zero }
+        if label.adjustsFontSizeToFitWidth, let adjustedFont = UIFont.init(name: font.fontName, size: label.adjustedFontSize) {
+            font = adjustedFont
+        }
+
         return title.boundingRect(with: size,
                                   options: [.usesLineFragmentOrigin],
                                   attributes: [NSAttributedStringKey.font: font],
@@ -85,13 +88,5 @@ class SwipeActionButton: UIButton {
         var rect = contentRect.center(size: currentImage?.size ?? .zero)
         rect.origin.y = alignmentRect.minY + (maximumImageHeight - rect.height) / 2
         return rect
-    }
-}
-
-extension CGRect {
-    func center(size: CGSize) -> CGRect {
-        let dx = width - size.width
-        let dy = height - size.height
-        return CGRect(x: origin.x + dx * 0.5, y: origin.y + dy * 0.5, width: size.width, height: size.height)
     }
 }
