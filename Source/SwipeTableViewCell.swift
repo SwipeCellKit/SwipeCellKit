@@ -17,6 +17,8 @@ open class SwipeTableViewCell: UITableViewCell {
     /// The object that acts as the delegate of the `SwipeTableViewCell`.
     public weak var delegate: SwipeTableViewCellDelegate?
     
+    public var swipeBeginOffsetX: CGFloat = 10
+    
     var animator: SwipeAnimator?
 
     var state = SwipeState.center
@@ -506,4 +508,14 @@ extension SwipeTableViewCell {
 
         return true
     }
+    
+    open override func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        let touchLocation = touch.location(in: touch.window)
+        if gestureRecognizer.isKind(of: UIPanGestureRecognizer.self) && touchLocation.x < swipeBeginOffsetX {
+            return false
+        } else {
+            return true
+        }
+    }
+    
 }
