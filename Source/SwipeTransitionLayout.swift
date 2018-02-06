@@ -49,7 +49,11 @@ class BorderTransitionLayout: SwipeTransitionLayout {
     
     func layout(view: UIView, atIndex index: Int, with context: ActionsViewLayoutContext) {
         let diff = context.visibleWidth - context.contentSize.width
-        view.frame.origin.x = (CGFloat(index) * context.contentSize.width / CGFloat(context.numberOfActions) + diff) * context.orientation.scale
+        var safeArea:CGFloat = 0
+        if #available(iOS 11.0, *) {
+            safeArea = view.window!.safeAreaInsets.left
+        }
+        view.frame.origin.x = (CGFloat(index) * (context.contentSize.width - safeArea) / CGFloat(context.numberOfActions) + diff) * context.orientation.scale
     }
     
     func visibleWidthsForViews(with context: ActionsViewLayoutContext) -> [CGFloat] {
