@@ -459,19 +459,19 @@ extension SwipeCollectionViewCell: SwipeActionsViewDelegate {
             
             switch style {
             case .delete:
-                self?.mask = actionsView.createDeletionMask()
+                self?.contentView.mask = actionsView.createDeletionMask()
                 
                 collectionView.deleteItems(at: [indexPath])
                 
                 UIView.animate(withDuration: 0.3, animations: {
                     self?.contentViewCenter.x = newCenter
-                    self?.mask?.frame.size.height = 0
+                    self?.contentView.mask?.frame.size.height = 0
                     
                     if fillOption.timing == .after {
                         actionsView.alpha = 0
                     }
                 }) { [weak self] _ in
-                    self?.mask = nil
+                    self?.contentView.mask = nil
                     self?.reset()
                 }
             case .reset:
