@@ -8,12 +8,12 @@
 import UIKit
 
 public class SwipeActionButton: UIButton {
-    var spacing: CGFloat = 8
-    var shouldHighlight = true
-    var highlightedBackgroundColor: UIColor?
+    public var spacing: CGFloat = 8
+    public var shouldHighlight = true
+    public var highlightedBackgroundColor: UIColor?
 
-    var maximumImageHeight: CGFloat = 0
-    var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
+    public var maximumImageHeight: CGFloat = 0
+    public var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
     
     var currentSpacing: CGFloat {
         return (currentTitle?.isEmpty == false && maximumImageHeight > 0) ? spacing : 0
