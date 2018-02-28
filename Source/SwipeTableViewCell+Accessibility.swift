@@ -84,13 +84,12 @@ class SwipeAccessibilityCustomAction: UIAccessibilityCustomAction {
     let indexPath: IndexPath
     
     init(action: SwipeAction, indexPath: IndexPath, target: Any, selector: Selector) {
+        
         self.action = action
         self.indexPath = indexPath
         
-        if let name = action.accessibilityLabel ?? action.title ?? action.image?.accessibilityIdentifier {
-            super.init(name: name, target: target, selector: selector)
-        } else {
-            super.init(name: "", target: target, selector: selector)
-        }
+        let name = action.accessibilityLabel ?? action.title ?? action.image?.accessibilityIdentifier ?? ""
+        
+        super.init(name: name, target: target, selector: selector)
     }
 }
