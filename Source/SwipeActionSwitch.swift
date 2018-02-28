@@ -12,11 +12,10 @@ class SwipeActionSwitch: UISwitch {
     convenience init(action: SwipeAction) {
         self.init(frame: .zero)
         
-        contentHorizontalAlignment = .center
-        contentVerticalAlignment = .center
-        
         tintColor = action.textColor ?? .white
         onTintColor = action.highlightedTextColor ?? tintColor
+        
+        setOn(action.isOn ?? false, animated: false)
     }
     
 }

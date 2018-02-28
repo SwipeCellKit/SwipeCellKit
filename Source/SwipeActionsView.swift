@@ -104,15 +104,19 @@ class SwipeActionsView: UIView {
     }
     
     func addButtons(for actions: [SwipeAction], withMaximum size: CGSize) -> [SwipeActionButton] {
+        let switchSizeMultiplier: CGFloat = 0.75
+        
         let buttons: [SwipeActionButton] = actions.map({ action in
             let actionButton = SwipeActionButton(action: action)
-            if action.showSwitch == false {
-                actionButton.addTarget(self, action: #selector(actionTapped(button:)), for: .touchUpInside)
-            } else {
+            if action.showSwitch == true {
                 let switchToAdd = SwipeActionSwitch(action: action)
                 switchToAdd.addTarget(self, action: #selector(switchTapped(tappedSwitch:)), for: .valueChanged)
+                switchToAdd.transform = CGAffineTransform(scaleX: switchSizeMultiplier, y: switchSizeMultiplier)
                 actionButton.subSwitch = switchToAdd
+            } else {
+                actionButton.addTarget(self, action: #selector(actionTapped(button:)), for: .touchUpInside)
             }
+            
             actionButton.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
             actionButton.spacing = options.buttonSpacing ?? 8
             actionButton.contentEdgeInsets = buttonEdgeInsets(fromOptions: options)
@@ -129,15 +133,14 @@ class SwipeActionsView: UIView {
             wrapperView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
             wrapperView.addSubview(button)
             if let subSwitch = button.subSwitch {
-                subSwitch.clipsToBounds = true
-                subSwitch.translatesAutoresizingMaskIntoConstraints = false
+                var switchSize = subSwitch.sizeThatFits(.zero)
+                switchSize = CGSize(width: switchSize.width * switchSizeMultiplier, height: switchSize.height * switchSizeMultiplier)
+                
+                let containerSize = CGSize(width: wrapperView.contentRect.width, height: size.height)
+                let dx = containerSize.width - switchSize.width
+                subSwitch.frame = CGRect(x: dx * 0.5, y: options.buttonPadding ?? 8, width: switchSize.width, height: switchSize.height)
                 
                 wrapperView.addSubview(subSwitch)
-                
-                let horizontalConstraint = NSLayoutConstraint(item: subSwitch, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: wrapperView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0)
-                let verticalConstraint = NSLayoutConstraint(item: subSwitch, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: wrapperView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0)
-                
-                wrapperView.addConstraints([horizontalConstraint, verticalConstraint])
             }
             
             if let effect = action.backgroundEffect {
