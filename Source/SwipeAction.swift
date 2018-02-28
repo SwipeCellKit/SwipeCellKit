@@ -51,6 +51,14 @@ public class SwipeAction: NSObject {
     /// - note: If you do not specify a color, `textColor` is used.
     public var highlightedTextColor: UIColor?
     
+    /// The switch to use to enable or disable the action.
+    ///
+    /// - note: false by default.
+    public var showSwitch: Bool?
+    
+    /// It specifies if switch is on (if shown)
+    public var isOn: Bool?
+    
     /// The image used for the action button.
     ///
     /// - note: You must specify a title or an image.
@@ -89,11 +97,13 @@ public class SwipeAction: NSObject {
 
      - parameter style: The style of the action button.
      - parameter title: The title of the action button.
+     - parameter showSwitch: Show switch if true
      - parameter handler: The closure to execute when the user taps the button associated with this action.
     */
-    public init(style: SwipeActionStyle, title: String?, handler: ((SwipeAction, IndexPath) -> Void)?) {
+    public init(style: SwipeActionStyle, title: String?, showSwitch: Bool? = nil, handler: ((SwipeAction, IndexPath) -> Void)?) {
         self.title = title
         self.style = style
+        self.showSwitch = showSwitch
         self.handler = handler
     }
     
