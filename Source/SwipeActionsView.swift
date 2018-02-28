@@ -104,9 +104,19 @@ class SwipeActionsView: UIView {
     }
     
     func addButtons(for actions: [SwipeAction], withMaximum size: CGSize) -> [SwipeActionButton] {
+        let switchSizeMultiplier: CGFloat = 0.75
+        
         let buttons: [SwipeActionButton] = actions.map({ action in
             let actionButton = SwipeActionButton(action: action)
-            actionButton.addTarget(self, action: #selector(actionTapped(button:)), for: .touchUpInside)
+            if action.showSwitch == true {
+                let switchToAdd = SwipeActionSwitch(action: action)
+                switchToAdd.addTarget(self, action: #selector(switchTapped(tappedSwitch:)), for: .valueChanged)
+                switchToAdd.transform = CGAffineTransform(scaleX: switchSizeMultiplier, y: switchSizeMultiplier)
+                actionButton.subSwitch = switchToAdd
+            } else {
+                actionButton.addTarget(self, action: #selector(actionTapped(button:)), for: .touchUpInside)
+            }
+            
             actionButton.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
             actionButton.spacing = options.buttonSpacing ?? 8
             actionButton.contentEdgeInsets = buttonEdgeInsets(fromOptions: options)
@@ -122,6 +132,16 @@ class SwipeActionsView: UIView {
             let wrapperView = SwipeActionButtonWrapperView(frame: frame, action: action, orientation: orientation, contentWidth: minimumButtonWidth)
             wrapperView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
             wrapperView.addSubview(button)
+            if let subSwitch = button.subSwitch {
+                var switchSize = subSwitch.sizeThatFits(.zero)
+                switchSize = CGSize(width: switchSize.width * switchSizeMultiplier, height: switchSize.height * switchSizeMultiplier)
+                
+                let containerSize = CGSize(width: wrapperView.contentRect.width, height: size.height)
+                let dx = containerSize.width - switchSize.width
+                subSwitch.frame = CGRect(x: dx * 0.5, y: options.buttonPadding ?? 8, width: switchSize.width, height: switchSize.height)
+                
+                wrapperView.addSubview(subSwitch)
+            }
             
             if let effect = action.backgroundEffect {
                 let effectView = UIVisualEffectView(effect: effect)
@@ -146,6 +166,17 @@ class SwipeActionsView: UIView {
         guard let index = buttons.index(of: button) else { return }
 
         delegate?.swipeActionsView(self, didSelect: actions[index])
+    }
+    
+    @objc func switchTapped(tappedSwitch: SwipeActionSwitch) {
+        guard let index = buttons.index(where: { (button) -> Bool in
+            return button.subSwitch == tappedSwitch
+        }) else { return }
+        
+        let action = actions[index]
+        action.isOn = tappedSwitch.isOn
+        
+        delegate?.swipeActionsView(self, didSelect: action)
     }
     
     func buttonEdgeInsets(fromOptions options: SwipeTableOptions) -> UIEdgeInsets {

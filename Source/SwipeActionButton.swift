@@ -11,18 +11,25 @@ class SwipeActionButton: UIButton {
     var spacing: CGFloat = 8
     var shouldHighlight = true
     var highlightedBackgroundColor: UIColor?
+    var subSwitch: SwipeActionSwitch?
 
     var maximumImageHeight: CGFloat = 0
+    var maximumSwitchHeight: CGFloat? {
+        return subSwitch?.sizeThatFits(.zero).height
+    }
+    var maximumTopComponentHeight: CGFloat {
+        return maximumSwitchHeight ?? maximumImageHeight
+    }
     var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
     
     var currentSpacing: CGFloat {
-        return (currentTitle?.isEmpty == false && maximumImageHeight > 0) ? spacing : 0
+        return (currentTitle?.isEmpty == false && maximumTopComponentHeight > 0) ? spacing : 0
     }
     
     var alignmentRect: CGRect {
         let contentRect = self.contentRect(forBounds: bounds)
         let titleHeight = titleBoundingRect(with: verticalAlignment == .centerFirstBaseline ? CGRect.infinite.size : contentRect.size).integral.height
-        let totalHeight = maximumImageHeight + titleHeight + currentSpacing
+        let totalHeight = maximumTopComponentHeight + titleHeight + currentSpacing
 
         return contentRect.center(size: CGSize(width: contentRect.width, height: totalHeight))
     }
@@ -77,12 +84,14 @@ class SwipeActionButton: UIButton {
     
     override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
         var rect = contentRect.center(size: titleBoundingRect(with: contentRect.size).size)
-        rect.origin.y = alignmentRect.minY + maximumImageHeight + currentSpacing
+        rect.origin.y = alignmentRect.minY + maximumTopComponentHeight + currentSpacing
         return rect.integral
     }
     
     override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
-        var rect = contentRect.center(size: currentImage?.size ?? .zero)
+        // Don't show image if need to show switch
+        let image: UIImage? = subSwitch == nil ? currentImage : nil
+        var rect = contentRect.center(size: image?.size ?? .zero)
         rect.origin.y = alignmentRect.minY + (maximumImageHeight - rect.height) / 2
         return rect
     }

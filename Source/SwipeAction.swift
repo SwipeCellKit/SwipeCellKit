@@ -51,6 +51,14 @@ public class SwipeAction: NSObject {
     /// - note: If you do not specify a color, `textColor` is used.
     public var highlightedTextColor: UIColor?
     
+    /// The switch to use to enable or disable the action.
+    ///
+    /// - note: false by default.
+    public var showSwitch: Bool?
+    
+    /// It specifies if switch is on (if shown)
+    public var isOn: Bool?
+    
     /// The image used for the action button.
     ///
     /// - note: You must specify a title or an image.
