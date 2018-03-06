@@ -53,7 +53,12 @@ class SwipeActionsView: UIView {
     }
  
     var preferredWidth: CGFloat {
-        return minimumButtonWidth * CGFloat(actions.count)
+        let allButtonsWidth = minimumButtonWidth * CGFloat(actions.count)
+        if #available(iOS 11.0, *) {
+            return allButtonsWidth + self.window!.safeAreaInsets.left
+        } else {
+            return allButtonsWidth
+        }
     }
 
     var contentSize: CGSize {
