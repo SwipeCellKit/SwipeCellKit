@@ -110,6 +110,11 @@ class SwipeActionsView: UIView {
             actionButton.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
             actionButton.spacing = options.buttonSpacing ?? 8
             actionButton.contentEdgeInsets = buttonEdgeInsets(fromOptions: options)
+            
+            if options.gradient != nil {
+                actionButton.layer.insertSublayer(options.gradient!, at: 0)
+            }
+                
             return actionButton
         })
         
