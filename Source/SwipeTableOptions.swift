@@ -43,7 +43,7 @@ public struct SwipeTableOptions {
     public var buttonSpacing: CGFloat?
     
     /// Add gradient
-    public var showGradient: (frame: CGRect, cornerRadius: CGFloat, fromColor: CGColor, toColor: CGColor)? = nil
+    public var gradient: CAGradientLayer?
     
     /// Constructs a new `SwipeTableOptions` instance with default options.
     public init() {}

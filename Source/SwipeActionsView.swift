@@ -111,15 +111,8 @@ class SwipeActionsView: UIView {
             actionButton.spacing = options.buttonSpacing ?? 8
             actionButton.contentEdgeInsets = buttonEdgeInsets(fromOptions: options)
             
-            if options.showGradient != nil {
-                let gradientLayer = CAGradientLayer()
-                gradientLayer.colors = [options.showGradient!.fromColor, options.showGradient!.toColor]
-                gradientLayer.startPoint = CGPoint.init(x: 0, y: 0.5)
-                gradientLayer.endPoint = CGPoint.init(x: 1, y: 0.5)
-                gradientLayer.frame = options.showGradient!.frame
-                gradientLayer.cornerRadius = options.showGradient!.cornerRadius
-                
-                actionButton.layer.insertSublayer(gradientLayer, at: 0)
+            if options.gradient != nil {
+                actionButton.layer.insertSublayer(options.gradient!, at: 0)
             }
                 
             return actionButton

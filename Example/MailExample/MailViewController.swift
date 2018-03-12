@@ -174,7 +174,14 @@ extension MailViewController: SwipeTableViewCellDelegate {
         
         options.transitionStyle = defaultOptions.transitionStyle
         
-        options.showGradient = (CGRect(x: 0, y: 10, width: 70, height: 80), cornerRadius: 10, fromColor: fromColor, toColor: toColor)
+        let gradient = CAGradientLayer()
+        gradient.frame = CGRect(x: 0, y: 10, width: 70, height: 80)
+        gradient.cornerRadius = 10
+        gradient.colors = [fromColor, UIColor.red.withAlphaComponent(0.5).cgColor, toColor]
+        gradient.startPoint = CGPoint.init(x: 0, y: 0.5)
+        gradient.endPoint = CGPoint.init(x: 1, y: 0.5)
+        
+        options.gradient = gradient
 
         return options
     }
