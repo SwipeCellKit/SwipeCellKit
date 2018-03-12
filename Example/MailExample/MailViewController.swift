@@ -159,16 +159,22 @@ extension MailViewController: SwipeTableViewCellDelegate {
     
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
         var options = SwipeTableOptions()
-        options.expansionStyle = orientation == .left ? .selection : .destructive
+        
+        var fromColor: CGColor = UIColor.red.withAlphaComponent(0.8).cgColor
+        var toColor: CGColor = UIColor.red.withAlphaComponent(0.8).cgColor
+        
+        if orientation == .left {
+            options.expansionStyle = .selection
+            fromColor = UIColor.red.withAlphaComponent(0).cgColor
+        }
+        else {
+            options.expansionStyle = .destructive
+            toColor = UIColor.red.withAlphaComponent(0).cgColor
+        }
+        
         options.transitionStyle = defaultOptions.transitionStyle
         
-        switch buttonStyle {
-        case .backgroundColor:
-            options.buttonSpacing = 11
-        case .circular:
-            options.buttonSpacing = 4
-            options.backgroundColor = #colorLiteral(red: 0.9467939734, green: 0.9468161464, blue: 0.9468042254, alpha: 1)
-        }
+        options.showGradient = (CGRect(x: 0, y: 10, width: 70, height: 80), cornerRadius: 10, fromColor: fromColor, toColor: toColor)
 
         return options
     }
@@ -179,7 +185,7 @@ extension MailViewController: SwipeTableViewCellDelegate {
 
         switch buttonStyle {
         case .backgroundColor:
-            action.backgroundColor = descriptor.color
+            action.backgroundColor = .white
         case .circular:
             action.backgroundColor = .clear
             action.textColor = descriptor.color
