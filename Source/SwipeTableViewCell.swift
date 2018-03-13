@@ -243,9 +243,9 @@ open class SwipeTableViewCell: UITableViewCell {
         
         addSubview(actionsView)
 
-        actionsView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
         actionsView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 2).isActive = true
-        actionsView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        actionsView.topAnchor.constraint(equalTo: topAnchor, constant: options.actionsViewTopInset).isActive = true
+        actionsView.bottomAnchor.constraint(equalTo: bottomAnchor, constant:options.actionsViewBottomOffset).isActive = true
         
         if orientation == .left {
             actionsView.rightAnchor.constraint(equalTo: leftAnchor).isActive = true

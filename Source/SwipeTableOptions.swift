@@ -42,6 +42,16 @@ public struct SwipeTableOptions {
     /// The amount of space, in points, between the button image and the button title.
     public var buttonSpacing: CGFloat?
     
+    /// The top inset of ActionsView in points
+    ///
+    /// -note:  By default, the inset is 0
+    public var actionsViewTopInset: CGFloat = 0.0
+    
+    ///The bottom offset of ActionsView in points
+    ///
+    /// -note:  By default, the offset is 0
+    public var actionsViewBottomOffset: CGFloat = 0.0
+    
     /// Constructs a new `SwipeTableOptions` instance with default options.
     public init() {}
 }
