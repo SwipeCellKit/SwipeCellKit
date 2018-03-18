@@ -55,7 +55,7 @@ class MailViewController: UITableViewController {
     
     // MARK: - Actions
     
-    @IBAction func moreTapped(_ sender: Any) {        
+    @IBAction func moreTapped(_ sender: Any) {
         let controller = UIAlertController(title: "Swipe Transition Style", message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: "Border", style: .default, handler: { _ in self.defaultOptions.transitionStyle = .border }))
         controller.addAction(UIAlertAction(title: "Drag", style: .default, handler: { _ in self.defaultOptions.transitionStyle = .drag }))
@@ -110,24 +110,24 @@ class MailViewController: UITableViewController {
 extension MailViewController: SwipeTableViewCellDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         let email = emails[indexPath.row]
-
+        
         if orientation == .left {
             guard isSwipeRightEnabled else { return nil }
             
             let read = SwipeAction(style: .default, title: nil) { action, indexPath in
                 let updatedStatus = !email.unread
                 email.unread = updatedStatus
-
+                
                 let cell = tableView.cellForRow(at: indexPath) as! MailCell
                 cell.setUnread(updatedStatus, animated: true)
             }
             
             read.hidesWhenSelected = true
             read.accessibilityLabel = email.unread ? "Mark as Read" : "Mark as Unread"
-
+            
             let descriptor: ActionDescriptor = email.unread ? .read : .unread
             configure(action: read, with: descriptor)
-
+            
             return [read]
         } else {
             let flag = SwipeAction(style: .default, title: nil, handler: nil)
@@ -152,7 +152,7 @@ extension MailViewController: SwipeTableViewCellDelegate {
                 self.present(controller, animated: true, completion: nil)
             }
             configure(action: more, with: .more)
-
+            
             return [delete, flag, more]
         }
     }
@@ -169,14 +169,14 @@ extension MailViewController: SwipeTableViewCellDelegate {
             options.buttonSpacing = 4
             options.backgroundColor = #colorLiteral(red: 0.9467939734, green: 0.9468161464, blue: 0.9468042254, alpha: 1)
         }
-
+        
         return options
     }
     
     func configure(action: SwipeAction, with descriptor: ActionDescriptor) {
         action.title = descriptor.title(forDisplayMode: buttonDisplayMode)
         action.image = descriptor.image(forStyle: buttonStyle, displayMode: buttonDisplayMode)
-
+        
         switch buttonStyle {
         case .backgroundColor:
             action.backgroundColor = descriptor.color
@@ -214,11 +214,11 @@ class MailCell: SwipeTableViewCell {
         indicatorView.color = tintColor
         indicatorView.backgroundColor = .clear
         contentView.addSubview(indicatorView)
- 
+        
         let size: CGFloat = 12
         indicatorView.widthAnchor.constraint(equalToConstant: size).isActive = true
         indicatorView.heightAnchor.constraint(equalTo: indicatorView.widthAnchor).isActive = true
-        indicatorView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 12).isActive = true
+        indicatorView.centerXAnchor.constraint(equalTo: fromLabel.leftAnchor, constant: -16).isActive = true
         indicatorView.centerYAnchor.constraint(equalTo: fromLabel.centerYAnchor).isActive = true
     }
     
@@ -234,7 +234,7 @@ class MailCell: SwipeTableViewCell {
             localAnimator = unread ? UIViewPropertyAnimator(duration: 1.0, dampingRatio: 0.4) : UIViewPropertyAnimator(duration: 0.3, dampingRatio: 1.0)
             localAnimator?.addAnimations(closure)
             localAnimator?.startAnimation()
-
+            
             self.animator = localAnimator
         } else {
             closure()
@@ -246,7 +246,7 @@ class IndicatorView: UIView {
     var color = UIColor.clear {
         didSet { setNeedsDisplay() }
     }
-
+    
     override func draw(_ rect: CGRect) {
         color.set()
         UIBezierPath(ovalIn: rect).fill()
