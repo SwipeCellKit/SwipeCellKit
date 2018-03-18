@@ -124,7 +124,8 @@ class SwipeActionsView: UIView {
         })
         
         let maximum = options.maximumButtonWidth ?? (size.width - 30) / CGFloat(actions.count)
-        minimumButtonWidth = buttons.reduce(options.minimumButtonWidth ?? 74, { initial, next in max(initial, next.preferredWidth(maximum: maximum)) })
+        let minimum = options.minimumButtonWidth ?? min(maximum, 74)
+        minimumButtonWidth = buttons.reduce(minimum, { initial, next in max(initial, next.preferredWidth(maximum: maximum)) })
         
         buttons.enumerated().forEach { (index, button) in
             let action = actions[index]
