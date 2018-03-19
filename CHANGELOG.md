@@ -2,7 +2,18 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.0.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.0.0)
+## [2.0.2](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.0.2)
+
+#### Fixed
+
+- Update README to fix an error with how to fulfill a delete row operation
+- Fix crash related to `UIAccessablilityCustomAction` if no accessability text is set on action image, or action label. (#156)
+- Fix actions where safeAreaInsets was not being considered (i.e. iPhone X) (#159, #119)
+- Fix issue where SwipeActionButton.maximumButtonWidth is not respected when its value is below the default/computed minimumButtonWidth (#150)
+
+---
+
+## [2.0.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.0.1)
 
 #### Fixed
 
