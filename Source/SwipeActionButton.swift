@@ -42,10 +42,8 @@ class SwipeActionButton: UIButton {
         }
     }
     
-    convenience init(action: SwipeAction, delegate: SwipeActionButtonDelegate?) {
+    convenience init(action: SwipeAction) {
         self.init(frame: .zero)
-
-        self.delegate = delegate
 
         contentHorizontalAlignment = .center
         

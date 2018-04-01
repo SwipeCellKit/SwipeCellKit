@@ -237,9 +237,7 @@ open class SwipeTableViewCell: UITableViewCell {
         let actionsView = SwipeActionsView(maxSize: bounds.size,
                                            options: options,
                                            orientation: orientation,
-                                           actions: actions,
-                                           delegate: self)
-        
+                                           actions: actions)
         actionsView.delegate = self
         
         addSubview(actionsView)
