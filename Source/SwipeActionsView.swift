@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol SwipeActionsViewDelegate: class {
+protocol SwipeActionsViewDelegate: class, SwipeActionButtonDelegate {
     func swipeActionsView(_ swipeActionsView: SwipeActionsView, didSelect action: SwipeAction)
 }
 
@@ -81,10 +81,11 @@ class SwipeActionsView: UIView {
         return options.expansionStyle != nil ? actions.last : nil
     }
     
-    init(maxSize: CGSize, options: SwipeTableOptions, orientation: SwipeActionsOrientation, actions: [SwipeAction]) {
+    init(maxSize: CGSize, options: SwipeTableOptions, orientation: SwipeActionsOrientation, actions: [SwipeAction], delegate: SwipeActionsViewDelegate?) {
         self.options = options
         self.orientation = orientation
         self.actions = actions.reversed()
+        self.delegate = delegate
         
         switch options.transitionStyle {
         case .border:
@@ -115,7 +116,8 @@ class SwipeActionsView: UIView {
     
     func addButtons(for actions: [SwipeAction], withMaximum size: CGSize) -> [SwipeActionButton] {
         let buttons: [SwipeActionButton] = actions.map({ action in
-            let actionButton = SwipeActionButton(action: action)
+            let actionButton = SwipeActionButton(action: action, delegate: delegate)
+            //actionButton.delegate = delegate
             actionButton.addTarget(self, action: #selector(actionTapped(button:)), for: .touchUpInside)
             actionButton.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
             actionButton.spacing = options.buttonSpacing ?? 8

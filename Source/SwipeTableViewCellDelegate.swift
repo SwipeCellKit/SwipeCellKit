@@ -12,6 +12,13 @@ import UIKit
  */
 public protocol SwipeTableViewCellDelegate: class {
     /**
+     The rectangle of the visible part of the table view. This can be, for example, the table view's bounds or the layout frame of table view's safe area layout guide.
+          
+     - note: The rectange should be in the table view's own coordinate system.
+     */
+    var visibleTableViewRect: CGRect { get }
+    
+    /**
      Asks the delegate for the actions to display in response to a swipe in the specified row.
      
      - parameter tableView: The table view object which owns the cell requesting this information.
@@ -66,6 +73,8 @@ public protocol SwipeTableViewCellDelegate: class {
  Default implementation of `SwipeTableViewCellDelegate` methods
  */
 public extension SwipeTableViewCellDelegate {
+    var visibleTableViewRect: CGRect { return .zero }
+    
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
         return SwipeTableOptions()
     }

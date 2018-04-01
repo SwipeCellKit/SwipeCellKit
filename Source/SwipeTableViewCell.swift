@@ -237,7 +237,8 @@ open class SwipeTableViewCell: UITableViewCell {
         let actionsView = SwipeActionsView(maxSize: bounds.size,
                                            options: options,
                                            orientation: orientation,
-                                           actions: actions)
+                                           actions: actions,
+                                           delegate: self)
         
         actionsView.delegate = self
         
@@ -481,6 +482,26 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
         if fillOption.timing == .with {
             invokeAction()
         }
+    }
+}
+
+extension SwipeTableViewCell: SwipeActionButtonDelegate {
+    func verticalOffsetForSwipeActionButton() -> CGFloat {
+        guard let visibleTableViewRect = delegate?.visibleTableViewRect, visibleTableViewRect != .zero else { return 0 }
+        let visibleCellRect = frame.intersection(visibleTableViewRect)
+        
+        // Calculate top offset
+        let visibleTopY = visibleCellRect.minY
+        let normalTopY = frame.minY
+        let differenceTop = max(visibleTopY, normalTopY) - min(visibleTopY, normalTopY)
+        
+        // Calculate bottom offset
+        let visibleBottomY = visibleCellRect.maxY
+        let normalBottomY = frame.maxY
+        let differenceBottom = max(visibleBottomY, normalBottomY) - min(visibleBottomY, normalBottomY)
+
+        // Calculate total offset
+        return round((differenceTop - differenceBottom) / 2)
     }
 }
 
