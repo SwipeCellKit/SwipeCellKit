@@ -13,6 +13,7 @@ protocol SwipeActionButtonDelegate: AnyObject {
 
 class SwipeActionButton: UIButton {
     weak var delegate: SwipeActionButtonDelegate?
+    
     var spacing: CGFloat = 8
     var shouldHighlight = true
     var highlightedBackgroundColor: UIColor?
@@ -31,9 +32,9 @@ class SwipeActionButton: UIButton {
         let totalHeight = imageHeight + titleHeight + currentSpacing
         
         let size = CGSize(width: contentRect.width, height: totalHeight)
-        let verticalOffset = delegate?.verticalOffsetForSwipeActionButton() ?? 0
+        let offset: CGFloat = delegate?.verticalOffsetForSwipeActionButton() ?? 0
         
-        return contentRect.center(size: size, verticalOffset: verticalOffset)
+        return contentRect.center(size: size, verticalOffset: offset)
     }
     
     private var imageHeight: CGFloat {

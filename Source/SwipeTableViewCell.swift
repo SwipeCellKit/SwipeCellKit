@@ -491,13 +491,13 @@ extension SwipeTableViewCell: SwipeActionButtonDelegate {
         // Calculate top offset
         let visibleTopY = visibleCellRect.minY
         let normalTopY = frame.minY
-        let differenceTop = max(visibleTopY, normalTopY) - min(visibleTopY, normalTopY)
-        
+        let differenceTop = abs(visibleTopY - normalTopY)
+
         // Calculate bottom offset
         let visibleBottomY = visibleCellRect.maxY
         let normalBottomY = frame.maxY
-        let differenceBottom = max(visibleBottomY, normalBottomY) - min(visibleBottomY, normalBottomY)
-
+        let differenceBottom = abs(visibleBottomY - normalBottomY)
+        
         // Calculate total offset
         return round((differenceTop - differenceBottom) / 2)
     }
