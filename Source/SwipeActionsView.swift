@@ -7,12 +7,12 @@
 
 import UIKit
 
-protocol SwipeActionsViewDelegate: class, SwipeActionButtonDelegate {
+protocol SwipeActionsViewDelegate: class {
     func swipeActionsView(_ swipeActionsView: SwipeActionsView, didSelect action: SwipeAction)
 }
 
 class SwipeActionsView: UIView {
-    weak var delegate: SwipeActionsViewDelegate? {
+    weak var delegate: (SwipeActionsViewDelegate & SwipeActionButtonDelegate)? {
         didSet {
             buttons.forEach({ $0.delegate = delegate })
         }
