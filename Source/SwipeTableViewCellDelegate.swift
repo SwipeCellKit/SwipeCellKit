@@ -73,7 +73,9 @@ public protocol SwipeTableViewCellDelegate: class {
  Default implementation of `SwipeTableViewCellDelegate` methods
  */
 public extension SwipeTableViewCellDelegate {
-    var visibleTableViewRect: CGRect { return .zero }
+    func visibleTableViewRect() -> CGRect {
+        return .zero
+    }
     
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
         return SwipeTableOptions()
