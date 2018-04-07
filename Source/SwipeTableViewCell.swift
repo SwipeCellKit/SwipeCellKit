@@ -118,9 +118,8 @@ open class SwipeTableViewCell: UITableViewCell {
         guard isEditing == false else { return }
         guard let target = gesture.view else { return }
         
-        let cell = tableView?.swipeCells.first(where: { $0.state.isActive })
-        if (cell != nil && cell != target) {
-            return;
+        if let cell = tableView?.swipeCells.first(where: { $0.state.isActive }), cell != target {
+            return
         }
         
         switch gesture.state {
@@ -360,11 +359,7 @@ open class SwipeTableViewCell: UITableViewCell {
     
     /// :nodoc:
     override open func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        let noSwipeCellPanning = tableView?.swipeCells.first(where: {
-            $0.panGestureRecognizer.state.rawValue >= UIGestureRecognizerState.began.rawValue
-        }) == nil
-        
-        if noSwipeCellPanning && state == .center {
+        if state == .center {
             super.setHighlighted(highlighted, animated: animated)
         }
     }
@@ -501,21 +496,15 @@ extension SwipeTableViewCell {
             if UIAccessibilityIsVoiceOverRunning() {
                 tableView?.hideSwipeCell()
             }
-
-            let noSwipeCellPanning = tableView?.swipeCells.first(where: {
-                $0.panGestureRecognizer.state.rawValue >= UIGestureRecognizerState.began.rawValue
-            }) == nil
             
-            if noSwipeCellPanning == false {
-                return true
-            }
-            
-            let cell = tableView?.swipeCells.first(where: { $0.state.isActive })
-            return cell == nil ? false : true
+            let swipedCell = tableView?.swipeCells.first(where: {
+                $0.state.isActive || $0.panGestureRecognizer.state.rawValue >= UIGestureRecognizerState.began.rawValue
+            })
+            return swipedCell == nil ? false : true
         }
         
         if gestureRecognizer == panGestureRecognizer,
-            let view = gestureRecognizer.view as? SwipeTableViewCell,
+            let view = gestureRecognizer.view,
             let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer
         {
             let translation = gestureRecognizer.translation(in: view)
