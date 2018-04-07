@@ -118,13 +118,13 @@ open class SwipeTableViewCell: UITableViewCell {
         guard isEditing == false else { return }
         guard let target = gesture.view else { return }
         
+        let cell = tableView?.swipeCells.first(where: { $0.state.isActive })
+        if (cell != nil && cell != target) {
+            return;
+        }
+        
         switch gesture.state {
         case .began:
-            let cell = tableView?.swipeCells.first(where: { $0.state.isActive })
-            if (cell != nil && cell != target) {
-                return;
-            }
-            
             stopAnimatorIfNeeded()
 
             originalCenter = center.x
