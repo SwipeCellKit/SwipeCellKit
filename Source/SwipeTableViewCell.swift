@@ -118,12 +118,13 @@ open class SwipeTableViewCell: UITableViewCell {
         guard isEditing == false else { return }
         guard let target = gesture.view else { return }
         
-        if let cell = tableView?.swipeCells.first(where: { $0.state.isActive }), cell != target {
-            return
-        }
-        
         switch gesture.state {
         case .began:
+            
+            if let cell = tableView?.swipeCells.first(where: { $0.state.isActive }), cell != target {
+                return
+            }
+            
             stopAnimatorIfNeeded()
 
             originalCenter = center.x
@@ -137,7 +138,11 @@ open class SwipeTableViewCell: UITableViewCell {
             
         case .changed:
             guard let actionsView = actionsView else { return }
-
+            
+            if state.isActive == false {
+                return
+            }
+            
             let translation = gesture.translation(in: target).x
             scrollRatio = 1.0
             
@@ -182,6 +187,10 @@ open class SwipeTableViewCell: UITableViewCell {
         case .ended:
             guard let actionsView = actionsView else { return }
 
+            if state.isActive == false {
+                return
+            }
+            
             let velocity = gesture.velocity(in: target)
             state = targetState(forVelocity: velocity)
             
