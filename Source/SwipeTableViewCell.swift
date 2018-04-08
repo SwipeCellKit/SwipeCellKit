@@ -135,7 +135,11 @@ open class SwipeTableViewCell: UITableViewCell {
                 let velocity = gesture.velocity(in: target)
                 let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
 
-                showActionsView(for: orientation)
+                if showActionsView(for: orientation) == false {
+                    // Cancel Pan Gesture when no actions exist for orientation
+                    gesture.isEnabled = false
+                    gesture.isEnabled = true
+                }
             }
             
         case .changed:
