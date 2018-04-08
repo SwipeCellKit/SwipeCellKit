@@ -24,6 +24,8 @@ open class SwipeTableViewCell: UITableViewCell {
     
     weak var tableView: UITableView?
     var actionsView: SwipeActionsView?
+    
+    var selectedIndexPaths: [IndexPath]?
 
     var originalLayoutMargins: UIEdgeInsets = .zero
     
@@ -185,7 +187,7 @@ open class SwipeTableViewCell: UITableViewCell {
                 }
             }
         case .ended:
-            guard let actionsView = actionsView else { return }
+            guard let actionsView = actionsView, let tableView = tableView else { return }
 
             if state.isActive == false {
                 return
@@ -203,6 +205,7 @@ open class SwipeTableViewCell: UITableViewCell {
 
                 animate(toOffset: targetOffset, withInitialVelocity: normalizedVelocity) { _ in
                     if self.state == .center {
+                        self.selectedIndexPaths?.forEach { tableView.selectRow(at: $0, animated: false, scrollPosition: .none) }
                         self.reset()
                     }
                 }
@@ -230,8 +233,8 @@ open class SwipeTableViewCell: UITableViewCell {
         
         // Remove highlight and deselect any selected cells
         super.setHighlighted(false, animated: false)
-        let selectedIndexPaths = tableView.indexPathsForSelectedRows
-        selectedIndexPaths?.forEach { tableView.deselectRow(at: $0, animated: false) }
+        self.selectedIndexPaths = tableView.indexPathsForSelectedRows
+        self.selectedIndexPaths?.forEach { tableView.deselectRow(at: $0, animated: false) }
         
         configureActionsView(with: actions, for: orientation)
         
@@ -407,6 +410,7 @@ extension SwipeTableViewCell {
         clipsToBounds = false
         actionsView?.removeFromSuperview()
         actionsView = nil
+        selectedIndexPaths = nil
     }
 }
 
@@ -507,7 +511,8 @@ extension SwipeTableViewCell {
             }
             
             let swipedCell = tableView?.swipeCells.first(where: {
-                $0.state.isActive || $0.panGestureRecognizer.state.rawValue >= UIGestureRecognizerState.began.rawValue
+                $0.state.isActive || $0.panGestureRecognizer.state == .began ||
+                    $0.panGestureRecognizer.state == .changed || $0.panGestureRecognizer.state == .ended
             })
             return swipedCell == nil ? false : true
         }
