@@ -122,7 +122,6 @@ open class SwipeTableViewCell: UITableViewCell {
         
         switch gesture.state {
         case .began:
-            
             if let cell = tableView?.swipeCells.first(where: { $0.state.isActive }), cell != target {
                 return
             }
@@ -144,10 +143,7 @@ open class SwipeTableViewCell: UITableViewCell {
             
         case .changed:
             guard let actionsView = actionsView else { return }
-            
-            if state.isActive == false {
-                return
-            }
+            guard state.isActive else { return }
             
             let translation = gesture.translation(in: target).x
             scrollRatio = 1.0
@@ -191,11 +187,8 @@ open class SwipeTableViewCell: UITableViewCell {
                 }
             }
         case .ended:
-            guard let actionsView = actionsView, let tableView = tableView else { return }
-
-            if state.isActive == false {
-                return
-            }
+            guard let actionsView = actionsView else { return }
+            guard state.isActive else { return }
             
             let velocity = gesture.velocity(in: target)
             state = targetState(forVelocity: velocity)
@@ -209,7 +202,6 @@ open class SwipeTableViewCell: UITableViewCell {
 
                 animate(toOffset: targetOffset, withInitialVelocity: normalizedVelocity) { _ in
                     if self.state == .center {
-                        self.selectedIndexPaths?.forEach { tableView.selectRow(at: $0, animated: false, scrollPosition: .none) }
                         self.reset()
                     }
                 }
@@ -250,6 +242,8 @@ open class SwipeTableViewCell: UITableViewCell {
             let indexPath = tableView.indexPath(for: self) else { return }
         
         let options = delegate?.tableView(tableView, editActionsOptionsForRowAt: indexPath, for: orientation) ?? SwipeTableOptions()
+        
+        self.clipsToBounds = false
         
         self.actionsView?.removeFromSuperview()
         self.actionsView = nil
@@ -414,6 +408,7 @@ extension SwipeTableViewCell {
         clipsToBounds = false
         actionsView?.removeFromSuperview()
         actionsView = nil
+        selectedIndexPaths?.forEach { tableView?.selectRow(at: $0, animated: false, scrollPosition: .none) }
         selectedIndexPaths = nil
     }
 }
@@ -467,6 +462,14 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             case .delete:
                 self?.mask = actionsView.createDeletionMask()
                 
+                // Remove deleted row from selectedIndexPaths & adjust selected index paths that are below deleted cell
+                self?.selectedIndexPaths = self?.selectedIndexPaths?.compactMap({
+                    guard $0 != indexPath else { return nil }
+                    if $0.section == indexPath.section && $0.row > indexPath.row {
+                        return IndexPath(row: $0.row - 1, section: $0.section)
+                    }
+                    return $0
+                })
                 tableView.deleteRows(at: [indexPath], with: .none)
                 
                 UIView.animate(withDuration: 0.3, animations: {

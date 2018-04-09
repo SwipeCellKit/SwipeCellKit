@@ -30,13 +30,11 @@ extension SwipeTableViewCell {
         
         if animated {
             animate(toOffset: targetCenter) { complete in
-                self.selectedIndexPaths?.forEach { self.tableView?.selectRow(at: $0, animated: false, scrollPosition: .none) }
                 self.reset()
                 completion?(complete)
             }
         } else {
             center = CGPoint(x: targetCenter, y: self.center.y)
-            self.selectedIndexPaths?.forEach { self.tableView?.selectRow(at: $0, animated: false, scrollPosition: .none) }
             reset()
         }
         
