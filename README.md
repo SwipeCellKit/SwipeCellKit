@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/jerkoch/SwipeCellKit.svg)](https://travis-ci.org/jerkoch/SwipeCellKit) 
 [![Version Status](https://img.shields.io/cocoapods/v/SwipeCellKit.svg)][podLink] 
-[![Swift 4.0](https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![Swift 4.1](https://img.shields.io/badge/Swift-4.1-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![license MIT](https://img.shields.io/cocoapods/l/SwipeCellKit.svg)][mitLink] 
 [![Platform](https://img.shields.io/cocoapods/p/SwipeCellKit.svg)][docsLink] 
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
@@ -73,8 +73,8 @@ The expansion style describes the behavior when the cell is swiped past a define
 
 ## Requirements
 
-* Swift 4.0
-* Xcode 9
+* Swift 4.1
+* Xcode 9+
 * iOS 9.0+
 
 ## Installation

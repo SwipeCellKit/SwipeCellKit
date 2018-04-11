@@ -2,6 +2,19 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.2.0)
+
+#### Added
+
+- Swift 4.1 Support. (#181)
+- Allow mix use of only image or text label actions. (#139)
+
+#### Fixed
+
+- Fix issue where multiple `SwipeTableViewCells` can be swipped simultaneously. (#57)
+
+---
+
 ## [2.1.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.1.0)
 
 #### Added

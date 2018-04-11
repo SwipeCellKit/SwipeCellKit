@@ -120,6 +120,10 @@ open class SwipeTableViewCell: UITableViewCell {
         
         switch gesture.state {
         case .began:
+            if let cell = tableView?.swipeCells.first(where: { $0.state.isActive }), cell != target {
+                return
+            }
+            
             stopAnimatorIfNeeded()
 
             originalCenter = center.x
@@ -133,7 +137,8 @@ open class SwipeTableViewCell: UITableViewCell {
             
         case .changed:
             guard let actionsView = actionsView else { return }
-
+            guard state.isActive else { return }
+            
             let translation = gesture.translation(in: target).x
             scrollRatio = 1.0
             
@@ -177,7 +182,8 @@ open class SwipeTableViewCell: UITableViewCell {
             }
         case .ended:
             guard let actionsView = actionsView else { return }
-
+            guard state.isActive else { return }
+            
             let velocity = gesture.velocity(in: target)
             state = targetState(forVelocity: velocity)
             
@@ -230,6 +236,8 @@ open class SwipeTableViewCell: UITableViewCell {
             let indexPath = tableView.indexPath(for: self) else { return }
         
         let options = delegate?.tableView(tableView, editActionsOptionsForRowAt: indexPath, for: orientation) ?? SwipeTableOptions()
+        
+        self.clipsToBounds = false
         
         self.actionsView?.removeFromSuperview()
         self.actionsView = nil
@@ -487,13 +495,17 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
 extension SwipeTableViewCell {
     /// :nodoc:
     override open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        
         if gestureRecognizer == tapGestureRecognizer {
             if UIAccessibilityIsVoiceOverRunning() {
                 tableView?.hideSwipeCell()
             }
-
-            let cell = tableView?.swipeCells.first(where: { $0.state.isActive })
-            return cell == nil ? false : true
+            
+            let swipedCell = tableView?.swipeCells.first(where: {
+                $0.state.isActive || $0.panGestureRecognizer.state == .began ||
+                    $0.panGestureRecognizer.state == .changed || $0.panGestureRecognizer.state == .ended
+            })
+            return swipedCell == nil ? false : true
         }
         
         if gestureRecognizer == panGestureRecognizer,
