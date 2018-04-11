@@ -8,7 +8,6 @@
 
 - Swift 4.1 Support. (#181)
 - Allow mix use of only image or text label actions. (#139)
-- Cancel pan gesture (swipe) when no actions exist for that swipe orientation. (#163, #172)
 
 #### Fixed
 
