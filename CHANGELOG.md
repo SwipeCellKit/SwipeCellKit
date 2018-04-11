@@ -13,7 +13,6 @@
 #### Fixed
 
 - Fix issue where multiple `SwipeTableViewCells` can be swipped simultaneously. (#57)
-- Fix issue where selected state is lost when swipping cell. (#58)
 
 ---
 

@@ -24,8 +24,6 @@ open class SwipeTableViewCell: UITableViewCell {
     
     weak var tableView: UITableView?
     var actionsView: SwipeActionsView?
-    
-    var selectedIndexPaths: [IndexPath]?
 
     var originalLayoutMargins: UIEdgeInsets = .zero
     
@@ -229,8 +227,8 @@ open class SwipeTableViewCell: UITableViewCell {
         
         // Remove highlight and deselect any selected cells
         super.setHighlighted(false, animated: false)
-        self.selectedIndexPaths = tableView.indexPathsForSelectedRows
-        self.selectedIndexPaths?.forEach { tableView.deselectRow(at: $0, animated: false) }
+        let selectedIndexPaths = tableView.indexPathsForSelectedRows
+        selectedIndexPaths?.forEach { tableView.deselectRow(at: $0, animated: false) }
         
         configureActionsView(with: actions, for: orientation)
         
@@ -408,8 +406,6 @@ extension SwipeTableViewCell {
         clipsToBounds = false
         actionsView?.removeFromSuperview()
         actionsView = nil
-        selectedIndexPaths?.forEach { tableView?.selectRow(at: $0, animated: false, scrollPosition: .none) }
-        selectedIndexPaths = nil
     }
 }
 
@@ -462,14 +458,6 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             case .delete:
                 self?.mask = actionsView.createDeletionMask()
                 
-                // Remove deleted row from selectedIndexPaths & adjust selected index paths that are below deleted cell
-                self?.selectedIndexPaths = self?.selectedIndexPaths?.compactMap({
-                    guard $0 != indexPath else { return nil }
-                    if $0.section == indexPath.section && $0.row > indexPath.row {
-                        return IndexPath(row: $0.row - 1, section: $0.section)
-                    }
-                    return $0
-                })
                 tableView.deleteRows(at: [indexPath], with: .none)
                 
                 UIView.animate(withDuration: 0.3, animations: {
