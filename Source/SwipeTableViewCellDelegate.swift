@@ -76,7 +76,7 @@ public extension SwipeTableViewCellDelegate {
     func visibleTableViewRect() -> CGRect {
         return .zero
     }
-    
+
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
         return SwipeTableOptions()
     }

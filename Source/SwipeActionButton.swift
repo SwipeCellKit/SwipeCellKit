@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SwipeActionButtonDelegate: AnyObject {
-    func verticalOffsetForSwipeActionButton() -> CGFloat
+    func verticalOffset(forSwipeActionButtonWithContentHeight contentHeight: CGFloat) -> CGFloat
 }
 
 class SwipeActionButton: UIButton {
@@ -32,7 +32,7 @@ class SwipeActionButton: UIButton {
         let totalHeight = imageHeight + titleHeight + currentSpacing
         
         let size = CGSize(width: contentRect.width, height: totalHeight)
-        let offset: CGFloat = delegate?.verticalOffsetForSwipeActionButton() ?? 0
+        let offset = delegate?.verticalOffset(forSwipeActionButtonWithContentHeight: totalHeight) ?? 0
         
         return contentRect.center(size: size, verticalOffset: offset)
     }
