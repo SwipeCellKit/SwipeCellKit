@@ -485,7 +485,8 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
 
 extension SwipeTableViewCell: SwipeActionButtonDelegate {
     func verticalOffset(forSwipeActionButtonWithContentHeight contentHeight: CGFloat) -> CGFloat {
-        guard let visibleTableViewRect = delegate?.visibleTableViewRect(), visibleTableViewRect != .zero else { return 0 }
+        guard let visibleTableViewRect = delegate?.visibleTableViewRect() else { return 0 }
+        
         let visibleCellRect = frame.intersection(visibleTableViewRect)
         let padding: CGFloat = 8
         
