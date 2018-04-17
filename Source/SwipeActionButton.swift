@@ -42,8 +42,13 @@ class SwipeActionButton: UIButton {
         tintColor = action.textColor ?? .white
         let highlightedTextColor = action.highlightedTextColor ?? tintColor
         highlightedBackgroundColor = action.highlightedBackgroundColor ?? UIColor.black.withAlphaComponent(0.1)
-
+        
+        #if swift(>=4.0)
         titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
+        #else
+        titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFontWeightMedium)
+        #endif
+
         titleLabel?.textAlignment = .center
         titleLabel?.lineBreakMode = .byWordWrapping
         titleLabel?.numberOfLines = 0
@@ -76,10 +81,11 @@ class SwipeActionButton: UIButton {
     func titleBoundingRect(with size: CGSize) -> CGRect {
         guard let title = currentTitle, let font = titleLabel?.font else { return .zero }
         
-        return title.boundingRect(with: size,
-                                  options: [.usesLineFragmentOrigin],
-                                  attributes: [NSAttributedStringKey.font: font],
-                                  context: nil).integral
+        #if swift(>=4.0)
+        return title.boundingRect(with: size, options: [.usesLineFragmentOrigin], attributes: [NSAttributedStringKey.font: font], context: nil).integral
+        #else
+        return title.boundingRect(with: size, options: [.usesLineFragmentOrigin], attributes: [NSFontAttributeName: font], context: nil).integral
+        #endif
     }
     
     override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
