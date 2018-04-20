@@ -122,7 +122,6 @@ open class SwipeTableViewCell: UITableViewCell {
         
         switch gesture.state {
         case .began:
-            guard let actionsView = actionsView else { return }
             if let cell = tableView?.swipeCells.first(where: { $0.state.isActive }), cell != target {
                 return
             }
@@ -135,9 +134,14 @@ open class SwipeTableViewCell: UITableViewCell {
                 let velocity = gesture.velocity(in: target)
                 let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
 
-                if showActionsView(for: orientation) == false && actionsView.options.cancelGestureRecognizerForEmptySwipeActions {
-                    gesture.isEnabled = false
-                    gesture.isEnabled = true
+                if showActionsView(for: orientation) == false {
+                    if let tableView = tableView, let indexPath = tableView.indexPath(for: self) {
+                        let options = delegate?.tableView(tableView, editActionsOptionsForRowAt: indexPath, for: orientation) ?? SwipeTableOptions()
+                        if options.cancelGestureRecognizerForEmptySwipeActions {
+                            gesture.isEnabled = false
+                            gesture.isEnabled = true
+                        }
+                    }
                 }
             }
             
@@ -217,24 +221,20 @@ open class SwipeTableViewCell: UITableViewCell {
     
     @discardableResult
     func showActionsView(for orientation: SwipeActionsOrientation) -> Bool {
-        guard let tableView = tableView,
-            let indexPath = tableView.indexPath(for: self),
-            let actions = delegate?.tableView(tableView, editActionsForRowAt: indexPath, for: orientation),
-            actions.count > 0
-            else {
-                return false
-        }
-        
-        originalLayoutMargins = super.layoutMargins
+        guard let tableView = tableView, let indexPath = tableView.indexPath(for: self) else { return false }
         
         // Remove highlight and deselect any selected cells
         super.setHighlighted(false, animated: false)
         self.selectedIndexPaths = tableView.indexPathsForSelectedRows
         self.selectedIndexPaths?.forEach { tableView.deselectRow(at: $0, animated: false) }
         
-        configureActionsView(with: actions, for: orientation)
+        if let actions = delegate?.tableView(tableView, editActionsForRowAt: indexPath, for: orientation), actions.count > 0 {
+            originalLayoutMargins = super.layoutMargins
+            configureActionsView(with: actions, for: orientation)
+            return true
+        }
         
-        return true
+        return false
     }
     
     func configureActionsView(with actions: [SwipeAction], for orientation: SwipeActionsOrientation) {
