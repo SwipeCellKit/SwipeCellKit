@@ -42,6 +42,12 @@ public struct SwipeTableOptions {
     /// The amount of space, in points, between the button image and the button title.
     public var buttonSpacing: CGFloat?
     
+    /// All selected cells prior to the swipe actions will automaticly be re-selected when swipe is hidden
+    public var adjustSelectionAutomatically: Bool = false
+    
+    /// The cell's gesture recognizer will cancel when panning orientation does not have any swipe actions
+    public var cancelGestureRecognizerForEmptySwipeActions: Bool = false
+    
     /// Constructs a new `SwipeTableOptions` instance with default options.
     public init() {}
 }

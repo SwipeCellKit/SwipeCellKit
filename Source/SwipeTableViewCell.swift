@@ -122,6 +122,7 @@ open class SwipeTableViewCell: UITableViewCell {
         
         switch gesture.state {
         case .began:
+            guard let actionsView = actionsView else { return }
             if let cell = tableView?.swipeCells.first(where: { $0.state.isActive }), cell != target {
                 return
             }
@@ -134,7 +135,10 @@ open class SwipeTableViewCell: UITableViewCell {
                 let velocity = gesture.velocity(in: target)
                 let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
 
-                showActionsView(for: orientation)
+                if showActionsView(for: orientation) == false && actionsView.options.cancelGestureRecognizerForEmptySwipeActions {
+                    gesture.isEnabled = false
+                    gesture.isEnabled = true
+                }
             }
             
         case .changed:
@@ -402,10 +406,12 @@ extension SwipeTableViewCell {
     func reset() {
         state = .center
         clipsToBounds = false
+        if let actionsView = self.actionsView, actionsView.options.adjustSelectionAutomatically {
+            selectedIndexPaths?.forEach { tableView?.selectRow(at: $0, animated: false, scrollPosition: .none) }
+        }
+        selectedIndexPaths = nil
         actionsView?.removeFromSuperview()
         actionsView = nil
-        selectedIndexPaths?.forEach { tableView?.selectRow(at: $0, animated: false, scrollPosition: .none) }
-        selectedIndexPaths = nil
     }
 }
 
@@ -458,14 +464,17 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             case .delete:
                 self?.mask = actionsView.createDeletionMask()
                 
-                // Remove deleted row from selectedIndexPaths & adjust selected index paths that are below deleted cell
-                self?.selectedIndexPaths = self?.selectedIndexPaths?.compactMap({
-                    guard $0 != indexPath else { return nil }
-                    if $0.section == indexPath.section && $0.row > indexPath.row {
-                        return IndexPath(row: $0.row - 1, section: $0.section)
-                    }
-                    return $0
-                })
+                if actionsView.options.adjustSelectionAutomatically {
+                    // Remove deleted row from selectedIndexPaths & adjust selected index paths that are below deleted cell
+                    self?.selectedIndexPaths = self?.selectedIndexPaths?.compactMap({
+                        guard $0 != indexPath else { return nil }
+                        if $0.section == indexPath.section && $0.row > indexPath.row {
+                            return IndexPath(row: $0.row - 1, section: $0.section)
+                        }
+                        return $0
+                    })
+                }
+                
                 tableView.deleteRows(at: [indexPath], with: .none)
                 
                 UIView.animate(withDuration: 0.3, animations: {
