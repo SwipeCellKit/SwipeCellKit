@@ -38,9 +38,8 @@ class SwipeActionsView: UIView {
     
     var safeAreaMargin: CGFloat {
         guard #available(iOS 11, *) else { return 0 }
-        guard let tableView = (superview as? SwipeTableViewCell)?.tableView else { return 0 }
-        
-        return orientation == .left ? tableView.safeAreaInsets.left : tableView.safeAreaInsets.right
+        guard let scrollView = (superview as? Swipeable ?? superview?.superview as? Swipeable)?.scrollView else { return 0 }
+        return orientation == .left ? scrollView.safeAreaInsets.left : scrollView.safeAreaInsets.right
     }
 
     var visibleWidth: CGFloat = 0 {

@@ -15,6 +15,8 @@ protocol Swipeable {
     var state: SwipeState { get }
     
     var frame: CGRect { get }
+    
+    var scrollView: UIScrollView? { get }
 }
 
 extension SwipeTableViewCell: Swipeable {}

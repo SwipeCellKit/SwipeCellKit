@@ -23,6 +23,10 @@ open class SwipeTableViewCell: UITableViewCell {
     var originalCenter: CGFloat = 0
     
     weak var tableView: UITableView?
+    var scrollView: UIScrollView? {
+        return tableView
+    }
+    
     var actionsView: SwipeActionsView?
 
     var originalLayoutMargins: UIEdgeInsets = .zero

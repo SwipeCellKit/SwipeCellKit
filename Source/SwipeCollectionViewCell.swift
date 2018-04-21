@@ -25,6 +25,10 @@ open class SwipeCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDel
     var originalCenter: CGFloat = 0
     
     weak var collectionView: UICollectionView?
+    var scrollView: UIScrollView? {
+        return collectionView
+    }
+    
     var actionsView: SwipeActionsView?
     
     var originalLayoutMargins: UIEdgeInsets = .zero
