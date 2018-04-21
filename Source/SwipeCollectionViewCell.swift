@@ -130,6 +130,10 @@ open class SwipeCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDel
         
         switch gesture.state {
         case .began:
+            if let cell = collectionView?.swipeCells.first(where: { $0.state.isActive }), cell.contentView != target {
+                return
+            }
+            
             stopAnimatorIfNeeded()
             
             // Use contentViewCenter.x instead of center.x so that it's relative only to the cell bounds, and
@@ -189,6 +193,7 @@ open class SwipeCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDel
             }
         case .ended:
             guard let actionsView = actionsView else { return }
+            guard state.isActive else { return }
             
             let velocity = gesture.velocity(in: target)
             state = targetState(forVelocity: velocity)
@@ -507,10 +512,11 @@ extension SwipeCollectionViewCell {
                 collectionView?.hideSwipeCell()
             }
             
-            if let cells = collectionView?.visibleCells as? [SwipeCollectionViewCell] {
-                let cell = cells.first(where: { $0.state.isActive })
-                return cell == nil ? false : true
-            }
+            let swipedCell = collectionView?.swipeCells.first(where: {
+                $0.state.isActive || $0.panGestureRecognizer.state == .began ||
+                    $0.panGestureRecognizer.state == .changed || $0.panGestureRecognizer.state == .ended
+            })
+            return swipedCell == nil ? false : true
         }
         
         if gestureRecognizer == panGestureRecognizer,
