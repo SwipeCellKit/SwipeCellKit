@@ -27,7 +27,7 @@ class SwipeActionsView: UIView {
 
     let orientation: SwipeActionsOrientation
     let actions: [SwipeAction]
-    let options: SwipeTableOptions
+    let options: SwipeOptions
     
     var buttons: [SwipeActionButton] = []
     
@@ -81,7 +81,7 @@ class SwipeActionsView: UIView {
         return options.expansionStyle != nil ? actions.last : nil
     }
     
-    init(maxSize: CGSize, options: SwipeTableOptions, orientation: SwipeActionsOrientation, actions: [SwipeAction]) {
+    init(maxSize: CGSize, options: SwipeOptions, orientation: SwipeActionsOrientation, actions: [SwipeAction]) {
         self.options = options
         self.orientation = orientation
         self.actions = actions.reversed()
@@ -159,7 +159,7 @@ class SwipeActionsView: UIView {
         delegate?.swipeActionsView(self, didSelect: actions[index])
     }
     
-    func buttonEdgeInsets(fromOptions options: SwipeTableOptions) -> UIEdgeInsets {
+    func buttonEdgeInsets(fromOptions options: SwipeOptions) -> UIEdgeInsets {
         let padding = options.buttonPadding ?? 8
         return UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
     }
