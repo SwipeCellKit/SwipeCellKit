@@ -226,7 +226,7 @@ class SwipeActionsView: UIView {
     func notifyExpansion(expanded: Bool) {
         guard let expandedButton = buttons.last else { return }
 
-        expansionDelegate?.actionButton(expandedButton, didChange: expanded, otherActionButtons: buttons.dropLast().reversed())
+        expansionDelegate?.actionButton(expandedButton, didChange: expanded, otherActionButtons: buttons.dropLast().reversed(), verticalOffset: expandedButton.lastOffset)
     }
     
     func createDeletionMask() -> UIView {

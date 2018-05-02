@@ -33,7 +33,7 @@ public protocol SwipeExpanding {
 
      - parameter otherActionButtons: The other action buttons in the view, not including the action button being expanded.
      */
-    func actionButton(_ button: UIButton, didChange expanding: Bool, otherActionButtons: [UIButton])
+    func actionButton(_ button: UIButton, didChange expanding: Bool, otherActionButtons: [UIButton], verticalOffset: CGFloat)
 }
 
 /**
@@ -107,12 +107,12 @@ public struct ScaleAndAlphaExpansion: SwipeExpanding {
     }
     
     /// :nodoc:
-    public func actionButton(_ button: UIButton, didChange expanding: Bool, otherActionButtons: [UIButton]) {
+    public func actionButton(_ button: UIButton, didChange expanding: Bool, otherActionButtons: [UIButton], verticalOffset: CGFloat) {
         let buttons = expanding ? otherActionButtons : otherActionButtons.reversed()
         
         buttons.enumerated().forEach { index, button in
             UIView.animate(withDuration: duration, delay: interButtonDelay * Double(expanding ? index : index + 1), options: [], animations: {
-                button.transform = expanding ? .init(scaleX: self.scale, y: self.scale) : .identity
+                button.transform = expanding ? CGAffineTransform(scaleX: self.scale, y: self.scale).translatedBy(x: 0, y: verticalOffset / 4) : .identity
                 button.alpha = expanding ? 0.0 : 1.0
             }, completion: nil)
         }
