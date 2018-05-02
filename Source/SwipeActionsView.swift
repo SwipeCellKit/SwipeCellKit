@@ -208,11 +208,13 @@ class SwipeActionsView: UIView {
             oldWidths.enumerated().forEach { index, oldWidth in
                 let newWidth = newWidths[index]
                 if oldWidth != newWidth {
+                    let button = self.buttons[index]
                     let context = SwipeActionTransitioningContext(actionIdentifier: self.actions[index].identifier,
-                                                                  button: self.buttons[index],
+                                                                  button: button,
                                                                   newPercentVisible: newWidth / self.minimumButtonWidth,
                                                                   oldPercentVisible: oldWidth / self.minimumButtonWidth,
-                                                                  wrapperView: self.subviews[index])
+                                                                  wrapperView: self.subviews[index],
+                                                                  verticalOffset: button.lastOffset)
                     
                     self.actions[index].transitionDelegate?.didTransition(with: context)
                 }
