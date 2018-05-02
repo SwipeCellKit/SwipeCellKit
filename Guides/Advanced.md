@@ -117,3 +117,55 @@ options.expansionDelegate = ScaleAndAlphaExpansion.default
 The `ScaleAndAlphaExpansion` type provides a static `default` configuration, but it can also be instantiated with custom parameters to suit your needs.
 
 You can also provide your own completely custom expansion behavior by adopting the `SwipeExpanding` protocol. The protocol allows you to customize the animation timing parameters prior to initiating the (un)expansion animation, as well as customizing the action during (un)expansion.
+
+## Vertical Centering the Button Image and Title in Tall Cells
+
+If your table view cells are tall then it can be useful to ensure that the button image and title remain centered relative to the visible portion of the cell. An example of this is shown below:
+
+<p align="center"><img src="https://raw.githubusercontent.com/halleygen/SwipeCellKit/vertical-centring/Screenshots/Vertical-Centering.gif" /></p>
+
+### Enabling Vertical Centering
+
+This feature is disabled by default and can be enabled by implementing `func visibleTableViewRect() -> CGRect?` in your `SwipeTableViewCell`'s delegate and returning a non-nil `CGRect`. This function should return a rectangle of the *visible* portion of your table view that is in the table view's own coordinate system. The visible portion of the table view refers to the part that is not obscurred by views (e.g. a navigation bar or a toolbar).
+
+If you are targeting iOS 11+ then this is simple thanks to the safe area APIs and your delegate function could simply be:
+
+```swift
+func visibleTableViewRect() -> CGRect? {
+        return tableView.safeAreaLayoutGuide.layoutFrame
+    }
+```
+
+On earlier iOS versions you will need to calculate this rectangle yourself. In the case where only a navigation bar obscurs the table view your delegate function could be:
+
+```swift
+func visibleTableViewRect() -> CGRect? {
+        guard let navigationController = navigationController else { return nil }
+
+        let topAdjustment = navigationController.navigationBar.frame.height
+        let bottomAdjustment = navigationController.toolbar?.frame.height ?? 0
+        let bounds = tableView.bounds
+
+        return CGRect(x: bounds.origin.x,
+                      y: bounds.origin.y + topAdjustment,
+                      width: bounds.width,
+                      height: bounds.height - bottomAdjustment)
+    }
+```
+
+### Using Custom Transitions With Vertical Centering Enabled
+
+Enabling vertical centering on cells with custom transitions may cause problems if the vertical offset is not taken into account. This offset can be accessed from the `SwipeActionTransitioningContext` object passed to your `transitionDelegate`. For example: 
+
+```swift
+let context: SwipeActionTransitioningContext
+
+// Does not take the vertical offset into account
+context.button.transform = CGAffineTransform(scaleX: initialScale, y: initialScale)
+
+// Does take the vertical offset into account by adding a translation to the transform
+context.button.transform = CGAffineTransform(scaleX: initialScale, y: initialScale).translatedBy(x: 0, y: context.verticalOffset / 4)
+```
+
+Left: Does not take vertical offset into account; Right: Does take vertical offset into account
+<p align="center"><img src="https://raw.githubusercontent.com/halleygen/SwipeCellKit/vertical-centring/Screenshots/Vertical-Centering-With-Scale-Transition-Bad.gif" /><img src="https://raw.githubusercontent.com/halleygen/SwipeCellKit/vertical-centring/Screenshots/Vertical-Centering-With-Scale-Transition-Good.gif" /></p>
