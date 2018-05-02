@@ -28,7 +28,7 @@ class SwipeActionButton: UIButton {
         let totalHeight = imageHeight + titleHeight + currentSpacing
         
         let size = CGSize(width: contentRect.width, height: totalHeight)
-        lastOffset = delegate?.verticalOffset(forSwipeActionButtonWithContentHeight: totalHeight) ?? 0
+        lastOffset = delegate?.verticalOffset(forButtonWithContentHeight: totalHeight) ?? 0
         return contentRect.center(size: size, verticalOffset: lastOffset)
     }
     

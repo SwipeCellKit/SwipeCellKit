@@ -126,9 +126,9 @@ If your table view cells are tall then it can be useful to ensure that the butto
 
 ### Enabling Vertical Centering
 
-This feature is disabled by default and can be enabled by implementing `func visibleTableViewRect() -> CGRect?` in your `SwipeTableViewCell`'s delegate and returning a non-nil `CGRect`. This function should return a rectangle of the *visible* portion of your table view that is in the table view's own coordinate system. The visible portion of the table view refers to the part that is not obscurred by views (e.g. a navigation bar or a toolbar).
+This feature is *disabled* by default, but can be enabled by implementing `func visibleTableViewRect() -> CGRect?` in your `SwipeTableViewCell`'s delegate and returning a non-nil `CGRect`. This function should return a rectangle of the *visible* portion of your table view that is in the table view's own coordinate system. The visible portion of the table view refers to the part that is not obscurred by other views (e.g. a navigation bar or a toolbar).
 
-If you are targeting iOS 11+ then this is simple thanks to the safe area APIs and your delegate function could simply be:
+If you are targeting iOS 11+ then this is simple thanks to the safe area API and your delegate function could simply be:
 
 ```swift
 func visibleTableViewRect() -> CGRect? {
@@ -136,7 +136,7 @@ func visibleTableViewRect() -> CGRect? {
     }
 ```
 
-On earlier iOS versions you will need to calculate this rectangle yourself. In the case where only a navigation bar obscurs the table view your delegate function could be:
+On earlier iOS versions you will need to calculate this rectangle yourself. In the case where a table view controller is embedded in a navigation controller the delegate function could be:
 
 ```swift
 func visibleTableViewRect() -> CGRect? {
@@ -164,8 +164,12 @@ let context: SwipeActionTransitioningContext
 context.button.transform = CGAffineTransform(scaleX: initialScale, y: initialScale)
 
 // Does take the vertical offset into account by adding a translation to the transform
-context.button.transform = CGAffineTransform(scaleX: initialScale, y: initialScale).translatedBy(x: 0, y: context.verticalOffset / 4)
+context.button.transform = CGAffineTransform(scaleX: initialScale, y: initialScale)
+                .translatedBy(x: 0, y: context.verticalOffset / 4)
 ```
 
-Left: Does not take vertical offset into account; Right: Does take vertical offset into account
-<p align="center"><img src="https://raw.githubusercontent.com/halleygen/SwipeCellKit/vertical-centring/Screenshots/Vertical-Centering-With-Scale-Transition-Bad.gif" /><img src="https://raw.githubusercontent.com/halleygen/SwipeCellKit/vertical-centring/Screenshots/Vertical-Centering-With-Scale-Transition-Good.gif" /></p>
+| Does not take vertical offset into account | Does take vertical offset into account | 
+|--------------------------------------------|----------------------------------------| 
+| <p align="center"><img src="https://raw.githubusercontent.com/halleygen/SwipeCellKit/vertical-centring/Screenshots/Vertical-Centering-With-Scale-Transition-Bad.gif" /></p>                                      | <p align="center"><img src="https://raw.githubusercontent.com/halleygen/SwipeCellKit/vertical-centring/Screenshots/Vertical-Centering-With-Scale-Transition-Good.gif" /></p>                                  | 
+
+Notice that the buttons in the image on the left are translated down and up as they appear and disappear.

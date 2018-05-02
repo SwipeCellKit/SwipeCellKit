@@ -9,7 +9,7 @@ import UIKit
 
 protocol SwipeActionsViewDelegate: class {
     func swipeActionsView(_ swipeActionsView: SwipeActionsView, didSelect action: SwipeAction)
-    func verticalOffset(forSwipeActionButtonWithContentHeight contentHeight: CGFloat) -> CGFloat
+    func verticalOffset(forButtonWithContentHeight contentHeight: CGFloat) -> CGFloat
 }
 
 class SwipeActionsView: UIView {
