@@ -7,12 +7,8 @@
 
 import UIKit
 
-protocol SwipeActionButtonDelegate: AnyObject {
-    func verticalOffset(forSwipeActionButtonWithContentHeight contentHeight: CGFloat) -> CGFloat
-}
-
 class SwipeActionButton: UIButton {
-    weak var delegate: SwipeActionButtonDelegate?
+    weak var delegate: SwipeActionsViewDelegate?
     
     var spacing: CGFloat = 8
     var shouldHighlight = true
@@ -20,7 +16,7 @@ class SwipeActionButton: UIButton {
 
     var maximumImageHeight: CGFloat = 0
     var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
-    
+    private(set) var lastOffset: CGFloat = 0
     
     var currentSpacing: CGFloat {
         return (currentTitle?.isEmpty == false && imageHeight > 0) ? spacing : 0
@@ -32,9 +28,8 @@ class SwipeActionButton: UIButton {
         let totalHeight = imageHeight + titleHeight + currentSpacing
         
         let size = CGSize(width: contentRect.width, height: totalHeight)
-        let offset = delegate?.verticalOffset(forSwipeActionButtonWithContentHeight: totalHeight) ?? 0
-        
-        return contentRect.center(size: size, verticalOffset: offset)
+        lastOffset = delegate?.verticalOffset(forSwipeActionButtonWithContentHeight: totalHeight) ?? 0
+        return contentRect.center(size: size, verticalOffset: lastOffset)
     }
     
     private var imageHeight: CGFloat {

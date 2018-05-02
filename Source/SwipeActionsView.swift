@@ -9,10 +9,11 @@ import UIKit
 
 protocol SwipeActionsViewDelegate: class {
     func swipeActionsView(_ swipeActionsView: SwipeActionsView, didSelect action: SwipeAction)
+    func verticalOffset(forSwipeActionButtonWithContentHeight contentHeight: CGFloat) -> CGFloat
 }
 
 class SwipeActionsView: UIView {
-    weak var delegate: (SwipeActionsViewDelegate & SwipeActionButtonDelegate)? {
+    weak var delegate: SwipeActionsViewDelegate? {
         didSet {
             buttons.forEach({ $0.delegate = delegate })
         }

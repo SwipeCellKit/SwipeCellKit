@@ -481,9 +481,7 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             invokeAction()
         }
     }
-}
 
-extension SwipeTableViewCell: SwipeActionButtonDelegate {
     func verticalOffset(forSwipeActionButtonWithContentHeight contentHeight: CGFloat) -> CGFloat {
         guard let visibleTableViewRect = delegate?.visibleTableViewRect() else { return 0 }
         
