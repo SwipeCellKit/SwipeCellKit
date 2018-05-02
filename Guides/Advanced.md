@@ -153,9 +153,13 @@ func visibleTableViewRect() -> CGRect? {
     }
 ```
 
-### Using Custom Transitions With Vertical Centering Enabled
+### Using Custom Transitions/Expansions With Vertical Centering Enabled
 
-Enabling vertical centering on cells with custom transitions may cause problems if the vertical offset is not taken into account. This offset can be accessed from the `SwipeActionTransitioningContext` object passed to your `transitionDelegate`. For example: 
+Enabling vertical centering on cells with custom transitions/expansions may cause problems if the vertical offset is not taken into account.
+
+For custom expansions this offset is passed to the object conforming the `SwipeExpanding`. 
+
+For custom transitions this offset can be accessed from the `SwipeActionTransitioningContext` struct passed to the object conforming to `SwipeActionTransitioning`. For example: 
 
 ```swift
 let context: SwipeActionTransitioningContext
