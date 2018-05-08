@@ -234,7 +234,16 @@ open class SwipeTableViewCell: UITableViewCell {
         self.actionsView?.removeFromSuperview()
         self.actionsView = nil
         
-        let actionsView = SwipeActionsView(maxSize: bounds.size,
+        var insets = UIEdgeInsets.zero
+        if let visibleTableViewRect = delegate?.visibleTableViewRect() {
+            let visibleCellRect = frame.intersection(visibleTableViewRect)
+            let top = visibleCellRect.minY > frame.minY ? max(0, visibleCellRect.minY - frame.minY) : 0
+            let bottom = max(0, frame.size.height - visibleCellRect.size.height - top)
+            insets = UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0)
+        }
+        
+        let actionsView = SwipeActionsView(contentInset: insets,
+                                           maxSize: bounds.size,
                                            options: options,
                                            orientation: orientation,
                                            actions: actions)
@@ -368,6 +377,7 @@ open class SwipeTableViewCell: UITableViewCell {
             super.layoutMargins = newValue
         }
     }
+
 }
 
 extension SwipeTableViewCell {
@@ -482,46 +492,10 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
         }
     }
 
-    func verticalOffset(forButtonWithContentHeight contentHeight: CGFloat) -> CGFloat {
-        guard let visibleTableViewRect = delegate?.visibleTableViewRect() else { return 0 }
-        
-        let visibleCellRect = frame.intersection(visibleTableViewRect)
-        let padding: CGFloat = 8
-        
-        // Check for edge case when swipe action button content size is taller than the visible portion of the cell
-        guard visibleCellRect.height > contentHeight + (padding * 2) else {
-            return edgeCaseVerticalOffset(for: contentHeight, visibleCellRect: visibleCellRect, padding: padding)
-        }
-        
-        // Calculate top offset
-        let visibleTopY = visibleCellRect.minY
-        let normalTopY = frame.minY
-        let differenceTop = abs(visibleTopY - normalTopY)
-        
-        // Calculate bottom offset
-        let visibleBottomY = visibleCellRect.maxY
-        let normalBottomY = frame.maxY
-        let differenceBottom = abs(visibleBottomY - normalBottomY)
-        
-        // Calculate total offset
-        return round((differenceTop - differenceBottom) / 2)
+    func visibleTableViewRect() -> CGRect? {
+        return delegate?.visibleTableViewRect()
     }
     
-    private func edgeCaseVerticalOffset(for contentHeight: CGFloat, visibleCellRect: CGRect, padding: CGFloat) -> CGFloat {
-        // Visible portion at top
-        if frame.maxY == visibleCellRect.maxY {
-            let offset = (frame.height / 2) - (contentHeight / 2) - padding
-            return round(offset)
-        }
-        
-        // Visible portion at bottom
-        if frame.minY == visibleCellRect.minY {
-            let offset = (contentHeight / 2) + padding - (frame.height / 2)
-            return round(offset)
-        }
-        
-        return 0
-    }
 }
 
 extension SwipeTableViewCell {

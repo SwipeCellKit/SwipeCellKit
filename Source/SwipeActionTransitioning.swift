@@ -33,18 +33,14 @@ public struct SwipeActionTransitioningContext {
     /// The new visibility percentage between 0.0 and 1.0.
     public let oldPercentVisible: CGFloat
     
-    /// The offset needed to ensure that the image and title of the SwipeActionButton are vertically centered in the visible part of the cell.
-    public let verticalOffset: CGFloat
-    
     internal let wrapperView: UIView
     
-    internal init(actionIdentifier: String?, button: UIButton, newPercentVisible: CGFloat, oldPercentVisible: CGFloat, wrapperView: UIView, verticalOffset: CGFloat) {
+    internal init(actionIdentifier: String?, button: UIButton, newPercentVisible: CGFloat, oldPercentVisible: CGFloat, wrapperView: UIView) {
         self.actionIdentifier = actionIdentifier
         self.button = button
         self.newPercentVisible = newPercentVisible
         self.oldPercentVisible = oldPercentVisible
         self.wrapperView = wrapperView
-        self.verticalOffset = verticalOffset
     }
     
     /// Sets the background color behind the action button.
@@ -94,7 +90,7 @@ public struct ScaleTransition: SwipeActionTransitioning {
     /// :nodoc:
     public func didTransition(with context: SwipeActionTransitioningContext) -> Void {
         if context.oldPercentVisible == 0 {
-            context.button.transform = CGAffineTransform(scaleX: initialScale, y: initialScale).translatedBy(x: 0, y: context.verticalOffset / 4)
+            context.button.transform = .init(scaleX: initialScale, y: initialScale)
         }
         
         if context.oldPercentVisible < threshold && context.newPercentVisible >= threshold {
@@ -103,7 +99,7 @@ public struct ScaleTransition: SwipeActionTransitioning {
             }
         } else if context.oldPercentVisible >= threshold && context.newPercentVisible < threshold {
             UIView.animate(withDuration: duration) {
-                context.button.transform  = CGAffineTransform(scaleX: self.initialScale, y: self.initialScale).translatedBy(x: 0, y: context.verticalOffset / 4)
+                context.button.transform = .init(scaleX: self.initialScale, y: self.initialScale)
             }
         }
     }

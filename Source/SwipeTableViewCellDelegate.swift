@@ -11,16 +11,6 @@ import UIKit
  The `SwipeTableViewCellDelegate` protocol is adopted by an object that manages the display of action buttons when the cell is swiped.
  */
 public protocol SwipeTableViewCellDelegate: class {
-    /**
-     Asks the delegate for the rectangle of the visible part of the table view, which is used to calculate the vertical offset needed to ensure that the swipe button's title and image are always vertically centered within the visible portion of the cell.
-     
-     This rectangle can be, for example, the table view's bounds or the layout frame of table view's safe area layout guide.
-     
-     If `nil` is returned, then no vertical offset will be calculated. The default implementation returns `nil`.
-          
-     - note: The returned rectange should be in the table view's own coordinate system.
-     */
-    func visibleTableViewRect() -> CGRect?
     
     /**
      Asks the delegate for the actions to display in response to a swipe in the specified row.
@@ -71,6 +61,17 @@ public protocol SwipeTableViewCellDelegate: class {
      - parameter orientation: The side of the cell.
      */
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?, for orientation: SwipeActionsOrientation)
+    
+    /**
+     Asks the delegate for the rectangle of the visible part of the table view, which is used to calculate the vertical offset needed to ensure that the swipe button's title and image are always vertically centered within the visible portion of the cell.
+     
+     This rectangle can be, for example, the table view's bounds or the layout frame of table view's safe area layout guide.
+     
+     If `nil` is returned, then no vertical offset will be calculated. The default implementation returns `nil`.
+     
+     - note: The returned rectange should be in the table view's own coordinate system.
+     */
+    func visibleTableViewRect() -> CGRect?
 }
 
 /**

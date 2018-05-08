@@ -8,15 +8,13 @@
 import UIKit
 
 class SwipeActionButton: UIButton {
-    weak var delegate: SwipeActionsViewDelegate?
-    
     var spacing: CGFloat = 8
     var shouldHighlight = true
     var highlightedBackgroundColor: UIColor?
 
     var maximumImageHeight: CGFloat = 0
     var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
-    private(set) var lastOffset: CGFloat = 0
+    
     
     var currentSpacing: CGFloat {
         return (currentTitle?.isEmpty == false && imageHeight > 0) ? spacing : 0
@@ -26,10 +24,8 @@ class SwipeActionButton: UIButton {
         let contentRect = self.contentRect(forBounds: bounds)
         let titleHeight = titleBoundingRect(with: verticalAlignment == .centerFirstBaseline ? CGRect.infinite.size : contentRect.size).integral.height
         let totalHeight = imageHeight + titleHeight + currentSpacing
-        
-        let size = CGSize(width: contentRect.width, height: totalHeight)
-        lastOffset = delegate?.verticalOffset(forButtonWithContentHeight: totalHeight) ?? 0
-        return contentRect.center(size: size, verticalOffset: lastOffset)
+
+        return contentRect.center(size: CGSize(width: contentRect.width, height: totalHeight))
     }
     
     private var imageHeight: CGFloat {
@@ -100,9 +96,9 @@ class SwipeActionButton: UIButton {
 }
 
 extension CGRect {
-    func center(size: CGSize, verticalOffset: CGFloat = 0) -> CGRect {
+    func center(size: CGSize) -> CGRect {
         let dx = width - size.width
         let dy = height - size.height
-        return CGRect(x: origin.x + dx * 0.5, y: verticalOffset + origin.y + dy * 0.5, width: size.width, height: size.height)
+        return CGRect(x: origin.x + dx * 0.5, y: origin.y + dy * 0.5, width: size.width, height: size.height)
     }
 }
