@@ -152,28 +152,3 @@ func visibleTableViewRect() -> CGRect? {
                       height: bounds.height - bottomAdjustment)
     }
 ```
-
-### Using Custom Transitions/Expansions With Vertical Centering Enabled
-
-Enabling vertical centering on cells with custom transitions/expansions may cause problems if the vertical offset is not taken into account.
-
-For custom expansions this offset is passed to the object conforming the `SwipeExpanding`. 
-
-For custom transitions this offset can be accessed from the `SwipeActionTransitioningContext` struct passed to the object conforming to `SwipeActionTransitioning`. For example: 
-
-```swift
-let context: SwipeActionTransitioningContext
-
-// Does not take the vertical offset into account
-context.button.transform = CGAffineTransform(scaleX: initialScale, y: initialScale)
-
-// Does take the vertical offset into account by adding a translation to the transform
-context.button.transform = CGAffineTransform(scaleX: initialScale, y: initialScale)
-                .translatedBy(x: 0, y: context.verticalOffset / 4)
-```
-
-| Does not take vertical offset into account | Does take vertical offset into account | 
-|--------------------------------------------|----------------------------------------| 
-| <p align="center"><img src="https://raw.githubusercontent.com/halleygen/SwipeCellKit/vertical-centring/Screenshots/Vertical-Centering-With-Scale-Transition-Bad.gif" /></p>                                      | <p align="center"><img src="https://raw.githubusercontent.com/halleygen/SwipeCellKit/vertical-centring/Screenshots/Vertical-Centering-With-Scale-Transition-Good.gif" /></p>                                  | 
-
-Notice that the buttons in the image on the left are translated down and up as they appear and disappear.
