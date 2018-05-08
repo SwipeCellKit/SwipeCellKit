@@ -491,10 +491,6 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             invokeAction()
         }
     }
-
-    func visibleTableViewRect() -> CGRect? {
-        return delegate?.visibleTableViewRect()
-    }
     
 }
 
