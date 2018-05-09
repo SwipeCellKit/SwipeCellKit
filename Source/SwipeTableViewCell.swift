@@ -235,18 +235,22 @@ open class SwipeTableViewCell: UITableViewCell {
         self.actionsView = nil
         
         var insets = UIEdgeInsets.zero
+        var isAtTop = true
+        
         if let visibleTableViewRect = delegate?.visibleTableViewRect() {
             let visibleCellRect = frame.intersection(visibleTableViewRect)
             let top = visibleCellRect.minY > frame.minY ? max(0, visibleCellRect.minY - frame.minY) : 0
             let bottom = max(0, frame.size.height - visibleCellRect.size.height - top)
             insets = UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0)
+            isAtTop = visibleTableViewRect.origin.y == visibleCellRect.origin.y
         }
         
         let actionsView = SwipeActionsView(contentInset: insets,
                                            maxSize: bounds.size,
                                            options: options,
                                            orientation: orientation,
-                                           actions: actions)
+                                           actions: actions,
+                                           isAtTop: isAtTop)
         actionsView.delegate = self
         
         addSubview(actionsView)
