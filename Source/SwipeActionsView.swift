@@ -158,11 +158,11 @@ class SwipeActionsView: UIView {
             heightConstraint.isActive = true
             
             let topConstraint = wrapperView.topAnchor.constraint(equalTo: topAnchor, constant: contentEdgeInsets.top)
-            topConstraint.priority = contentEdgeInsets.top == 0 ? .defaultHigh : .defaultLow
+            topConstraint.priority = contentEdgeInsets.top == 0 ? .required : .defaultHigh
             topConstraint.isActive = true
             
             let bottomConstraint = wrapperView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -1 * contentEdgeInsets.bottom)
-            bottomConstraint.priority = contentEdgeInsets.bottom == 0 ? .defaultHigh : .defaultLow
+            bottomConstraint.priority = contentEdgeInsets.bottom == 0 ? .required : .defaultHigh
             bottomConstraint.isActive = true
         }
         return buttons
