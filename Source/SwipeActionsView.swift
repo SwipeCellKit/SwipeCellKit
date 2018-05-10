@@ -81,7 +81,7 @@ class SwipeActionsView: UIView {
         return options.expansionStyle != nil ? actions.last : nil
     }
     
-    init(contentInset: UIEdgeInsets, maxSize: CGSize, options: SwipeTableOptions, orientation: SwipeActionsOrientation, actions: [SwipeAction], isAtTop: Bool) {
+    init(contentEdgeInsets: UIEdgeInsets, maxSize: CGSize, options: SwipeTableOptions, orientation: SwipeActionsOrientation, actions: [SwipeAction]) {
         self.options = options
         self.orientation = orientation
         self.actions = actions.reversed()
@@ -106,14 +106,14 @@ class SwipeActionsView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = options.backgroundColor ?? #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
         
-        buttons = addButtons(for: self.actions, withMaximum: maxSize, contentInset: contentInset, isAtTop: isAtTop)
+        buttons = addButtons(for: self.actions, withMaximum: maxSize, contentEdgeInsets: contentEdgeInsets)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addButtons(for actions: [SwipeAction], withMaximum size: CGSize, contentInset: UIEdgeInsets, isAtTop: Bool) -> [SwipeActionButton] {
+    func addButtons(for actions: [SwipeAction], withMaximum size: CGSize, contentEdgeInsets: UIEdgeInsets) -> [SwipeActionButton] {
         let buttons: [SwipeActionButton] = actions.map({ action in
             let actionButton = SwipeActionButton(action: action)
             actionButton.addTarget(self, action: #selector(actionTapped(button:)), for: .touchUpInside)
@@ -145,33 +145,26 @@ class SwipeActionsView: UIView {
                 addSubview(wrapperView)
             }
             
-            wrapperView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
-            
-            let bottomConstraint = wrapperView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -1 * contentInset.bottom)
-            bottomConstraint.isActive = true
-            
-            let topConstraint = wrapperView.topAnchor.constraint(equalTo: topAnchor, constant: contentInset.top)
-            topConstraint.isActive = true
-            
-            if isAtTop {
-                bottomConstraint.priority = .defaultHigh
-                topConstraint.priority = .defaultLow
-            } else {
-                bottomConstraint.priority = .defaultLow
-                topConstraint.priority = .defaultHigh
-            }
-            
             button.frame = wrapperView.contentRect
             button.maximumImageHeight = maximumImageHeight
             button.verticalAlignment = options.buttonVerticalAlignment
             button.shouldHighlight = action.hasBackgroundColor
             
+            wrapperView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+            
             let padding = options.buttonPadding ?? 8
             let heightConstraint = wrapperView.heightAnchor.constraint(greaterThanOrEqualToConstant: (padding * 2) + button.intrinsicContentSize.height)
             heightConstraint.priority = .required
             heightConstraint.isActive = true
+            
+            let topConstraint = wrapperView.topAnchor.constraint(equalTo: topAnchor, constant: contentEdgeInsets.top)
+            topConstraint.priority = contentEdgeInsets.top == 0 ? .defaultHigh : .defaultLow
+            topConstraint.isActive = true
+            
+            let bottomConstraint = wrapperView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -1 * contentEdgeInsets.bottom)
+            bottomConstraint.priority = contentEdgeInsets.bottom == 0 ? .defaultHigh : .defaultLow
+            bottomConstraint.isActive = true
         }
-        
         return buttons
     }
     
