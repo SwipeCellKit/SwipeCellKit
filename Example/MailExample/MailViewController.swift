@@ -24,6 +24,7 @@ class MailViewController: UITableViewController {
         tableView.allowsMultipleSelectionDuringEditing = true
         
         tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 100
         
         navigationItem.rightBarButtonItem = editButtonItem
         
@@ -52,14 +53,6 @@ class MailViewController: UITableViewController {
         cell.unread = email.unread
         
         return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return useTallCells ? 700 : UITableViewAutomaticDimension
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return useTallCells ? 700 : UITableViewAutomaticDimension
     }
     
     func visibleRect(for tableView: UITableView) -> CGRect? {
