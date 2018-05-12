@@ -15,7 +15,7 @@ class MailViewController: UITableViewController {
     var isSwipeRightEnabled = true
     var buttonDisplayMode: ButtonDisplayMode = .titleAndImage
     var buttonStyle: ButtonStyle = .backgroundColor
-    var useTallCells = false
+    var usesTallCells = false
     
     // MARK: - Lifecycle
     
@@ -49,14 +49,14 @@ class MailViewController: UITableViewController {
         cell.dateLabel.text = email.relativeDateString
         cell.subjectLabel.text = email.subject
         cell.bodyLabel.text = email.body
-        cell.bodyLabel.numberOfLines = useTallCells ? 0 : 2
+        cell.bodyLabel.numberOfLines = usesTallCells ? 0 : 2
         cell.unread = email.unread
         
         return cell
     }
     
     func visibleRect(for tableView: UITableView) -> CGRect? {
-        if useTallCells == false { return nil }
+        if usesTallCells == false { return nil }
         
         if #available(iOS 11.0, *) {
             return tableView.safeAreaLayoutGuide.layoutFrame
@@ -111,11 +111,11 @@ class MailViewController: UITableViewController {
     func cellHeightTapped() {
         let controller = UIAlertController(title: "Cell Height", message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: "Normal", style: .default, handler: { _ in
-            self.useTallCells = false
+            self.usesTallCells = false
             self.tableView.reloadData()
         }))
         controller.addAction(UIAlertAction(title: "Tall", style: .default, handler: { _ in
-            self.useTallCells = true
+            self.usesTallCells = true
             self.tableView.reloadData()
         }))
         controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -133,7 +133,7 @@ class MailViewController: UITableViewController {
     func resetData() {
         emails = mockEmails
         emails.forEach { $0.unread = false }
-        useTallCells = false
+        usesTallCells = false
         tableView.reloadData()
     }
 }
