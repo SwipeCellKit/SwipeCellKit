@@ -235,11 +235,13 @@ open class SwipeTableViewCell: UITableViewCell {
         self.actionsView = nil
         
         var contentEdgeInsets = UIEdgeInsets.zero
-        if let visibleTableViewRect = delegate?.visibleTableViewRect() {
+        if let visibleTableViewRect = delegate?.visibleRect(for: tableView) {
             let visibleCellRect = frame.intersection(visibleTableViewRect)
-            let top = visibleCellRect.minY > frame.minY ? max(0, visibleCellRect.minY - frame.minY) : 0
-            let bottom = max(0, frame.size.height - visibleCellRect.size.height - top)
-            contentEdgeInsets = UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0)
+            if visibleCellRect.isNull == false {
+                let top = visibleCellRect.minY > frame.minY ? max(0, visibleCellRect.minY - frame.minY) : 0
+                let bottom = max(0, frame.size.height - visibleCellRect.size.height - top)
+                contentEdgeInsets = UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0)
+            }
         }
         
         let actionsView = SwipeActionsView(contentEdgeInsets: contentEdgeInsets,
@@ -377,7 +379,6 @@ open class SwipeTableViewCell: UITableViewCell {
             super.layoutMargins = newValue
         }
     }
-
 }
 
 extension SwipeTableViewCell {
@@ -491,7 +492,6 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             invokeAction()
         }
     }
-    
 }
 
 extension SwipeTableViewCell {

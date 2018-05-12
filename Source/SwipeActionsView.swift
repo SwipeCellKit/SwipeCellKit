@@ -152,8 +152,7 @@ class SwipeActionsView: UIView {
             
             wrapperView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
             
-            let padding = options.buttonPadding ?? 8
-            let heightConstraint = wrapperView.heightAnchor.constraint(greaterThanOrEqualToConstant: (padding * 2) + button.intrinsicContentSize.height)
+            let heightConstraint = wrapperView.heightAnchor.constraint(greaterThanOrEqualToConstant: button.intrinsicContentSize.height)
             heightConstraint.priority = .required
             heightConstraint.isActive = true
             

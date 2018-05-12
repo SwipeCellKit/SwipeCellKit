@@ -35,11 +35,7 @@ class SwipeActionButton: UIButton {
     }
     
     override var intrinsicContentSize: CGSize {
-        let contentRect = self.contentRect(forBounds: bounds)
-        let titleHeight = titleBoundingRect(with: verticalAlignment == .centerFirstBaseline ? CGRect.infinite.size : contentRect.size).integral.height
-        let totalHeight = imageHeight + titleHeight + currentSpacing
-        
-        return CGSize(width: UIViewNoIntrinsicMetric, height: totalHeight)
+        return CGSize(width: UIViewNoIntrinsicMetric, height: spacing + alignmentRect.height + spacing)
     }
     
     convenience init(action: SwipeAction) {
