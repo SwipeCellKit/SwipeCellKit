@@ -118,13 +118,13 @@ The `ScaleAndAlphaExpansion` type provides a static `default` configuration, but
 
 You can also provide your own completely custom expansion behavior by adopting the `SwipeExpanding` protocol. The protocol allows you to customize the animation timing parameters prior to initiating the (un)expansion animation, as well as customizing the action during (un)expansion.
 
-## Vertical Centering Swipe Actions for Tall Cells
+## Vertically Centered Swipe Actions for Tall Cells
 
-If your table view cells are tall then it can be useful to ensure that the button image and title remain centered relative to the visible portion of the cell.
+If your table view cells are tall then it can be useful to have the swipe actions centered relative to the visible portion of the cell.
 
 <p align="center"><img src="https://raw.githubusercontent.com/halleygen/SwipeCellKit/vertical-centring/Screenshots/Vertical-Centering.gif" /></p>
 
-This is enabled once the `func visibleRect(for tableView: UITableView) -> CGRect?` in your `SwipeTableViewCell`'s delegate and returning a non-nil `CGRect`. This function should return a rectangle of the *visible* portion of your table view that is in the table view's own coordinate system. The visible portion of the table view refers to the part that is not obscurred by other views (e.g. a navigation bar or a toolbar).
+This is enabled once the `func visibleRect(for tableView: UITableView) -> CGRect?` in your `SwipeTableViewCell`'s delegate returns a non-nil `CGRect`. This function should return a rectangle of the *visible* portion of your table view that is in the table view's own coordinate system. The visible portion of the table view refers to the part that is not obscurred by other views (e.g. a navigation bar or a toolbar).
 
 If you are targeting iOS 11+ then this is simple thanks to the safe area API and your delegate function could simply be:
 
@@ -145,3 +145,5 @@ func visibleRect(for tableView: UITableView) -> CGRect? {
         return CGRect(x: bounds.origin.x, y: bounds.origin.y + topInset, width: bounds.width, height: bounds.height - bottomInset)
     }
 ```
+
+Refer to the Mail app example to see a working example.
