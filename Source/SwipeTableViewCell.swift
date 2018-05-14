@@ -241,11 +241,21 @@ open class SwipeTableViewCell: UITableViewCell {
         self.actionsView?.removeFromSuperview()
         self.actionsView = nil
         
-        let actionsView = SwipeActionsView(maxSize: bounds.size,
+        var contentEdgeInsets = UIEdgeInsets.zero
+        if let visibleTableViewRect = delegate?.visibleRect(for: tableView) {
+            let visibleCellRect = frame.intersection(visibleTableViewRect)
+            if visibleCellRect.isNull == false {
+                let top = visibleCellRect.minY > frame.minY ? max(0, visibleCellRect.minY - frame.minY) : 0
+                let bottom = max(0, frame.size.height - visibleCellRect.size.height - top)
+                contentEdgeInsets = UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0)
+            }
+        }
+        
+        let actionsView = SwipeActionsView(contentEdgeInsets: contentEdgeInsets,
+                                           maxSize: bounds.size,
                                            options: options,
                                            orientation: orientation,
                                            actions: actions)
-        
         actionsView.delegate = self
         
         addSubview(actionsView)
