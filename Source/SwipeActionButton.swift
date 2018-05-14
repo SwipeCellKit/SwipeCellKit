@@ -7,8 +7,8 @@
 
 import UIKit
 
-class SwipeActionButton: UIButton {
-    var spacing: CGFloat = 8
+public class SwipeActionButton: UIButton {
+    public var spacing: CGFloat = 8
     var shouldHighlight = true
     var highlightedBackgroundColor: UIColor?
 
@@ -57,7 +57,7 @@ class SwipeActionButton: UIButton {
         setImage(action.highlightedImage ?? action.image, for: .highlighted)
     }
     
-    override var isHighlighted: Bool {
+    override public var isHighlighted: Bool {
         didSet {
             guard shouldHighlight else { return }
             
@@ -74,31 +74,26 @@ class SwipeActionButton: UIButton {
     }
     
     func titleBoundingRect(with size: CGSize) -> CGRect {
-        guard let title = currentTitle, let font = titleLabel?.font else { return .zero }
-        
+        guard let title = currentTitle, let label = titleLabel, var font = label.font else { return .zero }
+        if label.adjustsFontSizeToFitWidth, let adjustedFont = UIFont.init(name: font.fontName, size: label.adjustedFontSize) {
+            font = adjustedFont
+        }
+
         return title.boundingRect(with: size,
                                   options: [.usesLineFragmentOrigin],
                                   attributes: [NSAttributedStringKey.font: font],
                                   context: nil).integral
     }
     
-    override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
+    override public func titleRect(forContentRect contentRect: CGRect) -> CGRect {
         var rect = contentRect.center(size: titleBoundingRect(with: contentRect.size).size)
         rect.origin.y = alignmentRect.minY + imageHeight + currentSpacing
         return rect.integral
     }
     
-    override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
+    override public func imageRect(forContentRect contentRect: CGRect) -> CGRect {
         var rect = contentRect.center(size: currentImage?.size ?? .zero)
         rect.origin.y = alignmentRect.minY + (imageHeight - rect.height) / 2
         return rect
-    }
-}
-
-extension CGRect {
-    func center(size: CGSize) -> CGRect {
-        let dx = width - size.width
-        let dy = height - size.height
-        return CGRect(x: origin.x + dx * 0.5, y: origin.y + dy * 0.5, width: size.width, height: size.height)
     }
 }
