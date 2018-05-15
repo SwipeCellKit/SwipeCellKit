@@ -150,11 +150,8 @@ class SwipeActionsView: UIView {
             button.verticalAlignment = options.buttonVerticalAlignment
             button.shouldHighlight = action.hasBackgroundColor
             
-            wrapperView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
-            
-            let heightConstraint = wrapperView.heightAnchor.constraint(greaterThanOrEqualToConstant: button.intrinsicContentSize.height)
-            heightConstraint.priority = .required
-            heightConstraint.isActive = true
+            wrapperView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+            wrapperView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
             
             let topConstraint = wrapperView.topAnchor.constraint(equalTo: topAnchor, constant: contentEdgeInsets.top)
             topConstraint.priority = contentEdgeInsets.top == 0 ? .required : .defaultHigh
@@ -163,6 +160,10 @@ class SwipeActionsView: UIView {
             let bottomConstraint = wrapperView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -1 * contentEdgeInsets.bottom)
             bottomConstraint.priority = contentEdgeInsets.bottom == 0 ? .required : .defaultHigh
             bottomConstraint.isActive = true
+            
+            let heightConstraint = wrapperView.heightAnchor.constraint(greaterThanOrEqualToConstant: button.intrinsicContentSize.height)
+            heightConstraint.priority = .required
+            heightConstraint.isActive = true
         }
         return buttons
     }
@@ -256,6 +257,7 @@ class SwipeActionsView: UIView {
 
 class SwipeActionButtonWrapperView: UIView {
     let contentRect: CGRect
+    var actionBackgroundColor: UIColor?
     
     init(frame: CGRect, action: SwipeAction, orientation: SwipeActionsOrientation, contentWidth: CGFloat) {
         switch orientation {
@@ -270,17 +272,26 @@ class SwipeActionButtonWrapperView: UIView {
         configureBackgroundColor(with: action)
     }
     
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        
+        if let actionBackgroundColor = self.actionBackgroundColor, let context = UIGraphicsGetCurrentContext() {
+            actionBackgroundColor.setFill()
+            context.fill(rect);
+        }
+    }
+    
     func configureBackgroundColor(with action: SwipeAction) {
         guard action.hasBackgroundColor else { return }
         
         if let backgroundColor = action.backgroundColor {
-            self.backgroundColor = backgroundColor
+            actionBackgroundColor = backgroundColor
         } else {
             switch action.style {
             case .destructive:
-                backgroundColor = #colorLiteral(red: 1, green: 0.2352941176, blue: 0.1882352941, alpha: 1)
+                actionBackgroundColor = #colorLiteral(red: 1, green: 0.2352941176, blue: 0.1882352941, alpha: 1)
             default:
-                backgroundColor = #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
+                actionBackgroundColor = #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
             }
         }
     }

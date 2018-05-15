@@ -28,6 +28,8 @@ extension SwipeTableViewCell {
         
         let targetCenter = self.targetCenter(active: false)
         
+        resetSelectedState()
+        
         if animated {
             animate(toOffset: targetCenter) { complete in
                 self.reset()

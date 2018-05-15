@@ -201,7 +201,11 @@ open class SwipeTableViewCell: UITableViewCell {
                         self.reset()
                     }
                 }
-
+                
+                if self.state == .center {
+                    resetSelectedState()
+                }
+                
                 if !state.isActive {
                     notifyEditingStateChange(active: false)
                 }
@@ -413,14 +417,19 @@ extension SwipeTableViewCell {
     func reset() {
         state = .center
         clipsToBounds = false
+        resetSelectedState()
+        
+        actionsView?.removeFromSuperview()
+        actionsView = nil
+    }
+    
+    func resetSelectedState() {
         if isPreviouslySelected {
             if let tableView = tableView, let indexPath = tableView.indexPath(for: self) {
                 tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
             }
         }
         isPreviouslySelected = false
-        actionsView?.removeFromSuperview()
-        actionsView = nil
     }
 }
 
