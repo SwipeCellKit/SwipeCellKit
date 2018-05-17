@@ -282,7 +282,10 @@ class SwipeActionButtonWrapperView: UIView {
     }
     
     func configureBackgroundColor(with action: SwipeAction) {
-        guard action.hasBackgroundColor else { return }
+        guard action.hasBackgroundColor else {
+            isOpaque = false
+            return
+        }
         
         if let backgroundColor = action.backgroundColor {
             actionBackgroundColor = backgroundColor
