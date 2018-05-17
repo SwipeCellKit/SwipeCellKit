@@ -2,6 +2,17 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.3.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.3.0)
+
+#### Added
+
+- Support for vertically centered swipe actions for tall cells. (#186)
+
+#### Fixed
+
+- Resolved issue where touching cell in swipe expantion zone resulted in immediate cell expansion (#194)
+- Reselect swipped cell if it was previously selected (#58)
+
 ## [2.2.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.2.0)
 
 #### Added
