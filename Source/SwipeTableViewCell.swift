@@ -24,6 +24,8 @@ open class SwipeTableViewCell: UITableViewCell {
     
     weak var tableView: UITableView?
     var actionsView: SwipeActionsView?
+    
+    var isPreviouslySelected = false
 
     var originalLayoutMargins: UIEdgeInsets = .zero
     
@@ -199,7 +201,11 @@ open class SwipeTableViewCell: UITableViewCell {
                         self.reset()
                     }
                 }
-
+                
+                if self.state == .center {
+                    resetSelectedState()
+                }
+                
                 if !state.isActive {
                     notifyEditingStateChange(active: false)
                 }
@@ -223,8 +229,8 @@ open class SwipeTableViewCell: UITableViewCell {
         
         // Remove highlight and deselect any selected cells
         super.setHighlighted(false, animated: false)
-        let selectedIndexPaths = tableView.indexPathsForSelectedRows
-        selectedIndexPaths?.forEach { tableView.deselectRow(at: $0, animated: false) }
+        isPreviouslySelected = isSelected
+        tableView.deselectRow(at: indexPath, animated: false)
         
         configureActionsView(with: actions, for: orientation)
         
@@ -410,8 +416,19 @@ extension SwipeTableViewCell {
     func reset() {
         state = .center
         clipsToBounds = false
+        resetSelectedState()
+        
         actionsView?.removeFromSuperview()
         actionsView = nil
+    }
+    
+    func resetSelectedState() {
+        if isPreviouslySelected {
+            if let tableView = tableView, let indexPath = tableView.indexPath(for: self) {
+                tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+            }
+        }
+        isPreviouslySelected = false
     }
 }
 
@@ -463,6 +480,8 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             switch style {
             case .delete:
                 self?.mask = actionsView.createDeletionMask()
+                
+                self?.isPreviouslySelected = false
                 
                 tableView.deleteRows(at: [indexPath], with: .none)
                 
