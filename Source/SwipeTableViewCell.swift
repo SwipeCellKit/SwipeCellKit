@@ -230,8 +230,7 @@ open class SwipeTableViewCell: UITableViewCell {
         // Remove highlight and deselect any selected cells
         super.setHighlighted(false, animated: false)
         isPreviouslySelected = isSelected
-        let selectedIndexPaths = tableView.indexPathsForSelectedRows
-        selectedIndexPaths?.forEach { tableView.deselectRow(at: $0, animated: false) }
+        tableView.deselectRow(at: indexPath, animated: false)
         
         configureActionsView(with: actions, for: orientation)
         
