@@ -122,7 +122,7 @@ open class SwipeTableViewCell: UITableViewCell {
         
         switch gesture.state {
         case .began:
-            if let cell = tableView?.swipeCells.first(where: { $0.state.isActive }), cell != target {
+            if let cell = tableView?.swipeCells.first(where: { $0.state == .dragging }), cell != target {
                 return
             }
             
