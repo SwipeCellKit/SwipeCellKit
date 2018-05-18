@@ -2,6 +2,12 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.3.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.3.1)
+
+#### Fixed
+
+- Fix issue where swiping a cell does not work while another cell is open (#197)
+
 ## [2.3.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.3.0)
 
 #### Added
