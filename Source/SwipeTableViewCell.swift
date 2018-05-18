@@ -24,6 +24,8 @@ open class SwipeTableViewCell: UITableViewCell {
     
     weak var tableView: UITableView?
     var actionsView: SwipeActionsView?
+    
+    var isPreviouslySelected = false
 
     var originalLayoutMargins: UIEdgeInsets = .zero
     
@@ -199,7 +201,11 @@ open class SwipeTableViewCell: UITableViewCell {
                         self.reset()
                     }
                 }
-
+                
+                if self.state == .center {
+                    resetSelectedState()
+                }
+                
                 if !state.isActive {
                     notifyEditingStateChange(active: false)
                 }
@@ -223,8 +229,8 @@ open class SwipeTableViewCell: UITableViewCell {
         
         // Remove highlight and deselect any selected cells
         super.setHighlighted(false, animated: false)
-        let selectedIndexPaths = tableView.indexPathsForSelectedRows
-        selectedIndexPaths?.forEach { tableView.deselectRow(at: $0, animated: false) }
+        isPreviouslySelected = isSelected
+        tableView.deselectRow(at: indexPath, animated: false)
         
         configureActionsView(with: actions, for: orientation)
         
@@ -242,11 +248,21 @@ open class SwipeTableViewCell: UITableViewCell {
         self.actionsView?.removeFromSuperview()
         self.actionsView = nil
         
-        let actionsView = SwipeActionsView(maxSize: bounds.size,
+        var contentEdgeInsets = UIEdgeInsets.zero
+        if let visibleTableViewRect = delegate?.visibleRect(for: tableView) {
+            let visibleCellRect = frame.intersection(visibleTableViewRect)
+            if visibleCellRect.isNull == false {
+                let top = visibleCellRect.minY > frame.minY ? max(0, visibleCellRect.minY - frame.minY) : 0
+                let bottom = max(0, frame.size.height - visibleCellRect.size.height - top)
+                contentEdgeInsets = UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0)
+            }
+        }
+        
+        let actionsView = SwipeActionsView(contentEdgeInsets: contentEdgeInsets,
+                                           maxSize: bounds.size,
                                            options: options,
                                            orientation: orientation,
                                            actions: actions)
-        
         actionsView.delegate = self
         
         addSubview(actionsView)
@@ -400,8 +416,19 @@ extension SwipeTableViewCell {
     func reset() {
         state = .center
         clipsToBounds = false
+        resetSelectedState()
+        
         actionsView?.removeFromSuperview()
         actionsView = nil
+    }
+    
+    func resetSelectedState() {
+        if isPreviouslySelected {
+            if let tableView = tableView, let indexPath = tableView.indexPath(for: self) {
+                tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+            }
+        }
+        isPreviouslySelected = false
     }
 }
 
@@ -453,6 +480,8 @@ extension SwipeTableViewCell: SwipeActionsViewDelegate {
             switch style {
             case .delete:
                 self?.mask = actionsView.createDeletionMask()
+                
+                self?.isPreviouslySelected = false
                 
                 tableView.deleteRows(at: [indexPath], with: .none)
                 

@@ -83,8 +83,9 @@ public struct SwipeExpansionStyle {
     }
     
     func shouldExpand(view: Swipeable, gesture: UIPanGestureRecognizer, in superview: UIView) -> Bool {
-        guard let actionsView = view.actionsView else { return false }
-        
+        guard let actionsView = view.actionsView, let gestureView = gesture.view else { return false }
+
+        guard abs(gesture.translation(in: gestureView).x) > 5.0 else { return false }
         guard abs(view.frame.minX) >= actionsView.preferredWidth else { return false }
         
         if abs(view.frame.minX) >= target.offset(for: view, in: superview, minimumOverscroll: minimumTargetOverscroll) {
