@@ -34,6 +34,10 @@ class SwipeActionButton: UIButton {
         }
     }
     
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: UIViewNoIntrinsicMetric, height: contentEdgeInsets.top + alignmentRect.height + contentEdgeInsets.bottom)
+    }
+    
     convenience init(action: SwipeAction) {
         self.init(frame: .zero)
 
