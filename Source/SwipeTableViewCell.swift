@@ -190,17 +190,17 @@ open class SwipeTableViewCell: UITableViewCell, Swipeable {
 }
 
 extension SwipeTableViewCell: SwipeControllerDelegate {
-    func swipeController(_ controller: SwipeController, canBeginEditingRowFor orientation: SwipeActionsOrientation) -> Bool {
+    func swipeController(_ controller: SwipeController, canBeginEditingSwipeableFor orientation: SwipeActionsOrientation) -> Bool {
         return self.isEditing == false
     }
     
-    func swipeController(_ controller: SwipeController, editActionsForRowFor orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+    func swipeController(_ controller: SwipeController, editActionsForSwipeableFor orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard let tableView = tableView, let indexPath = tableView.indexPath(for: self) else { return nil }
         
         return delegate?.tableView(tableView, editActionsForRowAt: indexPath, for: orientation)
     }
     
-    func swipeController(_ controller: SwipeController, editActionsOptionsForRowFor orientation: SwipeActionsOrientation) -> SwipeOptions {
+    func swipeController(_ controller: SwipeController, editActionsOptionsForSwipeableFor orientation: SwipeActionsOrientation) -> SwipeOptions {
         guard let tableView = tableView, let indexPath = tableView.indexPath(for: self) else { return SwipeOptions() }
         
         return delegate?.tableView(tableView, editActionsOptionsForRowAt: indexPath, for: orientation) ?? SwipeOptions()
@@ -212,7 +212,7 @@ extension SwipeTableViewCell: SwipeControllerDelegate {
         return delegate?.visibleRect(for: tableView)
     }
     
-    func swipeController(_ controller: SwipeController, willBeginEditingRowFor orientation: SwipeActionsOrientation) {
+    func swipeController(_ controller: SwipeController, willBeginEditingSwipeableFor orientation: SwipeActionsOrientation) {
         guard let tableView = tableView, let indexPath = tableView.indexPath(for: self) else { return }
         
         // Remove highlight and deselect any selected cells
@@ -223,7 +223,7 @@ extension SwipeTableViewCell: SwipeControllerDelegate {
         delegate?.tableView(tableView, willBeginEditingRowAt: indexPath, for: orientation)
     }
     
-    func swipeController(_ controller: SwipeController, didEndEditingRowFor orientation: SwipeActionsOrientation) {
+    func swipeController(_ controller: SwipeController, didEndEditingSwipeableFor orientation: SwipeActionsOrientation) {
         guard let tableView = tableView, let indexPath = tableView.indexPath(for: self), let actionsView = self.actionsView else { return }
         
         resetSelectedState()
@@ -231,7 +231,7 @@ extension SwipeTableViewCell: SwipeControllerDelegate {
         delegate?.tableView(tableView, didEndEditingRowAt: indexPath, for: actionsView.orientation)
     }
     
-    func swipeController(_ controller: SwipeController, didDeleteRowAt indexPath: IndexPath) {
+    func swipeController(_ controller: SwipeController, didDeleteSwipeableAt indexPath: IndexPath) {
         tableView?.deleteRows(at: [indexPath], with: .none)
     }
 }

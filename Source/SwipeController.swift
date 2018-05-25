@@ -1,5 +1,5 @@
 //
-//  SwipeCellController.swift
+//  SwipeController.swift
 //  SwipeCellKit
 //
 //  Created by Mohammad Kurabi on 5/19/18.
@@ -9,17 +9,17 @@ import Foundation
 
 protocol SwipeControllerDelegate: class {
     
-    func swipeController(_ controller: SwipeController, canBeginEditingRowFor orientation: SwipeActionsOrientation) -> Bool
+    func swipeController(_ controller: SwipeController, canBeginEditingSwipeableFor orientation: SwipeActionsOrientation) -> Bool
     
-    func swipeController(_ controller: SwipeController, editActionsForRowFor orientation: SwipeActionsOrientation) -> [SwipeAction]?
+    func swipeController(_ controller: SwipeController, editActionsForSwipeableFor orientation: SwipeActionsOrientation) -> [SwipeAction]?
     
-    func swipeController(_ controller: SwipeController, editActionsOptionsForRowFor orientation: SwipeActionsOrientation) -> SwipeOptions
+    func swipeController(_ controller: SwipeController, editActionsOptionsForSwipeableFor orientation: SwipeActionsOrientation) -> SwipeOptions
     
-    func swipeController(_ controller: SwipeController, willBeginEditingRowFor orientation: SwipeActionsOrientation)
+    func swipeController(_ controller: SwipeController, willBeginEditingSwipeableFor orientation: SwipeActionsOrientation)
     
-    func swipeController(_ controller: SwipeController, didEndEditingRowFor orientation: SwipeActionsOrientation)
+    func swipeController(_ controller: SwipeController, didEndEditingSwipeableFor orientation: SwipeActionsOrientation)
     
-    func swipeController(_ controller: SwipeController, didDeleteRowAt indexPath: IndexPath)
+    func swipeController(_ controller: SwipeController, didDeleteSwipeableAt indexPath: IndexPath)
     
     func swipeController(_ controller: SwipeController, visibleRectFor scrollView: UIScrollView) -> CGRect?
     
@@ -67,13 +67,13 @@ class SwipeController: NSObject, UIGestureRecognizerDelegate {
         
         let velocity = gesture.velocity(in: target)
         
-        if delegate?.swipeController(self, canBeginEditingRowFor: velocity.x > 0 ? .left : .right) == false {
+        if delegate?.swipeController(self, canBeginEditingSwipeableFor: velocity.x > 0 ? .left : .right) == false {
             return
         }
         
         switch gesture.state {
         case .began:
-            if let cell = scrollView?.swipeables.first(where: { $0.state == .dragging }) as? UIView, cell != self.swipeable {
+            if let swipeable = scrollView?.swipeables.first(where: { $0.state == .dragging }) as? UIView, swipeable != self.swipeable {
                 return
             }
             
@@ -151,7 +151,7 @@ class SwipeController: NSObject, UIGestureRecognizerDelegate {
                 }
                 
                 if !swipeable.state.isActive {
-                    delegate?.swipeController(self, didEndEditingRowFor: actionsView.orientation)
+                    delegate?.swipeController(self, didEndEditingSwipeableFor: actionsView.orientation)
                 }
             }
             
@@ -161,14 +161,14 @@ class SwipeController: NSObject, UIGestureRecognizerDelegate {
     
     @discardableResult
     func showActionsView(for orientation: SwipeActionsOrientation) -> Bool {
-        guard let actions = delegate?.swipeController(self, editActionsForRowFor: orientation), actions.count > 0 else { return false }
+        guard let actions = delegate?.swipeController(self, editActionsForSwipeableFor: orientation), actions.count > 0 else { return false }
         guard let swipeable = self.swipeable else { return false }
         
         originalLayoutMargins = swipeable.layoutMargins
         
         configureActionsView(with: actions, for: orientation)
         
-        delegate?.swipeController(self, willBeginEditingRowFor: orientation)
+        delegate?.swipeController(self, willBeginEditingSwipeableFor: orientation)
         
         return true
     }
@@ -176,17 +176,17 @@ class SwipeController: NSObject, UIGestureRecognizerDelegate {
     func configureActionsView(with actions: [SwipeAction], for orientation: SwipeActionsOrientation) {
         guard var swipeable = self.swipeable else { return }
 
-        let options = delegate?.swipeController(self, editActionsOptionsForRowFor: orientation) ?? SwipeOptions()
+        let options = delegate?.swipeController(self, editActionsOptionsForSwipeableFor: orientation) ?? SwipeOptions()
         
         swipeable.actionsView?.removeFromSuperview()
         swipeable.actionsView = nil
         
         var contentEdgeInsets = UIEdgeInsets.zero
         if let visibleTableViewRect = delegate?.swipeController(self, visibleRectFor: scrollView!) {
-            let visibleCellRect = swipeable.frame.intersection(visibleTableViewRect)
-            if visibleCellRect.isNull == false {
-                let top = visibleCellRect.minY > swipeable.frame.minY ? max(0, visibleCellRect.minY - swipeable.frame.minY) : 0
-                let bottom = max(0, swipeable.frame.size.height - visibleCellRect.size.height - top)
+            let visibleSwipeableRect = swipeable.frame.intersection(visibleTableViewRect)
+            if visibleSwipeableRect.isNull == false {
+                let top = visibleSwipeableRect.minY > swipeable.frame.minY ? max(0, visibleSwipeableRect.minY - swipeable.frame.minY) : 0
+                let bottom = max(0, swipeable.frame.size.height - visibleSwipeableRect.size.height - top)
                 contentEdgeInsets = UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0)
             }
         }
@@ -354,13 +354,13 @@ extension SwipeController: SwipeActionsViewDelegate {
             guard let `self` = self else { return }
             action.completionHandler = nil
             
-            self.delegate?.swipeController(self, didEndEditingRowFor: actionsView.orientation)
+            self.delegate?.swipeController(self, didEndEditingSwipeableFor: actionsView.orientation)
             
             switch style {
             case .delete:
                 swipeable.mask = actionsView.createDeletionMask()
                 
-                self.delegate?.swipeController(self, didDeleteRowAt: indexPath)
+                self.delegate?.swipeController(self, didDeleteSwipeableAt: indexPath)
                 
                 UIView.animate(withDuration: 0.3, animations: {
                     guard let swipeable = self.swipeable else { return }
@@ -418,7 +418,7 @@ extension SwipeController: SwipeActionsViewDelegate {
             reset()
         }
         
-        delegate?.swipeController(self, didEndEditingRowFor: actionView.orientation)
+        delegate?.swipeController(self, didEndEditingSwipeableFor: actionView.orientation)
     }
     
     func showSwipe(orientation: SwipeActionsOrientation, animated: Bool = true, completion: ((Bool) -> Void)? = nil) {
