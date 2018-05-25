@@ -55,19 +55,19 @@ class MailTableViewController: UITableViewController {
         return cell
     }
     
-    func visibleRect(for tableView: UITableView) -> CGRect? {
-        if usesTallCells == false { return nil }
-        
-        if #available(iOS 11.0, *) {
-            return tableView.safeAreaLayoutGuide.layoutFrame
-        } else {
-            let topInset = navigationController?.navigationBar.frame.height ?? 0
-            let bottomInset = navigationController?.toolbar?.frame.height ?? 0
-            let bounds = tableView.bounds
-            
-            return CGRect(x: bounds.origin.x, y: bounds.origin.y + topInset, width: bounds.width, height: bounds.height - bottomInset)
-        }
-    }
+//    func visibleRect(for tableView: UITableView) -> CGRect? {
+//        if usesTallCells == false { return nil }
+//        
+//        if #available(iOS 11.0, *) {
+//            return tableView.safeAreaLayoutGuide.layoutFrame
+//        } else {
+//            let topInset = navigationController?.navigationBar.frame.height ?? 0
+//            let bottomInset = navigationController?.toolbar?.frame.height ?? 0
+//            let bounds = tableView.bounds
+//            
+//            return CGRect(x: bounds.origin.x, y: bounds.origin.y + topInset, width: bounds.width, height: bounds.height - bottomInset)
+//        }
+//    }
     
     // MARK: - Actions
     

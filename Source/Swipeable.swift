@@ -10,17 +10,16 @@ import UIKit
 // MARK: - Internal 
 
 protocol Swipeable {
-    var actionsView: SwipeActionsView? { get }
+    var actionsView: SwipeActionsView? { get set }
     
-    var state: SwipeState { get }
+    var state: SwipeState { get set }
     
     var frame: CGRect { get }
     
     var scrollView: UIScrollView? { get }
+    
+    var indexPath: IndexPath? { get }
 }
-
-extension SwipeTableViewCell: Swipeable {}
-extension SwipeCollectionViewCell: Swipeable {}
 
 enum SwipeState: Int {
     case center = 0

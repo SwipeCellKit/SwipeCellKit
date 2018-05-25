@@ -14,7 +14,7 @@ import UIKit
  
  The default behavior closely matches the stock Mail.app. If you want to customize the transition style (ie. how the action buttons are exposed), or the expansion style (the behavior when the row is swiped passes a defined threshold), you can return the appropriately configured `SwipeOptions` via the `SwipeCollectionViewCellDelegate` delegate.
  */
-open class SwipeCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
+open class SwipeCollectionViewCell: UICollectionViewCell, Swipeable, UIGestureRecognizerDelegate {
     /// The object that acts as the delegate of the `SwipeCollectionViewCell`.
     public weak var delegate: SwipeCollectionViewCellDelegate?
     
@@ -27,6 +27,10 @@ open class SwipeCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDel
     weak var collectionView: UICollectionView?
     var scrollView: UIScrollView? {
         return collectionView
+    }
+    
+    var indexPath: IndexPath? {
+        return collectionView?.indexPath(for: self)
     }
     
     var actionsView: SwipeActionsView?

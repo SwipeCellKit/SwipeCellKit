@@ -128,6 +128,7 @@ class MailCollectionViewController: UICollectionViewController, UICollectionView
 }
 
 extension MailCollectionViewController: SwipeCollectionViewCellDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         let email = emails[indexPath.row]
         
@@ -191,6 +192,10 @@ extension MailCollectionViewController: SwipeCollectionViewCellDelegate {
         }
         
         return options
+    }
+    
+    func visibleRect(for collectionView: UICollectionView) -> CGRect? {
+        return nil
     }
     
     func configure(action: SwipeAction, with descriptor: ActionDescriptor) {
