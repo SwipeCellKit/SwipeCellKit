@@ -141,6 +141,7 @@ open class SwipeCollectionViewCell: UICollectionViewCell, Swipeable {
     // Override hitTest(_:with:) here so that we can make sure our `actionsView` gets the touch event
     //   if it's supposed to, since otherwise, our `contentView` will swallow it and pass it up to
     //   the collection view.
+    /// :nodoc:
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         guard let actionsView = actionsView else { return super.hitTest(point, with: event) }
         let modifiedPoint = actionsView.convert(point, from: self)
