@@ -15,6 +15,7 @@ class MailCollectionViewController: UICollectionViewController, UICollectionView
     var isSwipeRightEnabled = true
     var buttonDisplayMode: ButtonDisplayMode = .titleAndImage
     var buttonStyle: ButtonStyle = .backgroundColor
+    var usesTallCells = false
     
     // MARK: - Lifecycle
     
@@ -67,6 +68,7 @@ class MailCollectionViewController: UICollectionViewController, UICollectionView
         cell.dateLabel.text = email.relativeDateString
         cell.subjectLabel.text = email.subject
         cell.bodyLabel.text = email.body
+        cell.bodyLabel.numberOfLines = usesTallCells ? 0 : 2
         cell.unread = email.unread
         
         return cell
@@ -82,6 +84,7 @@ class MailCollectionViewController: UICollectionViewController, UICollectionView
         controller.addAction(UIAlertAction(title: "\(isSwipeRightEnabled ? "Disable" : "Enable") Swipe Right", style: .default, handler: { _ in self.isSwipeRightEnabled = !self.isSwipeRightEnabled }))
         controller.addAction(UIAlertAction(title: "Button Display Mode", style: .default, handler: { _ in self.buttonDisplayModeTapped() }))
         controller.addAction(UIAlertAction(title: "Button Style", style: .default, handler: { _ in self.buttonStyleTapped() }))
+        controller.addAction(UIAlertAction(title: "Cell Height", style: .default, handler: { _ in self.cellHeightTapped() }))
         controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         controller.addAction(UIAlertAction(title: "Reset", style: .destructive, handler: { _ in self.resetData() }))
         present(controller, animated: true, completion: nil)
@@ -108,9 +111,21 @@ class MailCollectionViewController: UICollectionViewController, UICollectionView
         }))
         controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(controller, animated: true, completion: nil)
-        
     }
     
+    func cellHeightTapped() {
+        let controller = UIAlertController(title: "Cell Height", message: nil, preferredStyle: .actionSheet)
+        controller.addAction(UIAlertAction(title: "Normal", style: .default, handler: { _ in
+            self.usesTallCells = false
+            self.collectionView?.reloadData()
+        }))
+        controller.addAction(UIAlertAction(title: "Tall", style: .default, handler: { _ in
+            self.usesTallCells = true
+            self.collectionView?.reloadData()
+        }))
+        controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(controller, animated: true, completion: nil)
+    }
     
     // MARK: - Helpers
     
@@ -123,6 +138,7 @@ class MailCollectionViewController: UICollectionViewController, UICollectionView
     func resetData() {
         emails = mockEmails
         emails.forEach { $0.unread = false }
+        usesTallCells = false
         collectionView?.reloadData()
     }
 }
@@ -195,7 +211,17 @@ extension MailCollectionViewController: SwipeCollectionViewCellDelegate {
     }
     
     func visibleRect(for collectionView: UICollectionView) -> CGRect? {
-        return nil
+        if usesTallCells == false { return nil }
+        
+        if #available(iOS 11.0, *) {
+            return collectionView.safeAreaLayoutGuide.layoutFrame
+        } else {
+            let topInset = navigationController?.navigationBar.frame.height ?? 0
+            let bottomInset = navigationController?.toolbar?.frame.height ?? 0
+            let bounds = collectionView.bounds
+            
+            return CGRect(x: bounds.origin.x, y: bounds.origin.y + topInset, width: bounds.width, height: bounds.height - bottomInset)
+        }
     }
     
     func configure(action: SwipeAction, with descriptor: ActionDescriptor) {

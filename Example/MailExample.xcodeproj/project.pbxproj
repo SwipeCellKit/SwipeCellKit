@@ -99,9 +99,9 @@
 				3F234B041E44AC2600E22A38 /* AppDelegate.swift */,
 				3F234B051E44AC2600E22A38 /* MailTableViewController.swift */,
 				B93ECA9C1EDEF1EA00AE05AD /* MailCollectionViewController.swift */,
+				B93ECA9E1EDEF56300AE05AD /* Shared.swift */,
 				3F234B061E44AC2600E22A38 /* Data.swift */,
 				3F234B101E44AC3400E22A38 /* Supporting Files */,
-				B93ECA9E1EDEF56300AE05AD /* Shared.swift */,
 			);
 			name = Source;
 			path = MailExample;
