@@ -20,36 +20,9 @@ class MailCollectionViewController: UICollectionViewController, UICollectionView
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
-        collectionView?.allowsSelection = true
-        collectionView?.allowsMultipleSelection = true
-        
-        view.layoutMargins.left = 32
-        
-        if let collectionView = collectionView {
-            let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-            flowLayout.minimumLineSpacing = 0
-            flowLayout.minimumInteritemSpacing = 0
-            flowLayout.itemSize = CGSize(width: collectionView.frame.width, height: 98)
-        }
-        
         navigationItem.rightBarButtonItem = editButtonItem
         
         resetData()
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        
-        coordinator.animate(alongsideTransition: { (ctx) in
-            if let collectionView = self.collectionView {
-                collectionView.collectionViewLayout.invalidateLayout()
-                collectionView.performBatchUpdates({
-                    let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-                    flowLayout.itemSize = CGSize(width: collectionView.frame.width, height: 98)
-                    collectionView.setCollectionViewLayout(flowLayout, animated: true)
-                }, completion: nil)
-            }
-        }, completion: nil)
     }
     
     // MARK: - Collection view data source
@@ -57,13 +30,19 @@ class MailCollectionViewController: UICollectionViewController, UICollectionView
         return emails.count
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: usesTallCells ? 160 : 98)
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let email = emails[indexPath.row]
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MailCell", for: indexPath) as! MailCollectionViewCell
         
         cell.delegate = self
-        cell.selectedBackgroundView = createSelectedBackgroundView()
+        cell.selectedBackgroundView = UIView()
+        cell.selectedBackgroundView?.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
         
-        let email = emails[indexPath.row]
         cell.fromLabel.text = email.from
         cell.dateLabel.text = email.relativeDateString
         cell.subjectLabel.text = email.subject
@@ -125,14 +104,6 @@ class MailCollectionViewController: UICollectionViewController, UICollectionView
         }))
         controller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(controller, animated: true, completion: nil)
-    }
-    
-    // MARK: - Helpers
-    
-    func createSelectedBackgroundView() -> UIView {
-        let view = UIView()
-        view.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
-        return view
     }
     
     func resetData() {
