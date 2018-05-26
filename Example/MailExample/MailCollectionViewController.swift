@@ -29,7 +29,7 @@ class MailCollectionViewController: UICollectionViewController, UICollectionView
             let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
             flowLayout.minimumLineSpacing = 0
             flowLayout.minimumInteritemSpacing = 0
-            flowLayout.itemSize = CGSize(width: collectionView.frame.width, height: 110)
+            flowLayout.itemSize = CGSize(width: collectionView.frame.width, height: 98)
         }
         
         navigationItem.rightBarButtonItem = editButtonItem
@@ -45,7 +45,7 @@ class MailCollectionViewController: UICollectionViewController, UICollectionView
                 collectionView.collectionViewLayout.invalidateLayout()
                 collectionView.performBatchUpdates({
                     let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-                    flowLayout.itemSize = CGSize(width: collectionView.frame.width, height: 110)
+                    flowLayout.itemSize = CGSize(width: collectionView.frame.width, height: 98)
                     collectionView.setCollectionViewLayout(flowLayout, animated: true)
                 }, completion: nil)
             }
