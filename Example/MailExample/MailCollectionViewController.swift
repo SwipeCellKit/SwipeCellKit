@@ -129,7 +129,7 @@ class MailCollectionViewController: UICollectionViewController, UICollectionView
 
 extension MailCollectionViewController: SwipeCollectionViewCellDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+    func collectionView(_ collectionView: UICollectionView, editActionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         let email = emails[indexPath.row]
         
         if orientation == .left {
@@ -178,7 +178,7 @@ extension MailCollectionViewController: SwipeCollectionViewCellDelegate {
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+    func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
         var options = SwipeOptions()
         options.expansionStyle = orientation == .left ? .selection : .destructive
         options.transitionStyle = defaultOptions.transitionStyle
