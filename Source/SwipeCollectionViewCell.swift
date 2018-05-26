@@ -14,50 +14,27 @@ import UIKit
  
  The default behavior closely matches the stock Mail.app. If you want to customize the transition style (ie. how the action buttons are exposed), or the expansion style (the behavior when the row is swiped passes a defined threshold), you can return the appropriately configured `SwipeOptions` via the `SwipeCollectionViewCellDelegate` delegate.
  */
-open class SwipeCollectionViewCell: UICollectionViewCell, Swipeable, UIGestureRecognizerDelegate {
+open class SwipeCollectionViewCell: UICollectionViewCell, Swipeable {
     /// The object that acts as the delegate of the `SwipeCollectionViewCell`.
     public weak var delegate: SwipeCollectionViewCellDelegate?
     
-    var animator: SwipeAnimator?
-    
     var state = SwipeState.center
-    var orientation: SwipeActionsOrientation?
-    var originalCenter: CGFloat = 0
-    
-    weak var collectionView: UICollectionView?
+    var actionsView: SwipeActionsView?
     var scrollView: UIScrollView? {
         return collectionView
     }
-    
     var indexPath: IndexPath? {
         return collectionView?.indexPath(for: self)
     }
-    
-    var actionsView: SwipeActionsView?
-    
-    var originalLayoutMargins: UIEdgeInsets = .zero
-    
-    lazy var panGestureRecognizer: UIPanGestureRecognizer = {
-        let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(gesture:)))
-        gesture.delegate = self
-        return gesture
-    }()
-    
-    lazy var tapGestureRecognizer: UITapGestureRecognizer = {
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(gesture:)))
-        gesture.delegate = self
-        return gesture
-    }()
-    
-    let elasticScrollRatio: CGFloat = 0.4
-    var scrollRatio: CGFloat = 1.0
-    var contentViewCenter: CGPoint {
-        get { return contentView.center }
-        set {
-            contentView.center = newValue
-            actionsView?.visibleWidth = abs(contentView.frame.minX)
-        }
+    var panGestureRecognizer: UIGestureRecognizer
+    {
+        return swipeController.panGestureRecognizer;
     }
+    
+    var swipeController: SwipeController!
+    var isPreviouslySelected = false
+    
+    weak var collectionView: UICollectionView?
     
     /// :nodoc:
     open override var frame: CGRect {
@@ -95,8 +72,8 @@ open class SwipeCollectionViewCell: UICollectionViewCell, Swipeable, UIGestureRe
     func configure() {
         contentView.clipsToBounds = false
         
-        contentView.addGestureRecognizer(tapGestureRecognizer)
-        contentView.addGestureRecognizer(panGestureRecognizer)
+        swipeController = SwipeController(swipeable: self, actionsContainerView: contentView)
+        swipeController.delegate = self
     }
     
     /// :nodoc:
@@ -104,6 +81,7 @@ open class SwipeCollectionViewCell: UICollectionViewCell, Swipeable, UIGestureRe
         super.prepareForReuse()
         
         reset()
+        resetSelectedState()
     }
     
     /// :nodoc:
@@ -116,6 +94,8 @@ open class SwipeCollectionViewCell: UICollectionViewCell, Swipeable, UIGestureRe
             
             if let collectionView = view as? UICollectionView {
                 self.collectionView = collectionView
+                
+                swipeController.scrollView = scrollView
                 
                 collectionView.panGestureRecognizer.removeTarget(self, action: nil)
                 collectionView.panGestureRecognizer.addTarget(self, action: #selector(handleCollectionPan(gesture:)))
@@ -130,236 +110,6 @@ open class SwipeCollectionViewCell: UICollectionViewCell, Swipeable, UIGestureRe
         
         if newWindow == nil {
             reset()
-        }
-    }
-    
-    @objc func handlePan(gesture: UIPanGestureRecognizer) {
-        guard let target = gesture.view else { return }
-        
-        switch gesture.state {
-        case .began:
-            if let cell = collectionView?.swipeCells.first(where: { $0.state.isActive }), cell.contentView != target {
-                return
-            }
-            
-            stopAnimatorIfNeeded()
-            
-            // Use contentViewCenter.x instead of center.x so that it's relative only to the cell bounds, and
-            //   not the overall collection view's interpretation of the cell's center
-            originalCenter = contentViewCenter.x
-            
-            if state == .center || state == .animatingToCenter {
-                let velocity = gesture.velocity(in: target)
-                let orientation: SwipeActionsOrientation = velocity.x > 0 ? .left : .right
-                
-                showActionsView(for: orientation)
-                self.orientation = orientation
-            }
-            
-        case .changed:
-            guard let actionsView = actionsView else { return }
-            
-            let translation = gesture.translation(in: target).x
-            scrollRatio = 1.0
-            
-            // Check if dragging past the center of the opposite direction of action view, if so
-            // then we need to apply elasticity
-            if (translation + originalCenter - bounds.midX) * actionsView.orientation.scale > 0 {
-                contentViewCenter.x = gesture.elasticTranslation(in: contentView,
-                                                                 withLimit: .zero,
-                                                                 fromOriginalCenter: CGPoint(x: originalCenter, y: 0)).x
-                scrollRatio = elasticScrollRatio
-                return
-            }
-            
-            if let expansionStyle = actionsView.options.expansionStyle {
-                let expanded = expansionStyle.shouldExpand(view: self, gesture: gesture, in: collectionView!, usingFrame: contentView.frame)
-                let targetOffset = expansionStyle.targetOffset(for: self)
-                let currentOffset = abs(translation + originalCenter - bounds.midX)
-                
-                if expanded && !actionsView.expanded && targetOffset > currentOffset {
-                    let centerForTranslationToEdge = bounds.midX - targetOffset * actionsView.orientation.scale
-                    let delta = centerForTranslationToEdge - originalCenter
-                    animate(toOffset: centerForTranslationToEdge)
-                    gesture.setTranslation(CGPoint(x: delta, y: 0), in: superview!)
-                } else {
-                    contentViewCenter.x = gesture.elasticTranslation(in: contentView,
-                                                                     withLimit: CGSize(width: targetOffset, height: 0),
-                                                                     fromOriginalCenter: CGPoint(x: originalCenter, y: 0),
-                                                                     applyingRatio: expansionStyle.targetOverscrollElasticity).x
-                }
-                
-                actionsView.setExpanded(expanded: expanded, feedback: true)
-            } else {
-                contentViewCenter.x = gesture.elasticTranslation(in: contentView,
-                                                                 withLimit: CGSize(width: actionsView.preferredWidth, height: 0),
-                                                                 fromOriginalCenter: CGPoint(x: originalCenter, y: 0),
-                                                                 applyingRatio: elasticScrollRatio).x
-                if (contentViewCenter.x - originalCenter) / translation != 1.0 {
-                    scrollRatio = elasticScrollRatio
-                }
-            }
-        case .ended:
-            guard let actionsView = actionsView else { return }
-            guard state.isActive else { return }
-            
-            let velocity = gesture.velocity(in: target)
-            state = targetState(forVelocity: velocity)
-            
-            if actionsView.expanded == true, let expandedAction = actionsView.expandableAction  {
-                perform(action: expandedAction)
-            } else {
-                let targetOffset = targetCenter(active: state.isActive)
-                let distance = targetOffset - contentViewCenter.x
-                let normalizedVelocity = velocity.x * scrollRatio / distance
-                
-                animate(toOffset: targetOffset, withInitialVelocity: normalizedVelocity) { _ in
-                    if self.state == .center {
-                        self.reset()
-                    }
-                }
-                
-                if !state.isActive {
-                    notifyEditingStateChange(active: false)
-                }
-            }
-            
-        default: break
-        }
-    }
-    
-    @discardableResult
-    func showActionsView(for orientation: SwipeActionsOrientation) -> Bool {
-        guard let collectionView = collectionView,
-            let indexPath = collectionView.indexPath(for: self),
-            let actions = delegate?.collectionView(collectionView, editActionsForRowAt: indexPath, for: orientation),
-            actions.count > 0
-            else {
-                return false
-        }
-        
-        originalLayoutMargins = super.layoutMargins
-        
-        // Remove highlight and deselect any selected cells
-        isHighlighted = false
-        let selectedIndexPaths = collectionView.indexPathsForSelectedItems
-        selectedIndexPaths?.forEach { collectionView.deselectItem(at: $0, animated: false) }
-        
-        configureActionsView(with: actions, for: orientation)
-        self.orientation = orientation
-        
-        return true
-    }
-    
-    func configureActionsView(with actions: [SwipeAction], for orientation: SwipeActionsOrientation) {
-        guard let collectionView = collectionView,
-            let indexPath = collectionView.indexPath(for: self) else { return }
-        
-        let options = delegate?.collectionView(collectionView, editActionsOptionsForRowAt: indexPath, for: orientation) ?? SwipeOptions()
-        
-        self.actionsView?.removeFromSuperview()
-        self.actionsView = nil
-        
-        var contentEdgeInsets = UIEdgeInsets.zero
-        if let visibleTableViewRect = delegate?.visibleRect(for: collectionView) {
-            let visibleCellRect = frame.intersection(visibleTableViewRect)
-            if visibleCellRect.isNull == false {
-                let top = visibleCellRect.minY > frame.minY ? max(0, visibleCellRect.minY - frame.minY) : 0
-                let bottom = max(0, frame.size.height - visibleCellRect.size.height - top)
-                contentEdgeInsets = UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0)
-            }
-        }
-        
-        let actionsView = SwipeActionsView(contentEdgeInsets: contentEdgeInsets,
-                                           maxSize: bounds.size,
-                                           options: options,
-                                           orientation: orientation,
-                                           actions: actions)
-        
-        actionsView.delegate = self
-        
-        contentView.addSubview(actionsView)
-        
-        actionsView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
-        actionsView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 2).isActive = true
-        actionsView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        
-        if orientation == .left {
-            actionsView.rightAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
-        } else {
-            actionsView.leftAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
-        }
-        
-        self.actionsView = actionsView
-        
-        state = .dragging
-        
-        notifyEditingStateChange(active: true)
-    }
-    
-    func notifyEditingStateChange(active: Bool) {
-        guard let actionsView = actionsView,
-            let collectionView = collectionView,
-            let indexPath = collectionView.indexPath(for: self) else { return }
-        
-        if active {
-            delegate?.collectionView(collectionView, willBeginEditingRowAt: indexPath, for: actionsView.orientation)
-        } else {
-            delegate?.collectionView(collectionView, didEndEditingRowAt: indexPath, for: actionsView.orientation)
-        }
-    }
-    
-    func animate(duration: Double = 0.7, toOffset offset: CGFloat, withInitialVelocity velocity: CGFloat = 0, completion: ((Bool) -> Void)? = nil) {
-        stopAnimatorIfNeeded()
-        
-        layoutIfNeeded()
-        
-        let animator: SwipeAnimator = {
-            if velocity != 0 {
-                if #available(iOS 10, *) {
-                    let velocity = CGVector(dx: velocity, dy: velocity)
-                    let parameters = UISpringTimingParameters(mass: 1.0, stiffness: 100, damping: 18, initialVelocity: velocity)
-                    return UIViewPropertyAnimator(duration: 0.0, timingParameters: parameters)
-                } else {
-                    return UIViewSpringAnimator(duration: duration, damping: 1.0, initialVelocity: velocity)
-                }
-            } else {
-                if #available(iOS 10, *) {
-                    return UIViewPropertyAnimator(duration: duration, dampingRatio: 1.0)
-                } else {
-                    return UIViewSpringAnimator(duration: duration, damping: 1.0)
-                }
-            }
-        }()
-        
-        animator.addAnimations({
-            self.contentViewCenter = CGPoint(x: offset, y: self.contentViewCenter.y)
-            
-            self.layoutIfNeeded()
-        })
-        
-        if let completion = completion {
-            animator.addCompletion(completion: completion)
-        }
-        
-        self.animator = animator
-        
-        animator.startAnimation()
-    }
-    
-    func stopAnimatorIfNeeded() {
-        if animator?.isRunning == true {
-            animator?.stopAnimation(true)
-        }
-    }
-    
-    @objc func handleTap(gesture: UITapGestureRecognizer) {
-        hideSwipe(animated: true)
-    }
-    
-    @objc func handleCollectionPan(gesture: UIPanGestureRecognizer) {
-        if gesture.state == .began {
-            hideSwipe(animated: true)
         }
     }
     
@@ -397,155 +147,87 @@ open class SwipeCollectionViewCell: UICollectionViewCell, Swipeable, UIGestureRe
         return actionsView.hitTest(modifiedPoint, with: event) ?? super.hitTest(point, with: event)
     }
 
-    
     /// :nodoc:
     override open var layoutMargins: UIEdgeInsets {
         get {
-            return frame.origin.x != 0 ? originalLayoutMargins : super.layoutMargins
+            return frame.origin.x != 0 ? swipeController.originalLayoutMargins : super.layoutMargins
         }
         set {
             super.layoutMargins = newValue
         }
     }
-}
-
-extension SwipeCollectionViewCell {
-    func targetState(forVelocity velocity: CGPoint) -> SwipeState {
-        guard let actionsView = actionsView else { return .center }
-        
-        switch actionsView.orientation {
-        case .left:
-            return (velocity.x < 0 && !actionsView.expanded) ? .center : .left
-        case .right:
-            return (velocity.x > 0 && !actionsView.expanded) ? .center : .right
-        }
+    
+    /// :nodoc:
+    override open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return swipeController.gestureRecognizerShouldBegin(gestureRecognizer)
     }
     
-    func targetCenter(active: Bool) -> CGFloat {
-        guard let actionsView = actionsView, active == true else { return bounds.midX }
-        return bounds.midX - actionsView.preferredWidth * actionsView.orientation.scale
+    @objc func handleCollectionPan(gesture: UIPanGestureRecognizer) {
+        if gesture.state == .began {
+            hideSwipe(animated: true)
+        }
     }
     
     func reset() {
-        state = .center
-        
+        contentView.clipsToBounds = false
+        swipeController.reset()
         collectionView?.setGestureEnabled(true)
-        
-        actionsView?.removeFromSuperview()
-        actionsView = nil
+    }
+    
+    func resetSelectedState() {
+        if isPreviouslySelected {
+            if let collectionView = collectionView, let indexPath = collectionView.indexPath(for: self) {
+                collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+            }
+        }
+        isPreviouslySelected = false
     }
 }
 
-extension SwipeCollectionViewCell: SwipeActionsViewDelegate {
-    func swipeActionsView(_ swipeActionsView: SwipeActionsView, didSelect action: SwipeAction) {
-        perform(action: action)
+extension SwipeCollectionViewCell: SwipeControllerDelegate {
+    func swipeController(_ controller: SwipeController, canBeginEditingSwipeableFor orientation: SwipeActionsOrientation) -> Bool {
+        return true
     }
     
-    func perform(action: SwipeAction) {
-        guard let actionsView = actionsView else { return }
+    func swipeController(_ controller: SwipeController, editActionsForSwipeableFor orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard let collectionView = collectionView, let indexPath = collectionView.indexPath(for: self) else { return nil }
         
-        if action == actionsView.expandableAction, let expansionStyle = actionsView.options.expansionStyle {
-            // Trigger the expansion (may already be expanded from drag)
-            actionsView.setExpanded(expanded: true)
-            
-            switch expansionStyle.completionAnimation {
-            case .bounce:
-                perform(action: action, hide: true)
-            case .fill(let fillOption):
-                performFillAction(action: action, fillOption: fillOption)
-            }
-        } else {
-            perform(action: action, hide: action.hidesWhenSelected)
-        }
+        return delegate?.collectionView(collectionView, editActionsForRowAt: indexPath, for: orientation)
     }
     
-    func perform(action: SwipeAction, hide: Bool) {
+    func swipeController(_ controller: SwipeController, editActionsOptionsForSwipeableFor orientation: SwipeActionsOrientation) -> SwipeOptions {
+        guard let collectionView = collectionView, let indexPath = collectionView.indexPath(for: self) else { return SwipeOptions() }
+        
+        return delegate?.collectionView(collectionView, editActionsOptionsForRowAt: indexPath, for: orientation) ?? SwipeOptions()
+    }
+    
+    func swipeController(_ controller: SwipeController, visibleRectFor scrollView: UIScrollView) -> CGRect? {
+        guard let collectionView = collectionView else { return nil }
+        
+        return delegate?.visibleRect(for: collectionView)
+    }
+    
+    func swipeController(_ controller: SwipeController, willBeginEditingSwipeableFor orientation: SwipeActionsOrientation) {
         guard let collectionView = collectionView, let indexPath = collectionView.indexPath(for: self) else { return }
         
-        if hide {
-            hideSwipe(animated: true)
-        }
+        // Remove highlight and deselect any selected cells
+        super.isHighlighted = false
+        isPreviouslySelected = isSelected
+        collectionView.deselectItem(at: indexPath, animated: false)
         
-        action.handler?(action, indexPath)
+        delegate?.collectionView(collectionView, willBeginEditingRowAt: indexPath, for: orientation)
     }
     
-    func performFillAction(action: SwipeAction, fillOption: SwipeExpansionStyle.FillOptions) {
-        guard let actionsView = actionsView,
-            let collectionView = collectionView,
-            let indexPath = collectionView.indexPath(for: self) else { return }
+    func swipeController(_ controller: SwipeController, didEndEditingSwipeableFor orientation: SwipeActionsOrientation) {
+        guard let collectionView = collectionView, let indexPath = collectionView.indexPath(for: self), let actionsView = self.actionsView else { return }
         
-        let newCenter = bounds.midX - (bounds.width + actionsView.minimumButtonWidth) * actionsView.orientation.scale
+        resetSelectedState()
         
-        action.completionHandler = { [weak self] style in
-            action.completionHandler = nil
-            
-            self?.delegate?.collectionView(collectionView, didEndEditingRowAt: indexPath, for: actionsView.orientation)
-            
-            switch style {
-            case .delete:
-                self?.contentView.mask = actionsView.createDeletionMask()
-                
-                collectionView.deleteItems(at: [indexPath])
-                
-                UIView.animate(withDuration: 0.3, animations: {
-                    self?.contentViewCenter.x = newCenter
-                    self?.contentView.mask?.frame.size.height = 0
-                    
-                    if fillOption.timing == .after {
-                        actionsView.alpha = 0
-                    }
-                }) { [weak self] _ in
-                    self?.contentView.mask = nil
-                    self?.reset()
-                }
-            case .reset:
-                self?.hideSwipe(animated: true)
-            }
-        }
-        
-        let invokeAction = {
-            action.handler?(action, indexPath)
-            
-            if let style = fillOption.autoFulFillmentStyle {
-                action.fulfill(with: style)
-            }
-        }
-        
-        animate(duration: 0.3, toOffset: newCenter) { _ in
-            if fillOption.timing == .after {
-                invokeAction()
-            }
-        }
-        
-        if fillOption.timing == .with {
-            invokeAction()
-        }
+        delegate?.collectionView(collectionView, didEndEditingRowAt: indexPath, for: actionsView.orientation)
     }
-}
-
-extension SwipeCollectionViewCell {
-    /// :nodoc:
-    override open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer == tapGestureRecognizer {
-            if UIAccessibilityIsVoiceOverRunning() {
-                collectionView?.hideSwipeCell()
-            }
-            
-            let swipedCell = collectionView?.swipeCells.first(where: {
-                $0.state.isActive || $0.panGestureRecognizer.state == .began ||
-                    $0.panGestureRecognizer.state == .changed || $0.panGestureRecognizer.state == .ended
-            })
-            return swipedCell == nil ? false : true
-        }
-        
-        if gestureRecognizer == panGestureRecognizer,
-            let view = gestureRecognizer.view,
-            let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
-            let translation = gestureRecognizer.translation(in: view)
-            return abs(translation.y) <= abs(translation.x)
-        }
-        
-        return true
+    
+    func swipeController(_ controller: SwipeController, didDeleteSwipeableAt indexPath: IndexPath) {
+        collectionView?.deleteItems(at: [indexPath])
     }
 }
 

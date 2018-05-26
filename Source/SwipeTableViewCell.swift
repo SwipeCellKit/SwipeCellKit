@@ -26,18 +26,15 @@ open class SwipeTableViewCell: UITableViewCell, Swipeable {
     var indexPath: IndexPath? {
         return tableView?.indexPath(for: self)
     }
+    var panGestureRecognizer: UIGestureRecognizer
+    {
+        return swipeController.panGestureRecognizer;
+    }
     
     var swipeController: SwipeController!
     var isPreviouslySelected = false
     
     weak var tableView: UITableView?
-    
-    /// :nodoc:
-    override open var center: CGPoint {
-        didSet {
-            actionsView?.visibleWidth = abs(frame.minX)
-        }
-    }
     
     /// :nodoc:
     open override var frame: CGRect {
@@ -74,18 +71,8 @@ open class SwipeTableViewCell: UITableViewCell, Swipeable {
     override open func prepareForReuse() {
         super.prepareForReuse()
         
-        swipeController.reset()
-        
+        reset()
         resetSelectedState()
-    }
-    
-    func resetSelectedState() {
-        if isPreviouslySelected {
-            if let tableView = tableView, let indexPath = tableView.indexPath(for: self) {
-                tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
-            }
-        }
-        isPreviouslySelected = false
     }
     
     /// :nodoc:
@@ -157,35 +144,27 @@ open class SwipeTableViewCell: UITableViewCell, Swipeable {
     
     /// :nodoc:
     override open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer == swipeController.tapGestureRecognizer {
-            if UIAccessibilityIsVoiceOverRunning() {
-                tableView?.hideSwipeCell()
-            }
-            
-            let swipedCell = tableView?.swipeCells.first(where: {
-                $0.state.isActive ||
-                    $0.swipeController.panGestureRecognizer.state == .began ||
-                    $0.swipeController.panGestureRecognizer.state == .changed ||
-                    $0.swipeController.panGestureRecognizer.state == .ended
-            })
-            return swipedCell == nil ? false : true
-        }
-        
-        if gestureRecognizer == swipeController.panGestureRecognizer,
-            let view = gestureRecognizer.view,
-            let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer
-        {
-            let translation = gestureRecognizer.translation(in: view)
-            return abs(translation.y) <= abs(translation.x)
-        }
-        
-        return true
+        return swipeController.gestureRecognizerShouldBegin(gestureRecognizer)
     }
     
     @objc func handleTablePan(gesture: UIPanGestureRecognizer) {
         if gesture.state == .began {
             hideSwipe(animated: true)
         }
+    }
+    
+    func reset() {
+        swipeController.reset()
+        clipsToBounds = false
+    }
+    
+    func resetSelectedState() {
+        if isPreviouslySelected {
+            if let tableView = tableView, let indexPath = tableView.indexPath(for: self) {
+                tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+            }
+        }
+        isPreviouslySelected = false
     }
 }
 

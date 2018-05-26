@@ -10,15 +10,17 @@ import UIKit
 // MARK: - Internal 
 
 protocol Swipeable {
-    var actionsView: SwipeActionsView? { get set }
-    
     var state: SwipeState { get set }
+    
+    var actionsView: SwipeActionsView? { get set }
     
     var frame: CGRect { get }
     
     var scrollView: UIScrollView? { get }
     
     var indexPath: IndexPath? { get }
+    
+    var panGestureRecognizer: UIGestureRecognizer { get }
 }
 
 enum SwipeState: Int {
