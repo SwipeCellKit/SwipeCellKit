@@ -124,7 +124,7 @@ If your cells are tall, then it can be useful to have the swipe actions centered
 
 <p align="center"><img src="https://raw.githubusercontent.com/halleygen/SwipeCellKit/vertical-centring/Screenshots/Vertical-Centering.gif" /></p>
 
-This is enabled once the `func visibleRect(for tableView: UITableView) -> CGRect?` or `func visibleRect(for collectionView: UICollectionView) -> CGRect?` in your `SwipeTableViewCell`'s or `SwipeCollectionViewCell` delegate returns a non-nil `CGRect`. This function should return a rectangle of the *visible* portion of your scroll view (`UITableView` or `UICollectionView`) that is in the scroll view's own coordinate system. The visible portion of the scroll view refers to the part that is not obscurred by other views (e.g. a navigation bar or a toolbar).
+This is enabled once the `func visibleRect(for tableView: UITableView) -> CGRect?` or `func visibleRect(for collectionView: UICollectionView) -> CGRect?` in your `SwipeTableViewCell`'s or `SwipeCollectionViewCell`'s delegate returns a non-nil `CGRect`. This function should return a rectangle of the *visible* portion of your scroll view (`UITableView` or `UICollectionView`) that is in the scroll view's own coordinate system. The visible portion of the scroll view refers to the part that is not obscurred by other views (e.g. a navigation bar or a toolbar).
 
 If you are targeting iOS 11+ then this is simple thanks to the safe area API and your delegate function could simply be:
 
