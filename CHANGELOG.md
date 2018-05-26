@@ -2,6 +2,12 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.3.2](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.3.2)
+
+#### Fixed
+
+- Add default implementation for `visibleRect(for tableView: UITableView)` as its optional (#201)
+
 ## [2.3.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.3.1)
 
 #### Fixed
