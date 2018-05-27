@@ -23,6 +23,9 @@ protocol Swipeable {
     var panGestureRecognizer: UIGestureRecognizer { get }
 }
 
+extension SwipeTableViewCell: Swipeable {}
+extension SwipeCollectionViewCell: Swipeable {}
+
 enum SwipeState: Int {
     case center = 0
     case left

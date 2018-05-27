@@ -25,6 +25,7 @@ class SwipeActionsView: UIView {
         return options.expansionDelegate ?? (expandableAction?.hasBackgroundColor == false ? ScaleAndAlphaExpansion.default : nil)
     }
 
+    weak var safeAreaInsetView: UIView?
     let orientation: SwipeActionsOrientation
     let actions: [SwipeAction]
     let options: SwipeOptions
@@ -38,7 +39,7 @@ class SwipeActionsView: UIView {
     
     var safeAreaMargin: CGFloat {
         guard #available(iOS 11, *) else { return 0 }
-        guard let scrollView = (superview as? Swipeable ?? superview?.superview as? Swipeable)?.scrollView else { return 0 }
+        guard let scrollView = self.safeAreaInsetView else { return 0 }
         return orientation == .left ? scrollView.safeAreaInsets.left : scrollView.safeAreaInsets.right
     }
 
@@ -80,7 +81,14 @@ class SwipeActionsView: UIView {
         return options.expansionStyle != nil ? actions.last : nil
     }
     
-    init(contentEdgeInsets: UIEdgeInsets, maxSize: CGSize, options: SwipeOptions, orientation: SwipeActionsOrientation, actions: [SwipeAction]) {
+    init(contentEdgeInsets: UIEdgeInsets,
+         maxSize: CGSize,
+         safeAreaInsetView: UIView,
+         options: SwipeOptions,
+         orientation: SwipeActionsOrientation,
+         actions: [SwipeAction]) {
+        
+        self.safeAreaInsetView = safeAreaInsetView
         self.options = options
         self.orientation = orientation
         self.actions = actions.reversed()

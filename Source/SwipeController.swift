@@ -179,7 +179,11 @@ class SwipeController: NSObject {
     }
     
     func configureActionsView(with actions: [SwipeAction], for orientation: SwipeActionsOrientation) {
-        guard var swipeable = self.swipeable, let actionsContainerView = self.actionsContainerView else { return }
+        guard var swipeable = self.swipeable,
+            let actionsContainerView = self.actionsContainerView,
+            let scrollView = self.scrollView else {
+                return
+        }
 
         let options = delegate?.swipeController(self, editActionsOptionsForSwipeableFor: orientation) ?? SwipeOptions()
         
@@ -187,8 +191,7 @@ class SwipeController: NSObject {
         swipeable.actionsView = nil
         
         var contentEdgeInsets = UIEdgeInsets.zero
-        if let scrollView = scrollView,
-            let visibleTableViewRect = delegate?.swipeController(self, visibleRectFor: scrollView) {
+        if let visibleTableViewRect = delegate?.swipeController(self, visibleRectFor: scrollView) {
             let visibleSwipeableRect = swipeable.frame.intersection(visibleTableViewRect)
             if visibleSwipeableRect.isNull == false {
                 let top = visibleSwipeableRect.minY > swipeable.frame.minY ? max(0, visibleSwipeableRect.minY - swipeable.frame.minY) : 0
@@ -199,6 +202,7 @@ class SwipeController: NSObject {
         
         let actionsView = SwipeActionsView(contentEdgeInsets: contentEdgeInsets,
                                            maxSize: swipeable.bounds.size,
+                                           safeAreaInsetView: scrollView,
                                            options: options,
                                            orientation: orientation,
                                            actions: actions)
