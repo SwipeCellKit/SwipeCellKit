@@ -8,17 +8,23 @@
 
 - `UICollectionView` support. You can now add swipe actions to a `UICollectionViewCell` by using the `SwipeCollectionViewCell` (#4)
 
+---
+
 ## [2.3.2](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.3.2)
 
 #### Fixed
 
 - Add default implementation for `visibleRect(for tableView: UITableView)` as its optional (#201)
 
+---
+
 ## [2.3.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.3.1)
 
 #### Fixed
 
 - Fix issue where swiping a cell does not work while another cell is open (#197)
+
+---
 
 ## [2.3.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.3.0)
 
@@ -30,6 +36,8 @@
 
 - Resolved issue where touching cell in swipe expantion zone resulted in immediate cell expansion (#194)
 - Reselect swipped cell if it was previously selected (#58)
+
+---
 
 ## [2.2.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.2.0)
 

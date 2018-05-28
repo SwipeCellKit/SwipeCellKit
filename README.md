@@ -14,7 +14,7 @@
 
 ## About
 
-A swipeable UITableViewCell or UICollectionViewCell with support for:
+A swipeable `UITableViewCell` or `UICollectionViewCell` with support for:
 
 * Left and right swipe actions
 * Action buttons with: *text only, text + image, image only*
