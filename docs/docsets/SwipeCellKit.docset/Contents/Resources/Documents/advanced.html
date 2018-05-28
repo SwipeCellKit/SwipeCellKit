@@ -42,6 +42,9 @@
                 <a href="Classes/SwipeAction.html">SwipeAction</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/SwipeCollectionViewCell.html">SwipeCollectionViewCell</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/SwipeTableViewCell.html">SwipeTableViewCell</a>
               </li>
             </ul>
@@ -71,6 +74,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Protocols/SwipeActionTransitioning.html">SwipeActionTransitioning</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/SwipeCollectionViewCellDelegate.html">SwipeCollectionViewCellDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/SwipeExpanding.html">SwipeExpanding</a>
@@ -111,7 +117,7 @@
                 <a href="Structs/SwipeExpansionStyle/FillOptions.html">– FillOptions</a>
               </li>
               <li class="nav-group-task">
-                <a href="Structs/SwipeTableOptions.html">SwipeTableOptions</a>
+                <a href="Structs/SwipeOptions.html">SwipeOptions</a>
               </li>
             </ul>
           </li>
@@ -225,23 +231,48 @@ completionAnimation: .fill(.manual(timing: .after))
 </code></pre>
 <h3 id='button-behavior' class='heading'>Button Behavior</h3>
 
-<p>It is also possible to customize the button expansion behavior by assigning a <code>expansionDelegate</code> to the <code><a href="Structs/SwipeTableOptions.html">SwipeTableOptions</a></code> type. The delegate is invoked during the (un)expansion process and allows you to customize the display of the action being expanded, as well as the other actions in the view. </p>
+<p>It is also possible to customize the button expansion behavior by assigning a <code>expansionDelegate</code> to the <code><a href="Structs/SwipeOptions.html">SwipeOptions</a></code> type. The delegate is invoked during the (un)expansion process and allows you to customize the display of the action being expanded, as well as the other actions in the view. </p>
 
 <p>The provided <code><a href="Structs/ScaleAndAlphaExpansion.html">ScaleAndAlphaExpansion</a></code> type is useful for actions with clear backgrounds. When expansion occurs, the <code><a href="Structs/ScaleAndAlphaExpansion.html">ScaleAndAlphaExpansion</a></code> type automatically scales and fades the remaining actions in and out of the view. By default, if the expanded action has a clear background, the default <code><a href="Structs/ScaleAndAlphaExpansion.html">ScaleAndAlphaExpansion</a></code> will be automatically applied by the system.</p>
 
 <p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Expansion-Delegate.gif" /></p>
-<pre class="highlight swift"><code><span class="k">var</span> <span class="nv">options</span> <span class="o">=</span> <span class="kt">SwipeTableOptions</span><span class="p">()</span>
+<pre class="highlight swift"><code><span class="k">var</span> <span class="nv">options</span> <span class="o">=</span> <span class="kt">SwipeOptions</span><span class="p">()</span>
 <span class="n">options</span><span class="o">.</span><span class="n">expansionDelegate</span> <span class="o">=</span> <span class="kt">ScaleAndAlphaExpansion</span><span class="o">.</span><span class="k">default</span>
 </code></pre>
 
 <p>The <code><a href="Structs/ScaleAndAlphaExpansion.html">ScaleAndAlphaExpansion</a></code> type provides a static <code>default</code> configuration, but it can also be instantiated with custom parameters to suit your needs.</p>
 
 <p>You can also provide your own completely custom expansion behavior by adopting the <code><a href="Protocols/SwipeExpanding.html">SwipeExpanding</a></code> protocol. The protocol allows you to customize the animation timing parameters prior to initiating the (un)expansion animation, as well as customizing the action during (un)expansion.</p>
+<h2 id='vertically-centered-swipe-actions-for-tall-cells' class='heading'>Vertically Centered Swipe Actions for Tall Cells</h2>
+
+<p>If your cells are tall, then it can be useful to have the swipe actions centered relative to the visible portion of the cell.</p>
+
+<p align="center"><img src="https://raw.githubusercontent.com/halleygen/SwipeCellKit/vertical-centring/Screenshots/Vertical-Centering.gif" /></p>
+
+<p>This is enabled once the <code>func visibleRect(for tableView: UITableView) -&gt; CGRect?</code> or <code>func visibleRect(for collectionView: UICollectionView) -&gt; CGRect?</code> in your <code><a href="Classes/SwipeTableViewCell.html">SwipeTableViewCell</a></code>&lsquo;s or <code><a href="Classes/SwipeCollectionViewCell.html">SwipeCollectionViewCell</a></code>&rsquo;s delegate returns a non-nil <code>CGRect</code>. This function should return a rectangle of the <em>visible</em> portion of your scroll view (<code>UITableView</code> or <code>UICollectionView</code>) that is in the scroll view&rsquo;s own coordinate system. The visible portion of the scroll view refers to the part that is not obscurred by other views (e.g. a navigation bar or a toolbar).</p>
+
+<p>If you are targeting iOS 11+ then this is simple thanks to the safe area API and your delegate function could simply be:</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">visibleRect</span><span class="p">(</span><span class="k">for</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGRect</span><span class="p">?</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">tableView</span><span class="o">.</span><span class="n">safeAreaLayoutGuide</span><span class="o">.</span><span class="n">layoutFrame</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>On earlier iOS versions you will need to calculate this rectangle yourself. In the case where a scroll view controller is embedded in a navigation controller the delegate function could be:</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">visibleRect</span><span class="p">(</span><span class="k">for</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGRect</span><span class="p">?</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">topInset</span> <span class="o">=</span> <span class="n">navigationController</span><span class="p">?</span><span class="o">.</span><span class="n">navigationBar</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">height</span> <span class="p">??</span> <span class="mi">0</span>
+        <span class="k">let</span> <span class="nv">bottomInset</span> <span class="o">=</span> <span class="n">navigationController</span><span class="p">?</span><span class="o">.</span><span class="n">toolbar</span><span class="p">?</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">height</span> <span class="p">??</span> <span class="mi">0</span>
+        <span class="k">let</span> <span class="nv">bounds</span> <span class="o">=</span> <span class="n">tableView</span><span class="o">.</span><span class="n">bounds</span>
+
+        <span class="k">return</span> <span class="kt">CGRect</span><span class="p">(</span><span class="nv">x</span><span class="p">:</span> <span class="n">bounds</span><span class="o">.</span><span class="n">origin</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="nv">y</span><span class="p">:</span> <span class="n">bounds</span><span class="o">.</span><span class="n">origin</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">topInset</span><span class="p">,</span> <span class="nv">width</span><span class="p">:</span> <span class="n">bounds</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="nv">height</span><span class="p">:</span> <span class="n">bounds</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">bottomInset</span><span class="p">)</span>
+    <span class="p">}</span>
+</code></pre>
+
+<p>Refer to the included Mail app sample to see a working example.</p>
 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://twitter.com/mkurabi" target="_blank" rel="external">Mohammad Kurabi</a>. All rights reserved. (Last updated: 2017-10-06)</p>
+          <p>&copy; 2018 <a class="link" href="https://twitter.com/mkurabi" target="_blank" rel="external">Mohammad Kurabi</a>. All rights reserved. (Last updated: 2018-05-26)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

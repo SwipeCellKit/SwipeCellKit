@@ -17,6 +17,48 @@ extension UITableView {
     }
 }
 
+extension UICollectionView {
+    var swipeCells: [SwipeCollectionViewCell] {
+        return visibleCells as? [SwipeCollectionViewCell] ?? []
+    }
+    
+    func hideSwipeCell() {
+        swipeCells.forEach { $0.hideSwipe(animated: true) }
+    }
+    
+    func setGestureEnabled(_ enabled: Bool) {
+        gestureRecognizers?.forEach {
+            guard $0 != panGestureRecognizer else { return }
+            
+            $0.isEnabled = enabled
+        }
+    }
+}
+
+extension UIScrollView {
+    var swipeables: [Swipeable] {
+        switch self {
+        case let tableView as UITableView:
+            return tableView.swipeCells
+        case let collectionView as UICollectionView:
+            return collectionView.swipeCells
+        default:
+            return []
+        }
+    }
+    
+    func hideSwipeables() {
+        switch self {
+        case let tableView as UITableView:
+            tableView.hideSwipeCell()
+        case let collectionView as UICollectionView:
+            collectionView.hideSwipeCell()
+        default:
+            return
+        }
+    }
+}
+
 extension UIPanGestureRecognizer {
     func elasticTranslation(in view: UIView?, withLimit limit: CGSize, fromOriginalCenter center: CGPoint, applyingRatio ratio: CGFloat = 0.20) -> CGPoint {
         let translation = self.translation(in: view)

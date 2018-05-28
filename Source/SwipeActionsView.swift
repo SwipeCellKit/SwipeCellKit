@@ -25,9 +25,10 @@ class SwipeActionsView: UIView {
         return options.expansionDelegate ?? (expandableAction?.hasBackgroundColor == false ? ScaleAndAlphaExpansion.default : nil)
     }
 
+    weak var safeAreaInsetView: UIView?
     let orientation: SwipeActionsOrientation
     let actions: [SwipeAction]
-    let options: SwipeTableOptions
+    let options: SwipeOptions
     
     var buttons: [SwipeActionButton] = []
     
@@ -38,9 +39,8 @@ class SwipeActionsView: UIView {
     
     var safeAreaMargin: CGFloat {
         guard #available(iOS 11, *) else { return 0 }
-        guard let tableView = (superview as? SwipeTableViewCell)?.tableView else { return 0 }
-        
-        return orientation == .left ? tableView.safeAreaInsets.left : tableView.safeAreaInsets.right
+        guard let scrollView = self.safeAreaInsetView else { return 0 }
+        return orientation == .left ? scrollView.safeAreaInsets.left : scrollView.safeAreaInsets.right
     }
 
     var visibleWidth: CGFloat = 0 {
@@ -81,7 +81,14 @@ class SwipeActionsView: UIView {
         return options.expansionStyle != nil ? actions.last : nil
     }
     
-    init(contentEdgeInsets: UIEdgeInsets, maxSize: CGSize, options: SwipeTableOptions, orientation: SwipeActionsOrientation, actions: [SwipeAction]) {
+    init(contentEdgeInsets: UIEdgeInsets,
+         maxSize: CGSize,
+         safeAreaInsetView: UIView,
+         options: SwipeOptions,
+         orientation: SwipeActionsOrientation,
+         actions: [SwipeAction]) {
+        
+        self.safeAreaInsetView = safeAreaInsetView
         self.options = options
         self.orientation = orientation
         self.actions = actions.reversed()
@@ -176,7 +183,7 @@ class SwipeActionsView: UIView {
         delegate?.swipeActionsView(self, didSelect: actions[index])
     }
     
-    func buttonEdgeInsets(fromOptions options: SwipeTableOptions) -> UIEdgeInsets {
+    func buttonEdgeInsets(fromOptions options: SwipeOptions) -> UIEdgeInsets {
         let padding = options.buttonPadding ?? 8
         return UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
     }

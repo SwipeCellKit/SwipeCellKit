@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>SwipeTableViewCell Class Reference</title>
+    <title>SwipeCollectionViewCell Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/SwipeTableViewCell" class="dashAnchor"></a>
-    <a title="SwipeTableViewCell Class Reference"></a>
+    <a name="//apple_ref/swift/Class/SwipeCollectionViewCell" class="dashAnchor"></a>
+    <a title="SwipeCollectionViewCell Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">SwipeCellKit Docs</a> (100% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">SwipeCellKit Reference</a>
         <img id="carat" src="../img/carat.png" />
-        SwipeTableViewCell Class Reference
+        SwipeCollectionViewCell Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -127,16 +127,16 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>SwipeTableViewCell</h1>
+            <h1>SwipeCollectionViewCell</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">SwipeTableViewCell</span><span class="p">:</span> <span class="kt">UITableViewCell</span></code></pre>
+                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">SwipeCollectionViewCell</span><span class="p">:</span> <span class="kt">UICollectionViewCell</span></code></pre>
 
                 </div>
               </div>
-            <p>The <code>SwipeTableViewCell</code> class extends <code>UITableViewCell</code> and provides more flexible options for cell swiping behavior.</p>
+            <p>The <code>SwipeCollectionViewCell</code> class extends <code>UICollectionViewCell</code> and provides more flexible options for cell swiping behavior.</p>
 
-<p>The default behavior closely matches the stock Mail.app. If you want to customize the transition style (ie. how the action buttons are exposed), or the expansion style (the behavior when the row is swiped passes a defined threshold), you can return the appropriately configured <code><a href="../Structs/SwipeOptions.html">SwipeOptions</a></code> via the <code><a href="../Protocols/SwipeTableViewCellDelegate.html">SwipeTableViewCellDelegate</a></code> delegate.</p>
+<p>The default behavior closely matches the stock Mail.app. If you want to customize the transition style (ie. how the action buttons are exposed), or the expansion style (the behavior when the row is swiped passes a defined threshold), you can return the appropriately configured <code><a href="../Structs/SwipeOptions.html">SwipeOptions</a></code> via the <code><a href="../Protocols/SwipeCollectionViewCellDelegate.html">SwipeCollectionViewCellDelegate</a></code> delegate.</p>
 
           </section>
           <section class="section task-group-section">
@@ -145,9 +145,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0a9TableViewB0C8delegateAA0adeB8Delegate_pSgXwvp"></a>
+                    <a name="/s:12SwipeCellKit0a14CollectionViewB0C8delegateAA0adeB8Delegate_pSgXwvp"></a>
                     <a name="//apple_ref/swift/Property/delegate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0a9TableViewB0C8delegateAA0adeB8Delegate_pSgXwvp">delegate</a>
+                    <a class="token" href="#/s:12SwipeCellKit0a14CollectionViewB0C8delegateAA0adeB8Delegate_pSgXwvp">delegate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -155,14 +155,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The object that acts as the delegate of the <code>SwipeTableViewCell</code>.</p>
+                        <p>The object that acts as the delegate of the <code>SwipeCollectionViewCell</code>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SwipeTableViewCellDelegate.html">SwipeTableViewCellDelegate</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SwipeCollectionViewCellDelegate.html">SwipeCollectionViewCellDelegate</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -176,9 +176,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0a9TableViewB0C11swipeOffset12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12SwipeCellKit0a14CollectionViewB0C11swipeOffset12CoreGraphics7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/swipeOffset" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0a9TableViewB0C11swipeOffset12CoreGraphics7CGFloatVvp">swipeOffset</a>
+                    <a class="token" href="#/s:12SwipeCellKit0a14CollectionViewB0C11swipeOffset12CoreGraphics7CGFloatVvp">swipeOffset</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -203,9 +203,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0a9TableViewB0C04hideA0ySb8animated_ySbcSg10completiontF"></a>
+                    <a name="/s:12SwipeCellKit0a14CollectionViewB0C04hideA0ySb8animated_ySbcSg10completiontF"></a>
                     <a name="//apple_ref/swift/Method/hideSwipe(animated:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0a9TableViewB0C04hideA0ySb8animated_ySbcSg10completiontF">hideSwipe(animated:completion:)</a>
+                    <a class="token" href="#/s:12SwipeCellKit0a14CollectionViewB0C04hideA0ySb8animated_ySbcSg10completiontF">hideSwipe(animated:completion:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -261,9 +261,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0a9TableViewB0C04showA0yAA0A18ActionsOrientationO11orientation_Sb8animatedySbcSg10completiontF"></a>
+                    <a name="/s:12SwipeCellKit0a14CollectionViewB0C04showA0yAA0A18ActionsOrientationO11orientation_Sb8animatedySbcSg10completiontF"></a>
                     <a name="//apple_ref/swift/Method/showSwipe(orientation:animated:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0a9TableViewB0C04showA0yAA0A18ActionsOrientationO11orientation_Sb8animatedySbcSg10completiontF">showSwipe(orientation:animated:completion:)</a>
+                    <a class="token" href="#/s:12SwipeCellKit0a14CollectionViewB0C04showA0yAA0A18ActionsOrientationO11orientation_Sb8animatedySbcSg10completiontF">showSwipe(orientation:animated:completion:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -331,9 +331,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0a9TableViewB0C03setA6Offsety12CoreGraphics7CGFloatV_Sb8animatedySbcSg10completiontF"></a>
+                    <a name="/s:12SwipeCellKit0a14CollectionViewB0C03setA6Offsety12CoreGraphics7CGFloatV_Sb8animatedySbcSg10completiontF"></a>
                     <a name="//apple_ref/swift/Method/setSwipeOffset(_:animated:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0a9TableViewB0C03setA6Offsety12CoreGraphics7CGFloatV_Sb8animatedySbcSg10completiontF">setSwipeOffset(_:animated:completion:)</a>
+                    <a class="token" href="#/s:12SwipeCellKit0a14CollectionViewB0C03setA6Offsety12CoreGraphics7CGFloatV_Sb8animatedySbcSg10completiontF">setSwipeOffset(_:animated:completion:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -351,6 +351,49 @@
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">setSwipeOffset</span><span class="p">(</span><span class="n">_</span> <span class="nv">offset</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>offset</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A point (expressed in points) that is offset from the non-swiped origin.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>animated</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Specify <code>true</code> to animate the transition to the new offset, <code>false</code> to make the transition immediate.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure to be executed once the animation has finished. A <code>Boolean</code> argument indicates whether or not the animations actually finished before the completion handler was called.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
