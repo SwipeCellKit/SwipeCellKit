@@ -2,6 +2,12 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.4.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.4.0)
+
+#### Added
+
+- `UICollectionView` support. You can now add swipe actions to a `UICollectionViewCell` by using the `SwipeCollectionViewCell` (#4)
+
 ## [2.3.2](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.3.2)
 
 #### Fixed
