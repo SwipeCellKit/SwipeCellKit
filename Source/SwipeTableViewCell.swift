@@ -115,14 +115,18 @@ open class SwipeTableViewCell: UITableViewCell {
 
         if !UIAccessibilityIsVoiceOverRunning() {
             for cell in tableView?.swipeCells ?? [] {
-                if (cell.state == .left || cell.state == .right) && !swipeController.contains(point: point) {
+                if (cell.state == .left || cell.state == .right) && !cell.contains(point: point) {
                     tableView?.hideSwipeCell()
                     return false
                 }
             }
         }
         
-        return swipeController.contains(point: point)
+        return contains(point: point)
+    }
+    
+    func contains(point: CGPoint) -> Bool {
+        return point.y > frame.minY && point.y < frame.maxY
     }
     
     /// :nodoc:

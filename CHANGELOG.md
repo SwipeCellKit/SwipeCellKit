@@ -2,6 +2,14 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.4.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.4.1)
+
+#### Fixed
+
+- Fix issue with swipe action handler not being invoked correctly at all times (#204, #205)
+
+---
+
 ## [2.4.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.4.0)
 
 #### Added

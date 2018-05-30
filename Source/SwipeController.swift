@@ -283,12 +283,6 @@ class SwipeController: NSObject {
         }
     }
     
-    func contains(point: CGPoint) -> Bool {
-        guard let swipeable = self.swipeable else { return false }
-        
-        return point.y > swipeable.frame.minY && point.y < swipeable.frame.maxY
-    }
-    
     func targetState(forVelocity velocity: CGPoint) -> SwipeState {
         guard let actionsView = swipeable?.actionsView else { return .center }
         
