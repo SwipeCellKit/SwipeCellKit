@@ -136,7 +136,7 @@ class SwipeController: NSObject {
                     scrollRatio = elasticScrollRatio
                 }
             }
-        case .ended:
+        case .ended, .cancelled:
             guard let actionsView = swipeable.actionsView, let actionsContainerView = self.actionsContainerView else { return }
             guard swipeable.state.isActive else { return }
             
@@ -159,7 +159,6 @@ class SwipeController: NSObject {
                     delegate?.swipeController(self, didEndEditingSwipeableFor: actionsView.orientation)
                 }
             }
-            
         default: break
         }
     }
