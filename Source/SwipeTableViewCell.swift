@@ -43,6 +43,16 @@ open class SwipeTableViewCell: UITableViewCell {
     }
     
     /// :nodoc:
+    open override var layoutMargins: UIEdgeInsets {
+        get {
+            return frame.origin.x != 0 ? swipeController.originalLayoutMargins : super.layoutMargins
+        }
+        set {
+            super.layoutMargins = newValue
+        }
+    }
+    
+    /// :nodoc:
     override public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -137,18 +147,15 @@ open class SwipeTableViewCell: UITableViewCell {
     }
     
     /// :nodoc:
-    override open var layoutMargins: UIEdgeInsets {
-        get {
-            return frame.origin.x != 0 ? swipeController.originalLayoutMargins : super.layoutMargins
-        }
-        set {
-            super.layoutMargins = newValue
-        }
+    override open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return swipeController.gestureRecognizerShouldBegin(gestureRecognizer)
     }
     
     /// :nodoc:
-    override open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return swipeController.gestureRecognizerShouldBegin(gestureRecognizer)
+    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        swipeController.traitCollectionDidChange(from: previousTraitCollection, to: self.traitCollection)
     }
     
     @objc func handleTablePan(gesture: UIPanGestureRecognizer) {

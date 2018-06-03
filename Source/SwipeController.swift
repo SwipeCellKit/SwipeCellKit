@@ -267,6 +267,21 @@ class SwipeController: NSObject {
         animator.startAnimation()
     }
     
+    func traitCollectionDidChange(from previousTraitCollrection: UITraitCollection?, to traitCollection: UITraitCollection) {
+        guard let swipeable = self.swipeable,
+            let actionsContainerView = self.actionsContainerView,
+            previousTraitCollrection != nil else {
+                return
+        }
+        
+        if swipeable.state == .left || swipeable.state == .right {
+            let targetOffset = targetCenter(active: swipeable.state.isActive)
+            actionsContainerView.center = CGPoint(x: targetOffset, y: actionsContainerView.center.y)
+            swipeable.actionsView?.visibleWidth = abs(actionsContainerView.frame.minX)
+            swipeable.layoutIfNeeded()
+        }        
+    }
+    
     func stopAnimatorIfNeeded() {
         if animator?.isRunning == true {
             animator?.stopAnimation(true)
