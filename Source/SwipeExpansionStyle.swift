@@ -62,6 +62,8 @@ public struct SwipeExpansionStyle {
     /// - note: Default value is 0.2. Valid range is from 0.0 for no movement past the expansion target, to 1.0 for unrestricted movement with dragging.
     public var targetOverscrollElasticity: CGFloat = 0.2
     
+    var minimumExpansionTranslation: CGFloat = 8.0
+    
     /**
      Contructs a new `SwipeExpansionStyle` instance.
      
@@ -84,12 +86,12 @@ public struct SwipeExpansionStyle {
     
     func shouldExpand(view: Swipeable, gesture: UIPanGestureRecognizer, in superview: UIView, within frame: CGRect? = nil) -> Bool {
         guard let actionsView = view.actionsView, let gestureView = gesture.view else { return false }
-        guard abs(gesture.translation(in: gestureView).x) > 5.0 else { return false }
+        guard abs(gesture.translation(in: gestureView).x) > minimumExpansionTranslation else { return false }
     
-        let xDelta = abs(frame?.minX ?? view.frame.minX)
-        if xDelta < actionsView.preferredWidth {
+        let xDelta = floor(abs(frame?.minX ?? view.frame.minX))
+        if xDelta <= actionsView.preferredWidth {
             return false
-        } else if xDelta >= targetOffset(for: view) {
+        } else if xDelta > targetOffset(for: view) {
             return true
         }
         
