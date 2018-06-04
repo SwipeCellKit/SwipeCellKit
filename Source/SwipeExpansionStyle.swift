@@ -82,21 +82,19 @@ public struct SwipeExpansionStyle {
         self.completionAnimation = completionAnimation
     }
     
-    func shouldExpand(view: Swipeable, gesture: UIPanGestureRecognizer, in superview: UIView, usingFrame: CGRect? = nil) -> Bool {
+    func shouldExpand(view: Swipeable, gesture: UIPanGestureRecognizer, in superview: UIView, within frame: CGRect? = nil) -> Bool {
         guard let actionsView = view.actionsView, let gestureView = gesture.view else { return false }
         guard abs(gesture.translation(in: gestureView).x) > 5.0 else { return false }
     
-        let xDelta = abs(usingFrame?.minX ?? view.frame.minX)
+        let xDelta = abs(frame?.minX ?? view.frame.minX)
         if xDelta < actionsView.preferredWidth {
             return false
         } else if xDelta >= targetOffset(for: view) {
             return true
         }
         
-        // If we've been given an override frame, we need to change which frame of reference to use in
-        //   the isTriggered method. This is useful when `view` is a cell, but the override frame
-        //   belongs to the view's content view (when the content view is moving, but not the `view`).
-        let referenceFrame: CGRect = usingFrame != nil ? view.frame : superview.bounds
+        // Use the frame instead of superview as Swipeable may not be full width of superview
+        let referenceFrame: CGRect = frame != nil ? view.frame : superview.bounds
         for trigger in additionalTriggers {
             if trigger.isTriggered(view: view, gesture: gesture, in: superview, referenceFrame: referenceFrame) {
                 return true
