@@ -35,7 +35,7 @@ class SwipeActionButton: UIButton {
     }
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIViewNoIntrinsicMetric, height: contentEdgeInsets.top + alignmentRect.height + contentEdgeInsets.bottom)
+        return CGSize(width: UIView.noIntrinsicMetric, height: contentEdgeInsets.top + alignmentRect.height + contentEdgeInsets.bottom)
     }
     
     convenience init(action: SwipeAction) {
@@ -82,7 +82,7 @@ class SwipeActionButton: UIButton {
         
         return title.boundingRect(with: size,
                                   options: [.usesLineFragmentOrigin],
-                                  attributes: [NSAttributedStringKey.font: font],
+                                  attributes: [NSAttributedString.Key.font: font],
                                   context: nil).integral
     }
     
