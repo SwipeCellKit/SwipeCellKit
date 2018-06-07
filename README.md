@@ -90,6 +90,9 @@ pod 'SwipeCellKit'
 
 # Get the latest on develop
 pod 'SwipeCellKit', :git => 'https://github.com/SwipeCellKit/SwipeCellKit.git', :branch => 'develop'
+
+# If you like to live dangerously
+pod 'SwipeCellKit', :git => 'https://github.com/SwipeCellKit/SwipeCellKit.git', :branch => 'swift_4.2'
 ````
 
 #### [Carthage](https://github.com/Carthage/Carthage)
