@@ -10,6 +10,8 @@
 - Fix issue where gesture cancellation causes swipe cell to remain in dragging state in a non-left, right or centre x position.
 - Fix issue where expansion may trigger when swiping in the expansion zone very quickly.
 
+---
+
 ## [2.4.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.4.1)
 
 #### Fixed
