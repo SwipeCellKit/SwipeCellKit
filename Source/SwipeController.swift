@@ -90,6 +90,13 @@ class SwipeController: NSObject {
             guard let actionsView = swipeable.actionsView, let actionsContainerView = self.actionsContainerView else { return }
             guard swipeable.state.isActive else { return }
             
+            if swipeable.state == .animatingToCenter {
+                let swipedCell = scrollView?.swipeables.first(where: { $0.state == .dragging || $0.state == .left || $0.state == .right }) as? UIView
+                if let swipedCell = swipedCell, swipedCell != self.swipeable {
+                    return
+                }
+            }
+            
             let translation = gesture.translation(in: target).x
             scrollRatio = 1.0
             
@@ -137,9 +144,11 @@ class SwipeController: NSObject {
                     scrollRatio = elasticScrollRatio
                 }
             }
-        case .ended, .cancelled:
+        case .ended, .cancelled, .failed:
             guard let actionsView = swipeable.actionsView, let actionsContainerView = self.actionsContainerView else { return }
-            guard swipeable.state.isActive else { return }
+            if swipeable.state.isActive == false && swipeable.bounds.midX == target.center.x  {
+                return
+            }
             
             swipeable.state = targetState(forVelocity: velocity)
             
