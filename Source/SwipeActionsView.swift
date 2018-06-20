@@ -267,6 +267,7 @@ class SwipeActionsView: UIView {
 class SwipeActionButtonWrapperView: UIView {
     let contentRect: CGRect
     var actionBackgroundColor: UIColor?
+    var actionBackgroundGradientLayer: CAGradientLayer?
     
     init(frame: CGRect, action: SwipeAction, orientation: SwipeActionsOrientation, contentWidth: CGFloat) {
         switch orientation {
@@ -290,13 +291,24 @@ class SwipeActionButtonWrapperView: UIView {
         }
     }
     
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+        
+        /// Up-to-date gradient layer (if it exist) frame with
+        /// parent layer bounds.
+        actionBackgroundGradientLayer?.frame = layer.bounds
+    }
+    
     func configureBackgroundColor(with action: SwipeAction) {
         guard action.hasBackgroundColor else {
             isOpaque = false
             return
         }
         
-        if let backgroundColor = action.backgroundColor {
+        if let backgroundGradient = action.backgroundGradient {
+            layer.addSublayer(backgroundGradient)
+            actionBackgroundGradientLayer = backgroundGradient
+        } else if let backgroundColor = action.backgroundColor {
             actionBackgroundColor = backgroundColor
         } else {
             switch action.style {

@@ -46,7 +46,7 @@ enum ActionDescriptor {
         case .trash: name = "Trash"
         }
         
-        return UIImage(named: style == .backgroundColor ? name : name + "-circle")
+        return UIImage(named: style == .circular ? name + "-circle" : name)
     }
     
     var color: UIColor {
@@ -63,5 +63,7 @@ enum ButtonDisplayMode {
 }
 
 enum ButtonStyle {
-    case backgroundColor, circular
+    case backgroundColor
+    case backgroundGradient
+    case circular
 }
