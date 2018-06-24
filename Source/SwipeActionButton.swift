@@ -51,6 +51,10 @@ class SwipeActionButton: UIButton {
         titleLabel?.textAlignment = .center
         titleLabel?.lineBreakMode = .byWordWrapping
         titleLabel?.numberOfLines = 0
+        if action.rotate180 {
+            titleLabel?.layer.transform = CATransform3DMakeRotation(180.0 * (CGFloat.pi / 180), 0, 0, 1.0)
+            imageView?.layer.transform = CATransform3DMakeRotation(180.0 * (CGFloat.pi / 180), 0, 0, 1.0)
+        }
         
         accessibilityLabel = action.accessibilityLabel
         

@@ -84,6 +84,10 @@ public class SwipeAction: NSObject {
     /// - note: When set to `true`, the actions menu is automatically hidden when the action is selected. The default value is `false`.
     public var hidesWhenSelected = false
     
+    
+    /// A Boolean value to rotate the generated buttons 180° when using [table reverse extension](https://github.com/marty-suzuki/ReverseExtension)
+    public var rotate180 = false
+    
     /**
      Constructs a new `SwipeAction` instance.
 
