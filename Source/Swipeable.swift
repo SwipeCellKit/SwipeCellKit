@@ -10,6 +10,8 @@ import UIKit
 // MARK: - Internal 
 
 protocol Swipeable {
+    var direction: SwipeDirection { get set }
+    
     var state: SwipeState { get set }
     
     var actionsView: SwipeActionsView? { get set }
@@ -38,4 +40,33 @@ enum SwipeState: Int {
     }
     
     var isActive: Bool { return self != .center }
+}
+
+/// Describes which swipe direction is allowed for the cell
+public struct SwipeDirection: OptionSet {
+    
+    private enum Options: Int {
+        case none
+        case rightToLeft
+        case leftToRight
+    }
+    
+    public let rawValue: Int
+    
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+    
+    private init(_ options: Options) {
+        self.rawValue = options.rawValue
+    }
+    
+    /// Swipe is not allowed at all on the cell
+    public static let None = SwipeDirection(.none)
+    
+    /// Allows user to swipe the cell from the right to the left
+    public static let RightToLeft = SwipeDirection(.rightToLeft)
+    
+    /// Allows user to swipe the cell from the left to the right
+    public static let LeftToRight = SwipeDirection(.leftToRight)
 }
