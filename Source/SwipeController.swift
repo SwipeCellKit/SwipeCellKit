@@ -219,14 +219,30 @@ class SwipeController: NSObject {
         
         actionsContainerView.addSubview(actionsView)
         
-        actionsView.heightAnchor.constraint(equalTo: swipeable.heightAnchor).isActive = true
-        actionsView.widthAnchor.constraint(equalTo: swipeable.widthAnchor, multiplier: 2).isActive = true
-        actionsView.topAnchor.constraint(equalTo: swipeable.topAnchor).isActive = true
+        if #available(iOS 9.0, *) {
+            actionsView.heightAnchor.constraint(equalTo: swipeable.heightAnchor).isActive = true
+            actionsView.widthAnchor.constraint(equalTo: swipeable.widthAnchor, multiplier: 2).isActive = true
+            actionsView.topAnchor.constraint(equalTo: swipeable.topAnchor).isActive = true
+        } else {
+            actionsContainerView.addConstraints([
+                NSLayoutConstraint(item: actionsView, attribute: .height, relatedBy: .equal, toItem: swipeable, attribute: .height, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: actionsView, attribute: .width, relatedBy: .equal, toItem: swipeable, attribute: .width, multiplier: 2.0, constant: 0.0),
+                NSLayoutConstraint(item: actionsView, attribute: .top, relatedBy: .equal, toItem: swipeable, attribute: .top, multiplier: 1.0, constant: 0.0)
+            ])
+        }
         
         if orientation == .left {
-            actionsView.rightAnchor.constraint(equalTo: actionsContainerView.leftAnchor).isActive = true
+            if #available(iOS 9.0, *) {
+                actionsView.rightAnchor.constraint(equalTo: actionsContainerView.leftAnchor).isActive = true
+            } else {
+                actionsContainerView.addConstraint(NSLayoutConstraint(item: actionsView, attribute: .right, relatedBy: .equal, toItem: actionsContainerView, attribute: .left, multiplier: 1.0, constant: 0.0))
+            }
         } else {
-            actionsView.leftAnchor.constraint(equalTo: actionsContainerView.rightAnchor).isActive = true
+            if #available(iOS 9.0, *) {
+                actionsView.leftAnchor.constraint(equalTo: actionsContainerView.rightAnchor).isActive = true
+            } else {
+                actionsContainerView.addConstraint(NSLayoutConstraint(item: actionsView, attribute: .left, relatedBy: .equal, toItem: actionsContainerView, attribute: .right, multiplier: 1.0, constant: 0.0))
+            }
         }
         
         actionsView.setNeedsUpdateConstraints()
