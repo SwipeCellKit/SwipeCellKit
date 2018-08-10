@@ -47,7 +47,11 @@ class SwipeActionButton: UIButton {
         let highlightedTextColor = action.highlightedTextColor ?? tintColor
         highlightedBackgroundColor = action.highlightedBackgroundColor ?? UIColor.black.withAlphaComponent(0.1)
 
-        titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
+        if #available(iOS 8.2, *) {
+            titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
+        } else {
+            titleLabel?.font = action.font ?? UIFont(name: "HelveticaNeue-Medium", size: 15)
+        }
         titleLabel?.textAlignment = .center
         titleLabel?.lineBreakMode = .byWordWrapping
         titleLabel?.numberOfLines = 0
