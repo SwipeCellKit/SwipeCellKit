@@ -79,11 +79,3 @@ extension UIPanGestureRecognizer {
         return CGPoint(x: x, y: y)
     }
 }
-
-#if swift(>=4.2)
-import UIKit.UIGeometry
-
-extension UIEdgeInsets {
-    public static let zero = UIEdgeInsets()
-}
-#endif
