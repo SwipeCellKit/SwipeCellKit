@@ -82,7 +82,7 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
     func configure() {
         contentView.clipsToBounds = false
         
-        swipeController = SwipeController(swipeable: self, actionsContainerView: contentView)
+        swipeController = SwipeController(swipeable: self, actionsContainerView: self)
         swipeController.delegate = self
     }
     
