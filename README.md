@@ -91,8 +91,8 @@ pod 'SwipeCellKit'
 # Get the latest on develop
 pod 'SwipeCellKit', :git => 'https://github.com/SwipeCellKit/SwipeCellKit.git', :branch => 'develop'
 
-# If you like to live dangerously
-pod 'SwipeCellKit', :git => 'https://github.com/SwipeCellKit/SwipeCellKit.git', :branch => 'swift_4.2'
+# If you have NOT upgraded to Swift 4.2, use the last non-swift 4.2 compatible release
+pod 'SwipeCellKit', '2.4.3'
 ````
 
 #### [Carthage](https://github.com/Carthage/Carthage)
