@@ -64,6 +64,11 @@ public class SwipeAction: NSObject {
     /// The closure to execute when the user taps the button associated with this action.
     public var handler: ((SwipeAction, IndexPath) -> Void)?
     
+    /// Background gradient colors of the action button. Has priority over backgroundColor attribute.
+    ///
+    /// - note: Use this property to specify background gradient for your button. If you do not specify a value for this property, the framework assigns a color from backgroundColor attribute or based on the value in the style property.
+    public var backgroundGradient: CAGradientLayer?
+    
     /// The background color of the action button.
     ///
     /// - note: Use this property to specify the background color for your button. If you do not specify a value for this property, the framework assigns a default color based on the value in the style property.

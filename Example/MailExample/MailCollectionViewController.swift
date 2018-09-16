@@ -84,6 +84,10 @@ class MailCollectionViewController: UICollectionViewController, UICollectionView
             self.buttonStyle = .backgroundColor
             self.defaultOptions.transitionStyle = .border
         }))
+        controller.addAction(UIAlertAction(title: "Gradient", style: .default, handler: { _ in
+            self.buttonStyle = .backgroundGradient
+            self.defaultOptions.transitionStyle = .border
+        }))
         controller.addAction(UIAlertAction(title: "Circular", style: .default, handler: { _ in
             self.buttonStyle = .circular
             self.defaultOptions.transitionStyle = .reveal
@@ -173,6 +177,8 @@ extension MailCollectionViewController: SwipeCollectionViewCellDelegate {
         switch buttonStyle {
         case .backgroundColor:
             options.buttonSpacing = 11
+        case .backgroundGradient:
+            options.buttonSpacing = 11
         case .circular:
             options.buttonSpacing = 4
             options.backgroundColor = #colorLiteral(red: 0.9467939734, green: 0.9468161464, blue: 0.9468042254, alpha: 1)
@@ -202,6 +208,13 @@ extension MailCollectionViewController: SwipeCollectionViewCellDelegate {
         switch buttonStyle {
         case .backgroundColor:
             action.backgroundColor = descriptor.color
+        case .backgroundGradient:
+            let gradientLayer = CAGradientLayer()
+            gradientLayer.locations = [0, 1]
+            gradientLayer.startPoint = CGPoint(x: 0.5, y: -0.27)
+            gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.06)
+            gradientLayer.colors = [UIColor.gray.cgColor, UIColor.black.cgColor]
+            action.backgroundGradient = gradientLayer
         case .circular:
             action.backgroundColor = .clear
             action.textColor = descriptor.color
