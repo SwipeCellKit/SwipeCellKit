@@ -154,6 +154,15 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
     /// :nodoc:
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         guard let actionsView = actionsView else { return super.hitTest(point, with: event) }
+        // Recursively check whether isHidden
+        var view : UIView? = actionsView
+        while let v = view {
+            if v.isHidden {
+                // actionsView (or one of it's parents) is hidden so cannot catch the event
+                return super.hitTest(point, with: event)
+            }
+            view = v.superview
+        }
         let modifiedPoint = actionsView.convert(point, from: self)
         return actionsView.hitTest(modifiedPoint, with: event) ?? super.hitTest(point, with: event)
     }
