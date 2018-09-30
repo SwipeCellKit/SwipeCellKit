@@ -14,6 +14,11 @@ public struct SwipeExpansionStyle {
                                                                                   elasticOverscroll: true,
                                                                                   completionAnimation: .bounce) }
     
+    public static var expandImmediately: SwipeExpansionStyle { return SwipeExpansionStyle(target: .percentage(0.0),
+                                                                             elasticOverscroll: true,
+                                                                             shouldExpandImmediately: true,
+                                                                             completionAnimation: .bounce) }
+    
     /// The default action performs a destructive behavior. The cell is removed from the table/collection view in an animated fashion.
     public static var destructive: SwipeExpansionStyle { return .destructive(automaticallyDelete: true, timing: .with) }
 
@@ -62,6 +67,8 @@ public struct SwipeExpansionStyle {
     /// - note: Default value is 0.2. Valid range is from 0.0 for no movement past the expansion target, to 1.0 for unrestricted movement with dragging.
     public var targetOverscrollElasticity: CGFloat = 0.2
     
+    public var shouldExpandImmediately: Bool = false;
+    
     var minimumExpansionTranslation: CGFloat = 8.0
     
     /**
@@ -77,14 +84,20 @@ public struct SwipeExpansionStyle {
 
      - returns: The new `SwipeExpansionStyle` instance.
      */
-    public init(target: Target, additionalTriggers: [Trigger] = [], elasticOverscroll: Bool = false, completionAnimation: CompletionAnimation = .bounce) {
+    public init(target: Target, additionalTriggers: [Trigger] = [], elasticOverscroll: Bool = false, shouldExpandImmediately: Bool = false, completionAnimation: CompletionAnimation = .bounce) {
         self.target = target
         self.additionalTriggers = additionalTriggers
         self.elasticOverscroll = elasticOverscroll
+        self.shouldExpandImmediately = shouldExpandImmediately
         self.completionAnimation = completionAnimation
     }
     
     func shouldExpand(view: Swipeable, gesture: UIPanGestureRecognizer, in superview: UIView, within frame: CGRect? = nil) -> Bool {
+        
+        if (shouldExpandImmediately) {
+            return true;
+        }
+        
         guard let actionsView = view.actionsView, let gestureView = gesture.view else { return false }
         guard abs(gesture.translation(in: gestureView).x) > minimumExpansionTranslation else { return false }
     
