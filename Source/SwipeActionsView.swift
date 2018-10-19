@@ -53,10 +53,11 @@ class SwipeActionsView: UIView {
             layoutContext = ActionsViewLayoutContext.newContext(for: self)
             
             transitionLayout.container(view: self, didChangeVisibleWidthWithContext: layoutContext)
-            
+
             setNeedsLayout()
             layoutIfNeeded()
-            
+            subviews.forEach { $0.setNeedsDisplay() }
+
             notifyVisibleWidthChanged(oldWidths: preLayoutVisibleWidths,
                                       newWidths: transitionLayout.visibleWidthsForViews(with: layoutContext))
         }
@@ -280,10 +281,10 @@ class SwipeActionButtonWrapperView: UIView {
         
         configureBackgroundColor(with: action)
     }
-    
+
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        
+
         if let actionBackgroundColor = self.actionBackgroundColor, let context = UIGraphicsGetCurrentContext() {
             actionBackgroundColor.setFill()
             context.fill(rect);
