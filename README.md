@@ -150,7 +150,7 @@ Set the `delegate` property on `SwipeCollectionViewCell`:
 
 ````swift
 override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! as! SwipeCollectionViewCell
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! SwipeCollectionViewCell
     cell.delegate = self
     return cell
 }
