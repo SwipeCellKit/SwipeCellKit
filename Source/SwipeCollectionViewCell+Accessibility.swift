@@ -50,7 +50,7 @@ extension SwipeCollectionViewCell {
             let actions = [rightActions.first, leftActions.first].compactMap({ $0 }) + rightActions.dropFirst() + leftActions.dropFirst()
             
             if actions.count > 0 {
-                return actions.map({ SwipeAccessibilityCustomAction(action: $0,
+                return actions.compactMap({ SwipeAccessibilityCustomAction(action: $0,
                                                                     indexPath: indexPath,
                                                                     target: self,
                                                                     selector: #selector(performAccessibilityCustomAction(accessibilityCustomAction:))) })
