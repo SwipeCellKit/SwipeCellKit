@@ -359,9 +359,17 @@ extension SwipeController: UIGestureRecognizerDelegate {
         
         if gestureRecognizer == panGestureRecognizer,
             let view = gestureRecognizer.view,
-            let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
+            let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer,
+            let delegate = delegate {
+            
             let translation = gestureRecognizer.translation(in: view)
-            return abs(translation.y) <= abs(translation.x)
+            guard abs(translation.x) >= abs(translation.y) else { return false }
+            
+            if (translation.x > 0 && delegate.swipeController(self, editActionsForSwipeableFor: .left) == nil)
+                || (translation.x < 0 && delegate.swipeController(self, editActionsForSwipeableFor: .right) == nil) {
+                return false
+            }
+                return true
         }
         
         return true
