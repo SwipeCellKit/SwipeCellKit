@@ -22,23 +22,7 @@ extension SwipeTableViewCell {
      - parameter completion: The closure to be executed once the animation has finished. A `Boolean` argument indicates whether or not the animations actually finished before the completion handler was called.     
      */
     public func hideSwipe(animated: Bool, completion: ((Bool) -> Void)? = nil) {
-        guard state == .left || state == .right else { return }
-        
-        state = .animatingToCenter
-        
-        let targetCenter = self.targetCenter(active: false)
-        
-        if animated {
-            animate(toOffset: targetCenter) { complete in
-                self.reset()
-                completion?(complete)
-            }
-        } else {
-            center = CGPoint(x: targetCenter, y: self.center.y)
-            reset()
-        }
-        
-        notifyEditingStateChange(active: false)
+        swipeController.hideSwipe(animated: animated, completion: completion)
     }
     
     /**
@@ -66,31 +50,6 @@ extension SwipeTableViewCell {
      - parameter completion: The closure to be executed once the animation has finished. A `Boolean` argument indicates whether or not the animations actually finished before the completion handler was called.
      */
     public func setSwipeOffset(_ offset: CGFloat, animated: Bool = true, completion: ((Bool) -> Void)? = nil) {
-        guard offset != 0 else {
-            hideSwipe(animated: animated, completion: completion)
-            return
-        }
-        
-        let orientation: SwipeActionsOrientation = offset > 0 ? .left : .right
-        let targetState = SwipeState(orientation: orientation)
-        
-        if state != targetState {
-            guard showActionsView(for: orientation) else { return }
-            
-            tableView?.hideSwipeCell()
-            
-            state = targetState
-        }
-        
-        let maxOffset = min(bounds.width, abs(offset)) * orientation.scale * -1
-        let targetCenter = abs(offset) == CGFloat.greatestFiniteMagnitude ? self.targetCenter(active: true) : bounds.midX + maxOffset
-        
-        if animated {
-            animate(toOffset: targetCenter) { complete in
-                completion?(complete)
-            }
-        } else {
-            center.x = targetCenter
-        }
+        swipeController.setSwipeOffset(offset, animated: animated, completion: completion)
     }
 }

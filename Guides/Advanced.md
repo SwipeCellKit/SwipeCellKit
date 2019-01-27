@@ -103,17 +103,47 @@ completionAnimation: .fill(.manual(timing: .after))
 
 ### Button Behavior
 
-It is also possible to customize the button expansion behavior by assigning a `expansionDelegate` to the `SwipeTableOptions` type. The delegate is invoked during the (un)expansion process and allows you to customize the display of the action being expanded, as well as the other actions in the view. 
+It is also possible to customize the button expansion behavior by assigning a `expansionDelegate` to the `SwipeOptions` type. The delegate is invoked during the (un)expansion process and allows you to customize the display of the action being expanded, as well as the other actions in the view. 
 
 The provided `ScaleAndAlphaExpansion` type is useful for actions with clear backgrounds. When expansion occurs, the `ScaleAndAlphaExpansion` type automatically scales and fades the remaining actions in and out of the view. By default, if the expanded action has a clear background, the default `ScaleAndAlphaExpansion` will be automatically applied by the system.
 
 <p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Expansion-Delegate.gif" /></p>
 
 ````swift
-var options = SwipeTableOptions()
+var options = SwipeOptions()
 options.expansionDelegate = ScaleAndAlphaExpansion.default
 ````
 
 The `ScaleAndAlphaExpansion` type provides a static `default` configuration, but it can also be instantiated with custom parameters to suit your needs.
 
 You can also provide your own completely custom expansion behavior by adopting the `SwipeExpanding` protocol. The protocol allows you to customize the animation timing parameters prior to initiating the (un)expansion animation, as well as customizing the action during (un)expansion.
+
+## Vertically Centered Swipe Actions for Tall Cells
+
+If your cells are tall, then it can be useful to have the swipe actions centered relative to the visible portion of the cell.
+
+<p align="center"><img src="https://raw.githubusercontent.com/halleygen/SwipeCellKit/vertical-centring/Screenshots/Vertical-Centering.gif" /></p>
+
+This is enabled once the `func visibleRect(for tableView: UITableView) -> CGRect?` or `func visibleRect(for collectionView: UICollectionView) -> CGRect?` in your `SwipeTableViewCell`'s or `SwipeCollectionViewCell`'s delegate returns a non-nil `CGRect`. This function should return a rectangle of the *visible* portion of your scroll view (`UITableView` or `UICollectionView`) that is in the scroll view's own coordinate system. The visible portion of the scroll view refers to the part that is not obscurred by other views (e.g. a navigation bar or a toolbar).
+
+If you are targeting iOS 11+ then this is simple thanks to the safe area API and your delegate function could simply be:
+
+```swift
+func visibleRect(for tableView: UITableView) -> CGRect? {
+    return tableView.safeAreaLayoutGuide.layoutFrame
+}
+```
+
+On earlier iOS versions you will need to calculate this rectangle yourself. In the case where a scroll view controller is embedded in a navigation controller the delegate function could be:
+
+```swift
+func visibleRect(for tableView: UITableView) -> CGRect? {
+        let topInset = navigationController?.navigationBar.frame.height ?? 0
+        let bottomInset = navigationController?.toolbar?.frame.height ?? 0
+        let bounds = tableView.bounds
+
+        return CGRect(x: bounds.origin.x, y: bounds.origin.y + topInset, width: bounds.width, height: bounds.height - bottomInset)
+    }
+```
+
+Refer to the included Mail app sample to see a working example.

@@ -43,6 +43,9 @@
                 <a href="../Classes/SwipeAction.html">SwipeAction</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/SwipeCollectionViewCell.html">SwipeCollectionViewCell</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/SwipeTableViewCell.html">SwipeTableViewCell</a>
               </li>
             </ul>
@@ -72,6 +75,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Protocols/SwipeActionTransitioning.html">SwipeActionTransitioning</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SwipeCollectionViewCellDelegate.html">SwipeCollectionViewCellDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/SwipeExpanding.html">SwipeExpanding</a>
@@ -112,7 +118,7 @@
                 <a href="../Structs/SwipeExpansionStyle/FillOptions.html">– FillOptions</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/SwipeTableOptions.html">SwipeTableOptions</a>
+                <a href="../Structs/SwipeOptions.html">SwipeOptions</a>
               </li>
             </ul>
           </li>
@@ -128,9 +134,9 @@
 
                 </div>
               </div>
-            <p>The <code>SwipeAction</code> object defines a single action to present when the user swipes horizontally in a table row.</p>
+            <p>The <code>SwipeAction</code> object defines a single action to present when the user swipes horizontally in a table/collection item.</p>
 
-<p>This class lets you define one or more custom actions to display for a given row in your table. Each instance of this class represents a single action to perform and includes the text, formatting information, and behavior for the corresponding button.</p>
+<p>This class lets you define one or more custom actions to display for a given item in your table/collection. Each instance of this class represents a single action to perform and includes the text, formatting information, and behavior for the corresponding button.</p>
 
           </section>
           <section class="section task-group-section">
@@ -139,9 +145,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A6ActionC10identifierSSSgv"></a>
+                    <a name="/s:12SwipeCellKit0A6ActionC10identifierSSSgvp"></a>
                     <a name="//apple_ref/swift/Property/identifier" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC10identifierSSSgv">identifier</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC10identifierSSSgvp">identifier</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -166,9 +172,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A6ActionC5titleSSSgv"></a>
+                    <a name="/s:12SwipeCellKit0A6ActionC5titleSSSgvp"></a>
                     <a name="//apple_ref/swift/Property/title" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC5titleSSSgv">title</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC5titleSSSgvp">title</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -198,9 +204,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A6ActionC5styleAA0aD5StyleOv"></a>
+                    <a name="/s:12SwipeCellKit0A6ActionC5styleAA0aD5StyleOvp"></a>
                     <a name="//apple_ref/swift/Property/style" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC5styleAA0aD5StyleOv">style</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC5styleAA0aD5StyleOvp">style</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -225,9 +231,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A6ActionC18transitionDelegateAA0aD13Transitioning_pSgv"></a>
+                    <a name="/s:12SwipeCellKit0A6ActionC18transitionDelegateAA0aD13Transitioning_pSgvp"></a>
                     <a name="//apple_ref/swift/Property/transitionDelegate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC18transitionDelegateAA0aD13Transitioning_pSgv">transitionDelegate</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC18transitionDelegateAA0aD13Transitioning_pSgvp">transitionDelegate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -252,9 +258,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A6ActionC4fontSo6UIFontCSgv"></a>
+                    <a name="/s:12SwipeCellKit0A6ActionC4fontSo6UIFontCSgvp"></a>
                     <a name="//apple_ref/swift/Property/font" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC4fontSo6UIFontCSgv">font</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC4fontSo6UIFontCSgvp">font</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -284,9 +290,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A6ActionC9textColorSo7UIColorCSgv"></a>
+                    <a name="/s:12SwipeCellKit0A6ActionC9textColorSo7UIColorCSgvp"></a>
                     <a name="//apple_ref/swift/Property/textColor" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC9textColorSo7UIColorCSgv">textColor</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC9textColorSo7UIColorCSgvp">textColor</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -316,9 +322,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A6ActionC20highlightedTextColorSo7UIColorCSgv"></a>
+                    <a name="/s:12SwipeCellKit0A6ActionC20highlightedTextColorSo7UIColorCSgvp"></a>
                     <a name="//apple_ref/swift/Property/highlightedTextColor" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC20highlightedTextColorSo7UIColorCSgv">highlightedTextColor</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC20highlightedTextColorSo7UIColorCSgvp">highlightedTextColor</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -329,7 +335,7 @@
                         <p>The highlighted text color of the action button.</p>
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
-    If you do not specify a color, <code><a href="../Classes/SwipeAction.html#/s:12SwipeCellKit0A6ActionC9textColorSo7UIColorCSgv">textColor</a></code> is used.
+    If you do not specify a color, <code><a href="../Classes/SwipeAction.html#/s:12SwipeCellKit0A6ActionC9textColorSo7UIColorCSgvp">textColor</a></code> is used.
 
 </div>
 
@@ -348,9 +354,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A6ActionC5imageSo7UIImageCSgv"></a>
+                    <a name="/s:12SwipeCellKit0A6ActionC5imageSo7UIImageCSgvp"></a>
                     <a name="//apple_ref/swift/Property/image" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC5imageSo7UIImageCSgv">image</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC5imageSo7UIImageCSgvp">image</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -380,9 +386,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A6ActionC16highlightedImageSo7UIImageCSgv"></a>
+                    <a name="/s:12SwipeCellKit0A6ActionC16highlightedImageSo7UIImageCSgvp"></a>
                     <a name="//apple_ref/swift/Property/highlightedImage" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC16highlightedImageSo7UIImageCSgv">highlightedImage</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC16highlightedImageSo7UIImageCSgvp">highlightedImage</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -393,7 +399,7 @@
                         <p>The highlighted image used for the action button.</p>
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
-    If you do not specify a highlight image, the default <code><a href="../Classes/SwipeAction.html#/s:12SwipeCellKit0A6ActionC5imageSo7UIImageCSgv">image</a></code> is used for the highlighted state.
+    If you do not specify a highlight image, the default <code><a href="../Classes/SwipeAction.html#/s:12SwipeCellKit0A6ActionC5imageSo7UIImageCSgvp">image</a></code> is used for the highlighted state.
 
 </div>
 
@@ -412,9 +418,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A6ActionC7handleryAC_10Foundation9IndexPathVtcSgv"></a>
+                    <a name="/s:12SwipeCellKit0A6ActionC7handleryAC_10Foundation9IndexPathVtcSgvp"></a>
                     <a name="//apple_ref/swift/Property/handler" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC7handleryAC_10Foundation9IndexPathVtcSgv">handler</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC7handleryAC_10Foundation9IndexPathVtcSgvp">handler</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -439,9 +445,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A6ActionC15backgroundColorSo7UIColorCSgv"></a>
+                    <a name="/s:12SwipeCellKit0A6ActionC15backgroundColorSo7UIColorCSgvp"></a>
                     <a name="//apple_ref/swift/Property/backgroundColor" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC15backgroundColorSo7UIColorCSgv">backgroundColor</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC15backgroundColorSo7UIColorCSgvp">backgroundColor</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -471,9 +477,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A6ActionC26highlightedBackgroundColorSo7UIColorCSgv"></a>
+                    <a name="/s:12SwipeCellKit0A6ActionC26highlightedBackgroundColorSo7UIColorCSgvp"></a>
                     <a name="//apple_ref/swift/Property/highlightedBackgroundColor" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC26highlightedBackgroundColorSo7UIColorCSgv">highlightedBackgroundColor</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC26highlightedBackgroundColorSo7UIColorCSgvp">highlightedBackgroundColor</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -503,9 +509,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A6ActionC16backgroundEffectSo08UIVisualF0CSgv"></a>
+                    <a name="/s:12SwipeCellKit0A6ActionC16backgroundEffectSo08UIVisualF0CSgvp"></a>
                     <a name="//apple_ref/swift/Property/backgroundEffect" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC16backgroundEffectSo08UIVisualF0CSgv">backgroundEffect</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC16backgroundEffectSo08UIVisualF0CSgvp">backgroundEffect</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -535,9 +541,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A6ActionC17hidesWhenSelectedSbv"></a>
+                    <a name="/s:12SwipeCellKit0A6ActionC17hidesWhenSelectedSbvp"></a>
                     <a name="//apple_ref/swift/Property/hidesWhenSelected" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC17hidesWhenSelectedSbv">hidesWhenSelected</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A6ActionC17hidesWhenSelectedSbvp">hidesWhenSelected</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -649,7 +655,7 @@
                       <div class="abstract">
                         <p>Calling this method performs the configured expansion completion animation including deletion, if necessary. Calling this method more than once has no effect.</p>
 
-<p>You should only call this method from the implementation of your action <code><a href="../Classes/SwipeAction.html#/s:12SwipeCellKit0A6ActionC7handleryAC_10Foundation9IndexPathVtcSgv">handler</a></code> method.</p>
+<p>You should only call this method from the implementation of your action <code><a href="../Classes/SwipeAction.html#/s:12SwipeCellKit0A6ActionC7handleryAC_10Foundation9IndexPathVtcSgvp">handler</a></code> method.</p>
 
                       </div>
                       <div class="declaration">
@@ -687,7 +693,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://twitter.com/mkurabi" target="_blank" rel="external">Mohammad Kurabi</a>. All rights reserved. (Last updated: 2017-10-06)</p>
+          <p>&copy; 2018 <a class="link" href="https://twitter.com/mkurabi" target="_blank" rel="external">Mohammad Kurabi</a>. All rights reserved. (Last updated: 2018-05-26)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

@@ -11,6 +11,7 @@ import UIKit
  The `SwipeTableViewCellDelegate` protocol is adopted by an object that manages the display of action buttons when the cell is swiped.
  */
 public protocol SwipeTableViewCellDelegate: class {
+    
     /**
      Asks the delegate for the actions to display in response to a swipe in the specified row.
      
@@ -33,11 +34,11 @@ public protocol SwipeTableViewCellDelegate: class {
      
      - parameter orientation: The side of the cell requesting this information.
      
-     - returns: A `SwipeTableOptions` instance which configures the behavior of the action buttons.
+     - returns: A `SwipeOptions` instance which configures the behavior of the action buttons.
      
-     - note: If not implemented, a default `SwipeTableOptions` instance is used.
+     - note: If not implemented, a default `SwipeOptions` instance is used.
      */
-    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions
     
     /**
      Tells the delegate that the table view is about to go into editing mode.
@@ -60,17 +61,32 @@ public protocol SwipeTableViewCellDelegate: class {
      - parameter orientation: The side of the cell.
      */
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?, for orientation: SwipeActionsOrientation)
+    
+    /**
+     Asks the delegate for visibile rectangle of the table view, which is used to ensure swipe actions are vertically centered within the visible portion of the cell.
+     
+     - parameter tableView: The table view object providing this information.
+     
+     - returns: The visible rectangle of the table view.
+     
+     - note: The returned rectange should be in the table view's own coordinate system. Returning `nil` will result in no vertical offset to be be calculated.
+     */
+    func visibleRect(for tableView: UITableView) -> CGRect?
 }
 
 /**
  Default implementation of `SwipeTableViewCellDelegate` methods
  */
 public extension SwipeTableViewCellDelegate {
-    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
-        return SwipeTableOptions()
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        return SwipeOptions()
     }
     
     func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) {}
     
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?, for orientation: SwipeActionsOrientation) {}
+    
+    func visibleRect(for tableView: UITableView) -> CGRect? {
+        return nil
+    }
 }

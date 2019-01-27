@@ -42,6 +42,9 @@
                 <a href="Classes/SwipeAction.html">SwipeAction</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/SwipeCollectionViewCell.html">SwipeCollectionViewCell</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/SwipeTableViewCell.html">SwipeTableViewCell</a>
               </li>
             </ul>
@@ -71,6 +74,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Protocols/SwipeActionTransitioning.html">SwipeActionTransitioning</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/SwipeCollectionViewCellDelegate.html">SwipeCollectionViewCellDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/SwipeExpanding.html">SwipeExpanding</a>
@@ -111,7 +117,7 @@
                 <a href="Structs/SwipeExpansionStyle/FillOptions.html">– FillOptions</a>
               </li>
               <li class="nav-group-task">
-                <a href="Structs/SwipeTableOptions.html">SwipeTableOptions</a>
+                <a href="Structs/SwipeOptions.html">SwipeOptions</a>
               </li>
             </ul>
           </li>
@@ -125,18 +131,18 @@
 
 <p><a href="https://travis-ci.org/jerkoch/SwipeCellKit"><img src="https://travis-ci.org/jerkoch/SwipeCellKit.svg" alt="Build Status"></a> 
 <a href="https://cocoapods.org/pods/SwipeCellKit"><img src="https://img.shields.io/cocoapods/v/SwipeCellKit.svg" alt="Version Status"></a> 
-<a href="https://developer.apple.com/swift/"><img src="https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat" alt="Swift 4.0"></a>
+<a href="https://developer.apple.com/swift/"><img src="https://img.shields.io/badge/Swift-4.1-orange.svg?style=flat" alt="Swift 4.1"></a>
 <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/cocoapods/l/SwipeCellKit.svg" alt="license MIT"></a> 
 <a href="https://swipecellkit.github.io/SwipeCellKit/"><img src="https://img.shields.io/cocoapods/p/SwipeCellKit.svg" alt="Platform"></a> 
 <a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible"></a>
 <a href="https://twitter.com/mkurabi"><img src="https://img.shields.io/badge/twitter-@mkurabi-blue.svg?style=flat" alt="Twitter"></a></p>
 
-<p><em>Swipeable UITableViewCell based on the stock Mail.app, implemented in Swift.</em></p>
+<p><em>Swipeable UITableViewCell/UICollectionViewCell based on the stock Mail.app, implemented in Swift.</em></p>
 
 <p align="center"><img src="https://raw.githubusercontent.com/jerkoch/SwipeCellKit/develop/Screenshots/Hero.gif" /></p>
 <h2 id='about' class='heading'>About</h2>
 
-<p>A swipeable UITableViewCell with support for:</p>
+<p>A swipeable UITableViewCell or UICollectionViewCell with support for:</p>
 
 <ul>
 <li>Left and right swipe actions</li>
@@ -146,6 +152,7 @@
 <li>Customizable action button behavior during swipe</li>
 <li>Animated expansion when dragging past threshold</li>
 <li>Customizable expansion animations</li>
+<li>Support for both <code>UITableView</code> and <code>UICollectionView</code></li>
 <li>Accessibility</li>
 </ul>
 <h2 id='background' class='heading'>Background</h2>
@@ -185,8 +192,8 @@
 <h2 id='requirements' class='heading'>Requirements</h2>
 
 <ul>
-<li>Swift 4.0</li>
-<li>Xcode 9</li>
+<li>Swift 4.1</li>
+<li>Xcode 9+</li>
 <li>iOS 9.0+</li>
 </ul>
 <h2 id='installation' class='heading'>Installation</h2>
@@ -205,7 +212,7 @@
 <h2 id='documentation' class='heading'>Documentation</h2>
 
 <p>Read the <a href="https://swipecellkit.github.io/SwipeCellKit/">docs</a>. Generated with <a href="https://github.com/realm/jazzy">jazzy</a>. Hosted by <a href="https://pages.github.com">GitHub Pages</a>.</p>
-<h2 id='usage' class='heading'>Usage</h2>
+<h2 id='usage-for-uitableview' class='heading'>Usage for UITableView</h2>
 
 <p>Set the <code>delegate</code> property on <code><a href="Classes/SwipeTableViewCell.html">SwipeTableViewCell</a></code>:</p>
 <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">cellForRowAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UITableViewCell</span> <span class="p">{</span>
@@ -231,8 +238,41 @@
 </code></pre>
 
 <p>Optionally, you can implement the <code>editActionsOptionsForRowAt</code> method to customize the behavior of the swipe actions:</p>
-<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">editActionsOptionsForRowAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span> <span class="k">for</span> <span class="nv">orientation</span><span class="p">:</span> <span class="kt">SwipeActionsOrientation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">SwipeTableOptions</span> <span class="p">{</span>
-    <span class="k">var</span> <span class="nv">options</span> <span class="o">=</span> <span class="kt">SwipeTableOptions</span><span class="p">()</span>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">editActionsOptionsForRowAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span> <span class="k">for</span> <span class="nv">orientation</span><span class="p">:</span> <span class="kt">SwipeActionsOrientation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">SwipeOptions</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">options</span> <span class="o">=</span> <span class="kt">SwipeOptions</span><span class="p">()</span>
+    <span class="n">options</span><span class="o">.</span><span class="n">expansionStyle</span> <span class="o">=</span> <span class="o">.</span><span class="n">destructive</span>
+    <span class="n">options</span><span class="o">.</span><span class="n">transitionStyle</span> <span class="o">=</span> <span class="o">.</span><span class="n">border</span>
+    <span class="k">return</span> <span class="n">options</span>
+<span class="p">}</span>
+</code></pre>
+<h2 id='usage-for-uicollectionview' class='heading'>Usage for UICollectionView</h2>
+
+<p>Set the <code>delegate</code> property on <code><a href="Classes/SwipeCollectionViewCell.html">SwipeCollectionViewCell</a></code>:</p>
+<pre class="highlight swift"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">collectionView</span><span class="p">(</span><span class="n">_</span> <span class="nv">collectionView</span><span class="p">:</span> <span class="kt">UICollectionView</span><span class="p">,</span> <span class="n">cellForItemAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UICollectionViewCell</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">cell</span> <span class="o">=</span> <span class="n">collectionView</span><span class="o">.</span><span class="nf">dequeueReusableCell</span><span class="p">(</span><span class="nv">withReuseIdentifier</span><span class="p">:</span> <span class="s">"Cell"</span><span class="p">,</span> <span class="nv">for</span><span class="p">:</span> <span class="n">indexPath</span><span class="p">)</span> <span class="k">as!</span> <span class="k">as!</span> <span class="kt">SwipeCollectionViewCell</span>
+    <span class="n">cell</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="k">self</span>
+    <span class="k">return</span> <span class="n">cell</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Adopt the <code><a href="Protocols/SwipeCollectionViewCellDelegate.html">SwipeCollectionViewCellDelegate</a></code> protocol:</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">collectionView</span><span class="p">(</span><span class="n">_</span> <span class="nv">collectionView</span><span class="p">:</span> <span class="kt">UICollectionView</span><span class="p">,</span> <span class="n">editActionsForItemAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span> <span class="k">for</span> <span class="nv">orientation</span><span class="p">:</span> <span class="kt">SwipeActionsOrientation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">SwipeAction</span><span class="p">]?</span> <span class="p">{</span>
+    <span class="k">guard</span> <span class="n">orientation</span> <span class="o">==</span> <span class="o">.</span><span class="k">right</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+
+    <span class="k">let</span> <span class="nv">deleteAction</span> <span class="o">=</span> <span class="kt">SwipeAction</span><span class="p">(</span><span class="nv">style</span><span class="p">:</span> <span class="o">.</span><span class="n">destructive</span><span class="p">,</span> <span class="nv">title</span><span class="p">:</span> <span class="s">"Delete"</span><span class="p">)</span> <span class="p">{</span> <span class="n">action</span><span class="p">,</span> <span class="n">indexPath</span> <span class="k">in</span>
+        <span class="c1">// handle action by updating model with deletion</span>
+    <span class="p">}</span>
+
+    <span class="c1">// customize the action appearance</span>
+    <span class="n">deleteAction</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"delete"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">deleteAction</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Optionally, you can implement the <code>editActionsOptionsForItemAt</code> method to customize the behavior of the swipe actions:</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">collectionView</span><span class="p">(</span><span class="n">_</span> <span class="nv">collectionView</span><span class="p">:</span> <span class="kt">UICollectionView</span><span class="p">,</span> <span class="n">editActionsOptionsForItemAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span> <span class="k">for</span> <span class="nv">orientation</span><span class="p">:</span> <span class="kt">SwipeActionsOrientation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">SwipeOptions</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">options</span> <span class="o">=</span> <span class="kt">SwipeOptions</span><span class="p">()</span>
     <span class="n">options</span><span class="o">.</span><span class="n">expansionStyle</span> <span class="o">=</span> <span class="o">.</span><span class="n">destructive</span>
     <span class="n">options</span><span class="o">.</span><span class="n">transitionStyle</span> <span class="o">=</span> <span class="o">.</span><span class="n">border</span>
     <span class="k">return</span> <span class="n">options</span>
@@ -278,12 +318,7 @@
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">delete</span> <span class="o">=</span> <span class="kt">SwipeAction</span><span class="p">(</span><span class="nv">style</span><span class="p">:</span> <span class="o">.</span><span class="n">destructive</span><span class="p">,</span> <span class="nv">title</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span> <span class="p">{</span> <span class="n">action</span><span class="p">,</span> <span class="n">indexPath</span> <span class="k">in</span>
     <span class="c1">// Update model</span>
     <span class="k">self</span><span class="o">.</span><span class="n">emails</span><span class="o">.</span><span class="nf">remove</span><span class="p">(</span><span class="nv">at</span><span class="p">:</span> <span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">)</span>
-
-    <span class="c1">// Coordinate table view update animations</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">tableView</span><span class="o">.</span><span class="nf">beginUpdates</span><span class="p">()</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">tableView</span><span class="o">.</span><span class="nf">insertRows</span><span class="p">(</span><span class="nv">at</span><span class="p">:</span> <span class="p">[</span><span class="kt">IndexPath</span><span class="p">(</span><span class="nv">row</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">section</span><span class="p">:</span> <span class="mi">1</span><span class="p">)],</span> <span class="nv">with</span><span class="p">:</span> <span class="o">.</span><span class="n">automatic</span><span class="p">)</span>
     <span class="n">action</span><span class="o">.</span><span class="nf">fulfill</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="o">.</span><span class="n">delete</span><span class="p">)</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">tableView</span><span class="o">.</span><span class="nf">endUpdates</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre>
 <h2 id='advanced' class='heading'>Advanced</h2>
@@ -304,7 +339,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://twitter.com/mkurabi" target="_blank" rel="external">Mohammad Kurabi</a>. All rights reserved. (Last updated: 2017-10-06)</p>
+          <p>&copy; 2018 <a class="link" href="https://twitter.com/mkurabi" target="_blank" rel="external">Mohammad Kurabi</a>. All rights reserved. (Last updated: 2018-05-26)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

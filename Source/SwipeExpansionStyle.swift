@@ -9,15 +9,15 @@ import UIKit
 
 /// Describes the expansion style.  Expansion is the behavior when the cell is swiped past a defined threshold.
 public struct SwipeExpansionStyle {    
-    /// The default action performs a selection-type behavior. The cell bounces back to its unopened state upon selection and the row remains in the table view.
+    /// The default action performs a selection-type behavior. The cell bounces back to its unopened state upon selection and the row remains in the table/collection view.
     public static var selection: SwipeExpansionStyle { return SwipeExpansionStyle(target: .percentage(0.5),
                                                                                   elasticOverscroll: true,
                                                                                   completionAnimation: .bounce) }
     
-    /// The default action performs a destructive behavior. The cell is removed from the table view in an animated fashion.
+    /// The default action performs a destructive behavior. The cell is removed from the table/collection view in an animated fashion.
     public static var destructive: SwipeExpansionStyle { return .destructive(automaticallyDelete: true, timing: .with) }
 
-    /// The default action performs a destructive behavior after the fill animation completes. The cell is removed from the table view in an animated fashion.
+    /// The default action performs a destructive behavior after the fill animation completes. The cell is removed from the table/collection view in an animated fashion.
     public static var destructiveAfterFill: SwipeExpansionStyle { return .destructive(automaticallyDelete: true, timing: .after) }
 
     /// The default action performs a fill behavior.
@@ -62,6 +62,8 @@ public struct SwipeExpansionStyle {
     /// - note: Default value is 0.2. Valid range is from 0.0 for no movement past the expansion target, to 1.0 for unrestricted movement with dragging.
     public var targetOverscrollElasticity: CGFloat = 0.2
     
+    var minimumExpansionTranslation: CGFloat = 8.0
+    
     /**
      Contructs a new `SwipeExpansionStyle` instance.
      
@@ -82,17 +84,21 @@ public struct SwipeExpansionStyle {
         self.completionAnimation = completionAnimation
     }
     
-    func shouldExpand(view: Swipeable, gesture: UIPanGestureRecognizer, in superview: UIView) -> Bool {
-        guard let actionsView = view.actionsView else { return false }
-        
-        guard abs(view.frame.minX) >= actionsView.preferredWidth else { return false }
-        
-        if abs(view.frame.minX) >= target.offset(for: view, in: superview, minimumOverscroll: minimumTargetOverscroll) {
+    func shouldExpand(view: Swipeable, gesture: UIPanGestureRecognizer, in superview: UIView, within frame: CGRect? = nil) -> Bool {
+        guard let actionsView = view.actionsView, let gestureView = gesture.view else { return false }
+        guard abs(gesture.translation(in: gestureView).x) > minimumExpansionTranslation else { return false }
+    
+        let xDelta = floor(abs(frame?.minX ?? view.frame.minX))
+        if xDelta <= actionsView.preferredWidth {
+            return false
+        } else if xDelta > targetOffset(for: view) {
             return true
         }
         
+        // Use the frame instead of superview as Swipeable may not be full width of superview
+        let referenceFrame: CGRect = frame != nil ? view.frame : superview.bounds
         for trigger in additionalTriggers {
-            if trigger.isTriggered(view: view, gesture: gesture, in: superview) {
+            if trigger.isTriggered(view: view, gesture: gesture, in: superview, referenceFrame: referenceFrame) {
                 return true
             }
         }
@@ -100,8 +106,8 @@ public struct SwipeExpansionStyle {
         return false
     }
     
-    func targetOffset(for view: Swipeable, in superview: UIView) -> CGFloat {
-        return target.offset(for: view, in: superview, minimumOverscroll: minimumTargetOverscroll)
+    func targetOffset(for view: Swipeable) -> CGFloat {
+        return target.offset(for: view, minimumOverscroll: minimumTargetOverscroll)
     }
 }
 
@@ -114,15 +120,15 @@ extension SwipeExpansionStyle {
         /// The target is specified by a edge inset.
         case edgeInset(CGFloat)
         
-        func offset(for view: Swipeable, in superview: UIView, minimumOverscroll: CGFloat) -> CGFloat {
+        func offset(for view: Swipeable, minimumOverscroll: CGFloat) -> CGFloat {
             guard let actionsView = view.actionsView else { return .greatestFiniteMagnitude }
             
             let offset: CGFloat = {
                 switch self {
                 case .percentage(let value):
-                    return superview.bounds.width * value
+                    return view.frame.width * value
                 case .edgeInset(let value):
-                    return superview.bounds.width - value
+                    return view.frame.width - value
                 }
             }()
             
@@ -138,13 +144,13 @@ extension SwipeExpansionStyle {
         /// The trigger is specified by the distance in points past the fully exposed action view.
         case overscroll(CGFloat)
         
-        func isTriggered(view: Swipeable, gesture: UIPanGestureRecognizer, in superview: UIView) -> Bool {
+        func isTriggered(view: Swipeable, gesture: UIPanGestureRecognizer, in superview: UIView, referenceFrame: CGRect) -> Bool {
             guard let actionsView = view.actionsView else { return false }
             
             switch self {
             case .touchThreshold(let value):
-                let location = gesture.location(in: superview).x
-                let locationRatio = (actionsView.orientation == .left ? location : superview.bounds.width - location) / superview.bounds.width
+                let location = gesture.location(in: superview).x - referenceFrame.origin.x
+                let locationRatio = (actionsView.orientation == .left ? location : referenceFrame.width - location) / referenceFrame.width
                 return locationRatio > value
             case .overscroll(let value):
                 return abs(view.frame.minX) > actionsView.preferredWidth + value

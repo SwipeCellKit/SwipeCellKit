@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SwipeCollectionViewCellDelegate Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/SwipeCollectionViewCellDelegate" class="dashAnchor"></a>
+    <a title="SwipeCollectionViewCellDelegate Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">SwipeCellKit Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/SwipeCellKit/SwipeCellKit"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">SwipeCellKit Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        SwipeCollectionViewCellDelegate Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../advanced.html">Advanced</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/SwipeAction.html">SwipeAction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SwipeCollectionViewCell.html">SwipeCollectionViewCell</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SwipeTableViewCell.html">SwipeTableViewCell</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/ExpansionFulfillmentStyle.html">ExpansionFulfillmentStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SwipeActionStyle.html">SwipeActionStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SwipeActionsOrientation.html">SwipeActionsOrientation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SwipeTransitionStyle.html">SwipeTransitionStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SwipeVerticalAlignment.html">SwipeVerticalAlignment</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/SwipeActionTransitioning.html">SwipeActionTransitioning</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SwipeCollectionViewCellDelegate.html">SwipeCollectionViewCellDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SwipeExpanding.html">SwipeExpanding</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SwipeTableViewCellDelegate.html">SwipeTableViewCellDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/ScaleAndAlphaExpansion.html">ScaleAndAlphaExpansion</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ScaleTransition.html">ScaleTransition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeActionTransitioningContext.html">SwipeActionTransitioningContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionAnimationTimingParameters.html">SwipeExpansionAnimationTimingParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle.html">SwipeExpansionStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle/Target.html">– Target</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle/Trigger.html">– Trigger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle/CompletionAnimation.html">– CompletionAnimation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeExpansionStyle/FillOptions.html">– FillOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeOptions.html">SwipeOptions</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>SwipeCollectionViewCellDelegate</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">SwipeCollectionViewCellDelegate</span><span class="p">:</span> <span class="kd">class</span></code></pre>
+
+                </div>
+              </div>
+            <p>The <code>SwipeCollectionViewCellDelegate</code> protocol is adopted by an object that manages the display of action buttons when the item is swiped.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SwipeCellKit0a14CollectionViewB8DelegateP010collectionE0SayAA0A6ActionCGSgSo012UICollectionE0C_10Foundation9IndexPathV20editActionsForItemAtAA0aN11OrientationO3fortF"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:editActionsForItemAt:for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwipeCellKit0a14CollectionViewB8DelegateP010collectionE0SayAA0A6ActionCGSgSo012UICollectionE0C_10Foundation9IndexPathV20editActionsForItemAtAA0aN11OrientationO3fortF">collectionView(_:editActionsForItemAt:for:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Asks the delegate for the actions to display in response to a swipe in the specified item.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">collectionView</span><span class="p">(</span><span class="n">_</span> <span class="nv">collectionView</span><span class="p">:</span> <span class="kt">UICollectionView</span><span class="p">,</span> <span class="n">editActionsForItemAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span> <span class="k">for</span> <span class="nv">orientation</span><span class="p">:</span> <span class="kt"><a href="../Enums/SwipeActionsOrientation.html">SwipeActionsOrientation</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Classes/SwipeAction.html">SwipeAction</a></span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>collectionView</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The collection view object which owns the item requesting this information.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>indexPath</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index path of the item.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>orientation</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The side of the item requesting this information.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An array of <code><a href="../Classes/SwipeAction.html">SwipeAction</a></code> objects representing the actions for the item. Each action you provide is used to create a button that the user can tap.  Returning <code>nil</code> will prevent swiping for the supplied orientation.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SwipeCellKit0a14CollectionViewB8DelegateP010collectionE0AA0A7OptionsVSo012UICollectionE0C_10Foundation9IndexPathV011editActionsH9ForItemAtAA0aN11OrientationO3fortF"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:editActionsOptionsForItemAt:for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwipeCellKit0a14CollectionViewB8DelegateP010collectionE0AA0A7OptionsVSo012UICollectionE0C_10Foundation9IndexPathV011editActionsH9ForItemAtAA0aN11OrientationO3fortF">collectionView(_:editActionsOptionsForItemAt:for:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Asks the delegate for the display options to be used while presenting the action buttons.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>If not implemented, a default <code><a href="../Structs/SwipeOptions.html">SwipeOptions</a></code> instance is used.</p>
+
+</div>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">collectionView</span><span class="p">(</span><span class="n">_</span> <span class="nv">collectionView</span><span class="p">:</span> <span class="kt">UICollectionView</span><span class="p">,</span> <span class="n">editActionsOptionsForItemAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span> <span class="k">for</span> <span class="nv">orientation</span><span class="p">:</span> <span class="kt"><a href="../Enums/SwipeActionsOrientation.html">SwipeActionsOrientation</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SwipeOptions.html">SwipeOptions</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>collectionView</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The collection view object which owns the item requesting this information.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>indexPath</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index path of the item.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>orientation</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The side of the item requesting this information.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A <code><a href="../Structs/SwipeOptions.html">SwipeOptions</a></code> instance which configures the behavior of the action buttons.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SwipeCellKit0a14CollectionViewB8DelegateP010collectionE0ySo012UICollectionE0C_10Foundation9IndexPathV22willBeginEditingItemAtAA0A18ActionsOrientationO3fortF"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:willBeginEditingItemAt:for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwipeCellKit0a14CollectionViewB8DelegateP010collectionE0ySo012UICollectionE0C_10Foundation9IndexPathV22willBeginEditingItemAtAA0A18ActionsOrientationO3fortF">collectionView(_:willBeginEditingItemAt:for:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Tells the delegate that the collection view is about to go into editing mode.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">collectionView</span><span class="p">(</span><span class="n">_</span> <span class="nv">collectionView</span><span class="p">:</span> <span class="kt">UICollectionView</span><span class="p">,</span> <span class="n">willBeginEditingItemAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span> <span class="k">for</span> <span class="nv">orientation</span><span class="p">:</span> <span class="kt"><a href="../Enums/SwipeActionsOrientation.html">SwipeActionsOrientation</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>collectionView</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The collection view object providing this information.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>indexPath</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index path of the item.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>orientation</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The side of the item.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SwipeCellKit0a14CollectionViewB8DelegateP010collectionE0ySo012UICollectionE0C_10Foundation9IndexPathVSg19didEndEditingItemAtAA0A18ActionsOrientationO3fortF"></a>
+                    <a name="//apple_ref/swift/Method/collectionView(_:didEndEditingItemAt:for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwipeCellKit0a14CollectionViewB8DelegateP010collectionE0ySo012UICollectionE0C_10Foundation9IndexPathVSg19didEndEditingItemAtAA0A18ActionsOrientationO3fortF">collectionView(_:didEndEditingItemAt:for:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Tells the delegate that the collection view has left editing mode.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">collectionView</span><span class="p">(</span><span class="n">_</span> <span class="nv">collectionView</span><span class="p">:</span> <span class="kt">UICollectionView</span><span class="p">,</span> <span class="n">didEndEditingItemAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">?,</span> <span class="k">for</span> <span class="nv">orientation</span><span class="p">:</span> <span class="kt"><a href="../Enums/SwipeActionsOrientation.html">SwipeActionsOrientation</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>collectionView</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The collection view object providing this information.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>indexPath</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index path of the item.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>orientation</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The side of the item.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SwipeCellKit0a14CollectionViewB8DelegateP11visibleRectSC6CGRectVSgSo012UICollectionE0C3for_tF"></a>
+                    <a name="//apple_ref/swift/Method/visibleRect(for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwipeCellKit0a14CollectionViewB8DelegateP11visibleRectSC6CGRectVSgSo012UICollectionE0C3for_tF">visibleRect(for:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Asks the delegate for visibile rectangle of the collection view, which is used to ensure swipe actions are vertically centered within the visible portion of the item.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>The returned rectange should be in the collection view&rsquo;s own coordinate system. Returning <code>nil</code> will result in no vertical offset to be be calculated.</p>
+
+</div>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">visibleRect</span><span class="p">(</span><span class="k">for</span> <span class="nv">collectionView</span><span class="p">:</span> <span class="kt">UICollectionView</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGRect</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>collectionView</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The collection view object providing this information.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The visible rectangle of the collection view.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2018 <a class="link" href="https://twitter.com/mkurabi" target="_blank" rel="external">Mohammad Kurabi</a>. All rights reserved. (Last updated: 2018-05-26)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

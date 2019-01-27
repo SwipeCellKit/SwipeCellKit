@@ -42,6 +42,9 @@
                 <a href="Classes/SwipeAction.html">SwipeAction</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/SwipeCollectionViewCell.html">SwipeCollectionViewCell</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/SwipeTableViewCell.html">SwipeTableViewCell</a>
               </li>
             </ul>
@@ -71,6 +74,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Protocols/SwipeActionTransitioning.html">SwipeActionTransitioning</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/SwipeCollectionViewCellDelegate.html">SwipeCollectionViewCellDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/SwipeExpanding.html">SwipeExpanding</a>
@@ -111,7 +117,7 @@
                 <a href="Structs/SwipeExpansionStyle/FillOptions.html">– FillOptions</a>
               </li>
               <li class="nav-group-task">
-                <a href="Structs/SwipeTableOptions.html">SwipeTableOptions</a>
+                <a href="Structs/SwipeOptions.html">SwipeOptions</a>
               </li>
             </ul>
           </li>
@@ -140,9 +146,9 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <code>SwipeAction</code> object defines a single action to present when the user swipes horizontally in a table row.</p>
+                        <p>The <code>SwipeAction</code> object defines a single action to present when the user swipes horizontally in a table/collection item.</p>
 
-<p>This class lets you define one or more custom actions to display for a given row in your table. Each instance of this class represents a single action to perform and includes the text, formatting information, and behavior for the corresponding button.</p>
+<p>This class lets you define one or more custom actions to display for a given item in your table/collection. Each instance of this class represents a single action to perform and includes the text, formatting information, and behavior for the corresponding button.</p>
 
                         <a href="Classes/SwipeAction.html" class="slightly-smaller">See more</a>
                       </div>
@@ -151,6 +157,40 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">SwipeAction</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@SwipeCellKit@objc(cs)SwipeCollectionViewCell"></a>
+                    <a name="//apple_ref/swift/Class/SwipeCollectionViewCell" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@SwipeCellKit@objc(cs)SwipeCollectionViewCell">SwipeCollectionViewCell</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The <code>SwipeCollectionViewCell</code> class extends <code>UICollectionViewCell</code> and provides more flexible options for cell swiping behavior.</p>
+
+<p>The default behavior closely matches the stock Mail.app. If you want to customize the transition style (ie. how the action buttons are exposed), or the expansion style (the behavior when the row is swiped passes a defined threshold), you can return the appropriately configured <code><a href="Structs/SwipeOptions.html">SwipeOptions</a></code> via the <code><a href="Protocols/SwipeCollectionViewCellDelegate.html">SwipeCollectionViewCellDelegate</a></code> delegate.</p>
+
+                        <a href="Classes/SwipeCollectionViewCell.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">SwipeCollectionViewCell</span><span class="p">:</span> <span class="kt">UICollectionViewCell</span></code></pre>
 
                         </div>
                       </div>
@@ -176,7 +216,7 @@
                       <div class="abstract">
                         <p>The <code>SwipeTableViewCell</code> class extends <code>UITableViewCell</code> and provides more flexible options for cell swiping behavior.</p>
 
-<p>The default behavior closely matches the stock Mail.app. If you want to customize the transition style (ie. how the action buttons are exposed), or the expansion style (the behavior when the row is swiped passes a defined threshold), you can return the appropriately configured <code><a href="Structs/SwipeTableOptions.html">SwipeTableOptions</a></code> via the <code><a href="Protocols/SwipeTableViewCellDelegate.html">SwipeTableViewCellDelegate</a></code> delegate.</p>
+<p>The default behavior closely matches the stock Mail.app. If you want to customize the transition style (ie. how the action buttons are exposed), or the expansion style (the behavior when the row is swiped passes a defined threshold), you can return the appropriately configured <code><a href="Structs/SwipeOptions.html">SwipeOptions</a></code> via the <code><a href="Protocols/SwipeTableViewCellDelegate.html">SwipeTableViewCellDelegate</a></code> delegate.</p>
 
                         <a href="Classes/SwipeTableViewCell.html" class="slightly-smaller">See more</a>
                       </div>
@@ -196,7 +236,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://twitter.com/mkurabi" target="_blank" rel="external">Mohammad Kurabi</a>. All rights reserved. (Last updated: 2017-10-06)</p>
+          <p>&copy; 2018 <a class="link" href="https://twitter.com/mkurabi" target="_blank" rel="external">Mohammad Kurabi</a>. All rights reserved. (Last updated: 2018-05-26)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

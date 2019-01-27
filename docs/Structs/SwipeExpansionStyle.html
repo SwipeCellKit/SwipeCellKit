@@ -43,6 +43,9 @@
                 <a href="../Classes/SwipeAction.html">SwipeAction</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/SwipeCollectionViewCell.html">SwipeCollectionViewCell</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/SwipeTableViewCell.html">SwipeTableViewCell</a>
               </li>
             </ul>
@@ -72,6 +75,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Protocols/SwipeActionTransitioning.html">SwipeActionTransitioning</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SwipeCollectionViewCellDelegate.html">SwipeCollectionViewCellDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/SwipeExpanding.html">SwipeExpanding</a>
@@ -112,7 +118,7 @@
                 <a href="../Structs/SwipeExpansionStyle/FillOptions.html">– FillOptions</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/SwipeTableOptions.html">SwipeTableOptions</a>
+                <a href="../Structs/SwipeOptions.html">SwipeOptions</a>
               </li>
             </ul>
           </li>
@@ -137,9 +143,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV9selectionACvZ"></a>
+                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV9selectionACvpZ"></a>
                     <a name="//apple_ref/swift/Variable/selection" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV9selectionACvZ">selection</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV9selectionACvpZ">selection</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -147,7 +153,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The default action performs a selection-type behavior. The cell bounces back to its unopened state upon selection and the row remains in the table view.</p>
+                        <p>The default action performs a selection-type behavior. The cell bounces back to its unopened state upon selection and the row remains in the table/collection view.</p>
 
                       </div>
                       <div class="declaration">
@@ -164,9 +170,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV11destructiveACvZ"></a>
+                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV11destructiveACvpZ"></a>
                     <a name="//apple_ref/swift/Variable/destructive" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV11destructiveACvZ">destructive</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV11destructiveACvpZ">destructive</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -174,7 +180,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The default action performs a destructive behavior. The cell is removed from the table view in an animated fashion.</p>
+                        <p>The default action performs a destructive behavior. The cell is removed from the table/collection view in an animated fashion.</p>
 
                       </div>
                       <div class="declaration">
@@ -191,9 +197,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV20destructiveAfterFillACvZ"></a>
+                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV20destructiveAfterFillACvpZ"></a>
                     <a name="//apple_ref/swift/Variable/destructiveAfterFill" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV20destructiveAfterFillACvZ">destructiveAfterFill</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV20destructiveAfterFillACvpZ">destructiveAfterFill</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -201,7 +207,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The default action performs a destructive behavior after the fill animation completes. The cell is removed from the table view in an animated fashion.</p>
+                        <p>The default action performs a destructive behavior after the fill animation completes. The cell is removed from the table/collection view in an animated fashion.</p>
 
                       </div>
                       <div class="declaration">
@@ -218,9 +224,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV4fillACvZ"></a>
+                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV4fillACvpZ"></a>
                     <a name="//apple_ref/swift/Variable/fill" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV4fillACvZ">fill</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV4fillACvpZ">fill</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -312,9 +318,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV6targetAC6TargetOv"></a>
+                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV6targetAC6TargetOvp"></a>
                     <a name="//apple_ref/swift/Property/target" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV6targetAC6TargetOv">target</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV6targetAC6TargetOvp">target</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -339,9 +345,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV18additionalTriggersSayAC7TriggerOGv"></a>
+                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV18additionalTriggersSayAC7TriggerOGvp"></a>
                     <a name="//apple_ref/swift/Property/additionalTriggers" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV18additionalTriggersSayAC7TriggerOGv">additionalTriggers</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV18additionalTriggersSayAC7TriggerOGvp">additionalTriggers</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -366,9 +372,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV17elasticOverscrollSbv"></a>
+                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV17elasticOverscrollSbvp"></a>
                     <a name="//apple_ref/swift/Property/elasticOverscroll" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV17elasticOverscrollSbv">elasticOverscroll</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV17elasticOverscrollSbvp">elasticOverscroll</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -393,9 +399,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV19completionAnimationAC010CompletionG0Ov"></a>
+                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV19completionAnimationAC010CompletionG0Ovp"></a>
                     <a name="//apple_ref/swift/Property/completionAnimation" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV19completionAnimationAC010CompletionG0Ov">completionAnimation</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV19completionAnimationAC010CompletionG0Ovp">completionAnimation</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -420,9 +426,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV23minimumTargetOverscroll12CoreGraphics7CGFloatVv"></a>
+                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV23minimumTargetOverscroll12CoreGraphics7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/minimumTargetOverscroll" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV23minimumTargetOverscroll12CoreGraphics7CGFloatVv">minimumTargetOverscroll</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV23minimumTargetOverscroll12CoreGraphics7CGFloatVvp">minimumTargetOverscroll</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -447,9 +453,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV26targetOverscrollElasticity12CoreGraphics7CGFloatVv"></a>
+                    <a name="/s:12SwipeCellKit0A14ExpansionStyleV26targetOverscrollElasticity12CoreGraphics7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/targetOverscrollElasticity" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV26targetOverscrollElasticity12CoreGraphics7CGFloatVv">targetOverscrollElasticity</a>
+                    <a class="token" href="#/s:12SwipeCellKit0A14ExpansionStyleV26targetOverscrollElasticity12CoreGraphics7CGFloatVvp">targetOverscrollElasticity</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -683,7 +689,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://twitter.com/mkurabi" target="_blank" rel="external">Mohammad Kurabi</a>. All rights reserved. (Last updated: 2017-10-06)</p>
+          <p>&copy; 2018 <a class="link" href="https://twitter.com/mkurabi" target="_blank" rel="external">Mohammad Kurabi</a>. All rights reserved. (Last updated: 2018-05-26)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
