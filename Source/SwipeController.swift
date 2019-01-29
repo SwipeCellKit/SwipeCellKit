@@ -73,7 +73,7 @@ class SwipeController: NSObject {
         
         switch gesture.state {
         case .began:
-            if let swipeable = scrollView?.swipeables.first(where: { $0.state == .dragging }) as? UIView, swipeable != self.swipeable {
+            if let swipeable = scrollView?.swipeables.first(where: { $0.state == .dragging }) as? UIView, self.swipeable != nil, swipeable != self.swipeable! {
                 return
             }
             
@@ -92,7 +92,7 @@ class SwipeController: NSObject {
             
             if swipeable.state == .animatingToCenter {
                 let swipedCell = scrollView?.swipeables.first(where: { $0.state == .dragging || $0.state == .left || $0.state == .right }) as? UIView
-                if let swipedCell = swipedCell, swipedCell != self.swipeable {
+                if let swipedCell = swipedCell, self.swipeable != nil, swipedCell != self.swipeable! {
                     return
                 }
             }
