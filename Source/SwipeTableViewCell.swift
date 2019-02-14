@@ -17,6 +17,10 @@ open class SwipeTableViewCell: UITableViewCell {
     
     /// The object that acts as the delegate of the `SwipeTableViewCell`.
     public weak var delegate: SwipeTableViewCellDelegate?
+
+    /// we don't call super.setEditing in ThreadTableViewCell since that shows the default edit control
+    /// we instead set this flag and check it to disable swipes when a cell is in edit mode
+    open var pseudoEditing: Bool = false
     
     var state = SwipeState.center
     var actionsView: SwipeActionsView?

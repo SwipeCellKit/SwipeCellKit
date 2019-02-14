@@ -40,8 +40,19 @@ class SwipeController: NSObject {
     var originalCenter: CGFloat = 0
     var scrollRatio: CGFloat = 1.0
     var originalLayoutMargins: UIEdgeInsets = .zero
+
+    /// If the user swipes quickly or beyond a certain distance threshold, you may want to force the swipe through gesture
+    /// Every time a pan gesture finishes, this block is called.
+    /// If this block returns true, it will not open the menu and instead trigger a swipe through animation.
+    public var customActionTrigger: ((UIPanGestureRecognizer)->Bool)? = nil
+
+    /// If the user swipes back quickly (as if trying to close the menu), by default, it will trigger a swipe through animation.
+    /// Implement this method if you want to instead base it off some other factor (such as velocity)
+    /// If this block returns true, it will close the swipe cell and not trigger an action
+    /// This is only called if the user is swiping in a close direction
+    public var forceMenuCloseTrigger: ((UIPanGestureRecognizer)->Bool)? = nil
     
-    lazy var panGestureRecognizer: UIPanGestureRecognizer = {
+    public lazy var panGestureRecognizer: UIPanGestureRecognizer = {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(gesture:)))
         gesture.delegate = self
         return gesture
@@ -64,6 +75,10 @@ class SwipeController: NSObject {
 
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
         guard let target = actionsContainerView, var swipeable = self.swipeable else { return }
+
+        if let cell = swipeable as? SwipeTableViewCell {
+            guard cell.isEditing == false && cell.pseudoEditing == false else { return }
+        }
         
         let velocity = gesture.velocity(in: target)
         
@@ -105,7 +120,8 @@ class SwipeController: NSObject {
             if (translation + originalCenter - swipeable.bounds.midX) * actionsView.orientation.scale > 0 {
                 target.center.x = gesture.elasticTranslation(in: target,
                                                              withLimit: .zero,
-                                                             fromOriginalCenter: CGPoint(x: originalCenter, y: 0)).x
+                                                             fromOriginalCenter: CGPoint(x: originalCenter, y: 0),
+                                                             swipeToScrollRatio: (actionsView.options.expansionStyle?.swipeToScrollRatio) ?? 1).x
                 swipeable.actionsView?.visibleWidth = abs((swipeable as Swipeable).frame.minX)
                 scrollRatio = elasticScrollRatio
                 return
@@ -123,11 +139,12 @@ class SwipeController: NSObject {
                     let delta = centerForTranslationToEdge - originalCenter
                     
                     animate(toOffset: centerForTranslationToEdge)
-                    gesture.setTranslation(CGPoint(x: delta, y: 0), in: swipeable.superview!)
+                    gesture.setTranslation(CGPoint(x: delta / expansionStyle.swipeToScrollRatio, y: 0), in: swipeable.superview!)
                 } else {
                     target.center.x = gesture.elasticTranslation(in: target,
                                                                  withLimit: CGSize(width: targetOffset, height: 0),
                                                                  fromOriginalCenter: CGPoint(x: originalCenter, y: 0),
+                                                                 swipeToScrollRatio: expansionStyle.swipeToScrollRatio,
                                                                  applyingRatio: expansionStyle.targetOverscrollElasticity).x
                     swipeable.actionsView?.visibleWidth = abs(actionsContainerView.frame.minX)
                 }
@@ -137,6 +154,7 @@ class SwipeController: NSObject {
                 target.center.x = gesture.elasticTranslation(in: target,
                                                              withLimit: CGSize(width: actionsView.preferredWidth, height: 0),
                                                              fromOriginalCenter: CGPoint(x: originalCenter, y: 0),
+                                                             swipeToScrollRatio: 1,
                                                              applyingRatio: elasticScrollRatio).x
                 swipeable.actionsView?.visibleWidth = abs(actionsContainerView.frame.minX)
                 
@@ -151,8 +169,61 @@ class SwipeController: NSObject {
             }
             
             swipeable.state = targetState(forVelocity: velocity)
+
+            // If customActionTrigger is true, then perform the last action immediately (without showing the menu)
+            // If it's false, fall back to previous behavior
+            let shouldOverridePerformAction: Bool
+            if let customActionTrigger = self.customActionTrigger {
+                switch swipeable.state {
+                // Check left and right separately to ensure that the user is flicking in the right direction
+                case .left:
+                    shouldOverridePerformAction = velocity.x > 0 && customActionTrigger(gesture)
+                case .right:
+                    shouldOverridePerformAction = velocity.x < 0 && customActionTrigger(gesture)
+                default:
+                    shouldOverridePerformAction = false
+                }
+            } else {
+                // The feature is disabled
+                shouldOverridePerformAction = false
+            }
+
+            let shouldForceCloseMenu: Bool
+            if let forceMenuCloseTrigger = self.forceMenuCloseTrigger {
+                switch swipeable.state {
+                case .left:
+                    // Only call forceMenuCloseTrigger if the user is swiping in that direction (as if to close the swipe cell)
+                    shouldForceCloseMenu = velocity.x < 0 && forceMenuCloseTrigger(gesture)
+                case .right:
+                    shouldForceCloseMenu = velocity.x > 0 && forceMenuCloseTrigger(gesture)
+                default:
+                    shouldForceCloseMenu = false
+                }
+            } else {
+                shouldForceCloseMenu = false
+            }
+
+            let containsOnlyOneAction = actionsView.actions.count == 1
+            let performAction = actionsView.expanded == true || shouldOverridePerformAction
             
-            if actionsView.expanded == true, let expandedAction = actionsView.expandableAction  {
+            if shouldForceCloseMenu || (containsOnlyOneAction && !performAction) {
+                // Set active to false and animate back to the start position
+                let targetOffset = targetCenter(active: false)
+                let distance = targetOffset - actionsView.center.x
+                let normalizedVelocity = velocity.x * scrollRatio / distance
+
+                animate(toOffset: targetOffset, withInitialVelocity: normalizedVelocity) { _ in
+                    if swipeable.state == .center {
+                        self.reset()
+                    }
+                }
+            } else if performAction, let expandedAction = actionsView.expandableAction  {
+                // Give haptic feedback in this case since we skipped the expanded state
+                if shouldOverridePerformAction {
+                    actionsView.feedbackGenerator.impactOccurred()
+                    actionsView.feedbackGenerator.prepare()
+                }
+
                 perform(action: expandedAction)
             } else {
                 let targetOffset = targetCenter(active: swipeable.state.isActive)

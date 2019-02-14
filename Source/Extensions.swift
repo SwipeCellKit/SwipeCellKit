@@ -60,14 +60,14 @@ extension UIScrollView {
 }
 
 extension UIPanGestureRecognizer {
-    func elasticTranslation(in view: UIView?, withLimit limit: CGSize, fromOriginalCenter center: CGPoint, applyingRatio ratio: CGFloat = 0.20) -> CGPoint {
+    func elasticTranslation(in view: UIView?, withLimit limit: CGSize, fromOriginalCenter center: CGPoint, swipeToScrollRatio: CGFloat, applyingRatio ratio: CGFloat = 0.20) -> CGPoint {
         let translation = self.translation(in: view)
 
         guard let sourceView = self.view else {
             return translation
         }
         
-        let updatedCenter = CGPoint(x: center.x + translation.x, y: center.y + translation.y)
+        let updatedCenter = CGPoint(x: center.x + translation.x * swipeToScrollRatio, y: center.y + translation.y)
         let distanceFromCenter = CGSize(width: abs(updatedCenter.x - sourceView.bounds.midX),
                                         height: abs(updatedCenter.y - sourceView.bounds.midY))
         

@@ -61,6 +61,11 @@ public struct SwipeExpansionStyle {
     ///
     /// - note: Default value is 0.2. Valid range is from 0.0 for no movement past the expansion target, to 1.0 for unrestricted movement with dragging.
     public var targetOverscrollElasticity: CGFloat = 0.2
+
+    /// This affects how much the cell moves when you swipe
+    /// If this value is above 1, the cell will move faster than your finger
+    /// If it's less than 1, it will move slower than your finger
+    public var swipeToScrollRatio: CGFloat = 1
     
     var minimumExpansionTranslation: CGFloat = 8.0
     
