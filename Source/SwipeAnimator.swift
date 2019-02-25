@@ -5,7 +5,7 @@
 //  Copyright © 2017 Jeremy Koch. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 protocol SwipeAnimator {
     /// A Boolean value indicating whether the animation is currently running.
