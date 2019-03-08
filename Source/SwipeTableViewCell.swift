@@ -181,7 +181,9 @@ open class SwipeTableViewCell: UITableViewCell {
 
 extension SwipeTableViewCell: SwipeControllerDelegate {
     func swipeController(_ controller: SwipeController, canBeginEditingSwipeableFor orientation: SwipeActionsOrientation) -> Bool {
-        return self.isEditing == false
+        guard let tableView = tableView, let indexPath = tableView.indexPath(for: self) else { return false }
+        
+        return delegate?.tableView(tableView, canBeginEditingForRowAt: indexPath, for: orientation) ?? false
     }
     
     func swipeController(_ controller: SwipeController, editActionsForSwipeableFor orientation: SwipeActionsOrientation) -> [SwipeAction]? {

@@ -12,6 +12,8 @@ import UIKit
  */
 public protocol SwipeTableViewCellDelegate: class {
     
+    func tableView(_ tableView: UITableView, canBeginEditingForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> Bool
+    
     /**
      Asks the delegate for the actions to display in response to a swipe in the specified row.
      
