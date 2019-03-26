@@ -23,7 +23,7 @@ class MailTableViewController: UITableViewController {
         tableView.allowsSelection = true
         tableView.allowsMultipleSelectionDuringEditing = true
         
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
         
         navigationItem.rightBarButtonItem = editButtonItem
