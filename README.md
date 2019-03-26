@@ -91,7 +91,7 @@ pod 'SwipeCellKit'
 # Get the latest on develop
 pod 'SwipeCellKit', :git => 'https://github.com/SwipeCellKit/SwipeCellKit.git', :branch => 'develop'
 
-# If you have NOT upgraded to Swift 5.0, use the last Swift 4.2 compatible release
+# If you have NOT upgraded to Swift 5.0, use the last Swift 4.2/Xcode 10.2 compatible release
 pod 'SwipeCellKit', '2.5.2'
 
 # If you have NOT upgraded to Swift 4.2, use the last non-swift 4.2 compatible release
