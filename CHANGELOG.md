@@ -2,7 +2,7 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.5.3](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.5.3)
+## [2.5.4](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.5.4)
 
 #### Fixed
 
