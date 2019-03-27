@@ -20,6 +20,20 @@
                ReferencedContainer = "container:SwipeCellKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3F234AE21E44AA5E00E22A38"
+               BuildableName = "MailExample.app"
+               BlueprintName = "MailExample"
+               ReferencedContainer = "container:Example/MailExample.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
