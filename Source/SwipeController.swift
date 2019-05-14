@@ -62,6 +62,22 @@ class SwipeController: NSObject {
         
         configure()
     }
+    
+    private func testForSwitch(view: UIView?) -> Bool {
+        guard let view = view else { return false }
+        if view is UISwitch {
+            return true
+        } else {
+            return testForSwitch(view: view.superview)
+        }
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if testForSwitch(view: touch.view) {
+            return false
+        }
+        return true
+    }
 
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
         guard let target = actionsContainerView, var swipeable = self.swipeable else { return }
