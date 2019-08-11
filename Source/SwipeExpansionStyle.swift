@@ -64,6 +64,11 @@ public struct SwipeExpansionStyle {
     
     var minimumExpansionTranslation: CGFloat = 8.0
     
+    /// The threshold to avoid options being hidden.
+    ///
+    /// - note: This value is checked just when is greater than preferred width for the target view. Remember if you set this property your last action couldn't be trigger, to active this effect set a value more than 0 and less than 1 is measured by percentage.
+    public let stickThreshold: CGFloat
+    
     /**
      Contructs a new `SwipeExpansionStyle` instance.
      
@@ -77,11 +82,12 @@ public struct SwipeExpansionStyle {
 
      - returns: The new `SwipeExpansionStyle` instance.
      */
-    public init(target: Target, additionalTriggers: [Trigger] = [], elasticOverscroll: Bool = false, completionAnimation: CompletionAnimation = .bounce) {
+    public init(target: Target, additionalTriggers: [Trigger] = [], elasticOverscroll: Bool = false, completionAnimation: CompletionAnimation = .bounce, stickThreshold: CGFloat = 0.0) {
         self.target = target
         self.additionalTriggers = additionalTriggers
         self.elasticOverscroll = elasticOverscroll
         self.completionAnimation = completionAnimation
+        self.stickThreshold = stickThreshold
     }
     
     func shouldExpand(view: Swipeable, gesture: UIPanGestureRecognizer, in superview: UIView, within frame: CGRect? = nil) -> Bool {
@@ -89,7 +95,10 @@ public struct SwipeExpansionStyle {
         guard abs(gesture.translation(in: gestureView).x) > minimumExpansionTranslation else { return false }
     
         let xDelta = floor(abs(frame?.minX ?? view.frame.minX))
+        
         if xDelta <= actionsView.preferredWidth {
+            return false
+        } else if stickThreshold > 0, xDelta > threesholdDistance(for: view) {
             return false
         } else if xDelta > targetOffset(for: view) {
             return true
@@ -108,6 +117,10 @@ public struct SwipeExpansionStyle {
     
     func targetOffset(for view: Swipeable) -> CGFloat {
         return target.offset(for: view, minimumOverscroll: minimumTargetOverscroll)
+    }
+    
+    private func threesholdDistance(for view: Swipeable) -> CGFloat {
+        return view.frame.width * stickThreshold
     }
 }
 
