@@ -111,7 +111,11 @@ class SwipeActionsView: UIView {
         
         clipsToBounds = true
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = options.backgroundColor ?? #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
+		if #available(iOS 13.0, *) {
+			backgroundColor = options.backgroundColor ?? .systemGroupedBackground
+		} else {
+			backgroundColor = options.backgroundColor ?? #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
+		}
         
         buttons = addButtons(for: self.actions, withMaximum: maxSize, contentEdgeInsets: contentEdgeInsets)
     }
@@ -303,7 +307,11 @@ class SwipeActionButtonWrapperView: UIView {
             case .destructive:
                 actionBackgroundColor = #colorLiteral(red: 1, green: 0.2352941176, blue: 0.1882352941, alpha: 1)
             default:
-                actionBackgroundColor = #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
+				if #available(iOS 13.0, *) {
+					actionBackgroundColor = .systemGroupedBackground
+				} else {
+					actionBackgroundColor = #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
+				}
             }
         }
     }
