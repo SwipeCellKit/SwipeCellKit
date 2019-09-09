@@ -437,6 +437,8 @@ extension SwipeController: SwipeActionsViewDelegate {
                 }
             case .reset:
                 self.hideSwipe(animated: true)
+            case .none:
+                self.reset()
             }
         }
         

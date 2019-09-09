@@ -120,6 +120,9 @@ public enum ExpansionFulfillmentStyle {
 
     /// Implies the item will be reset and the actions view hidden upon action fulfillment.
     case reset
+
+    /// Implies the item will be same as in the end of animation.
+    case none
 }
 
 // MARK: - Internal
