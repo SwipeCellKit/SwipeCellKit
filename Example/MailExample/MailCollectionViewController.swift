@@ -175,7 +175,11 @@ extension MailCollectionViewController: SwipeCollectionViewCellDelegate {
             options.buttonSpacing = 11
         case .circular:
             options.buttonSpacing = 4
-            options.backgroundColor = #colorLiteral(red: 0.9467939734, green: 0.9468161464, blue: 0.9468042254, alpha: 1)
+            if #available(iOS 13.0, *) {
+                options.backgroundColor = UIColor.systemGray6
+            } else {
+                options.backgroundColor = #colorLiteral(red: 0.9467939734, green: 0.9468161464, blue: 0.9468042254, alpha: 1)
+            }
         }
         
         return options
@@ -201,10 +205,10 @@ extension MailCollectionViewController: SwipeCollectionViewCellDelegate {
         
         switch buttonStyle {
         case .backgroundColor:
-            action.backgroundColor = descriptor.color
+            action.backgroundColor = descriptor.color(forStyle: buttonStyle)
         case .circular:
             action.backgroundColor = .clear
-            action.textColor = descriptor.color
+            action.textColor = descriptor.color(forStyle: buttonStyle)
             action.font = .systemFont(ofSize: 13)
             action.transitionDelegate = ScaleTransition.default
         }
