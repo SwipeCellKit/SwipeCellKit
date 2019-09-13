@@ -82,6 +82,17 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
     func configure() {
         contentView.clipsToBounds = false
         
+        if contentView.translatesAutoresizingMaskIntoConstraints == true {
+            contentView.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([
+                contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                contentView.topAnchor.constraint(equalTo: self.topAnchor),
+                contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+                contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            ])
+        }
+        
         swipeController = SwipeController(swipeable: self, actionsContainerView: contentView)
         swipeController.delegate = self
     }
