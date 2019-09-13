@@ -82,6 +82,17 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
     func configure() {
         contentView.clipsToBounds = false
         
+        if contentView.translatesAutoresizingMaskIntoConstraints == true {
+            contentView.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([
+                contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                contentView.topAnchor.constraint(equalTo: self.topAnchor),
+                contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+                contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            ])
+        }
+        
         swipeController = SwipeController(swipeable: self, actionsContainerView: contentView)
         swipeController.delegate = self
     }
@@ -153,7 +164,11 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
     //   the collection view.
     /// :nodoc:
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        guard let actionsView = actionsView else { return super.hitTest(point, with: event) }
+        guard
+          let actionsView = actionsView,
+          isHidden == false
+        else { return super.hitTest(point, with: event) }
+
         let modifiedPoint = actionsView.convert(point, from: self)
         return actionsView.hitTest(modifiedPoint, with: event) ?? super.hitTest(point, with: event)
     }

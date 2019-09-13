@@ -432,6 +432,7 @@ extension SwipeController: SwipeActionsViewDelegate {
                     }
                 }) { [weak self] _ in
                     self?.actionsContainerView?.mask = nil
+                    self?.resetSwipe()
                     self?.reset()
                 }
             case .reset:
@@ -479,6 +480,15 @@ extension SwipeController: SwipeActionsViewDelegate {
         }
         
         delegate?.swipeController(self, didEndEditingSwipeableFor: actionView.orientation)
+    }
+    
+    func resetSwipe() {
+        guard let swipeable = self.swipeable, let actionsContainerView = self.actionsContainerView else { return }
+        
+        let targetCenter = self.targetCenter(active: false)
+        
+        actionsContainerView.center = CGPoint(x: targetCenter, y: actionsContainerView.center.y)
+        swipeable.actionsView?.visibleWidth = abs(actionsContainerView.frame.minX)
     }
     
     func showSwipe(orientation: SwipeActionsOrientation, animated: Bool = true, completion: ((Bool) -> Void)? = nil) {
