@@ -112,13 +112,24 @@ class SwipeActionsView: UIView {
         clipsToBounds = true
         translatesAutoresizingMaskIntoConstraints = false
         
+
+    #if canImport(Combine)
         if let backgroundColor = options.backgroundColor {
             self.backgroundColor = backgroundColor
-        } else if #available(iOS 13.0, *) {
+        }
+        else if #available(iOS 13.0, *) {
             backgroundColor = UIColor.systemGray5
         } else {
             backgroundColor = #colorLiteral(red: 0.7803494334, green: 0.7761332393, blue: 0.7967314124, alpha: 1)
         }
+    #else
+        if let backgroundColor = options.backgroundColor {
+            self.backgroundColor = backgroundColor
+        }
+        else {
+            backgroundColor = #colorLiteral(red: 0.7803494334, green: 0.7761332393, blue: 0.7967314124, alpha: 1)
+        }
+    #endif
         
         buttons = addButtons(for: self.actions, withMaximum: maxSize, contentEdgeInsets: contentEdgeInsets)
     }
@@ -308,13 +319,25 @@ class SwipeActionButtonWrapperView: UIView {
         } else {
             switch action.style {
             case .destructive:
-                actionBackgroundColor = UIColor.systemRed
+            #if canImport(Combine)
+                if #available(iOS 13.0, *) {
+                    actionBackgroundColor = UIColor.systemRed
+                } else {
+                    actionBackgroundColor = #colorLiteral(red: 1, green: 0.2352941176, blue: 0.1882352941, alpha: 1)
+                }
+            #else
+                actionBackgroundColor = #colorLiteral(red: 1, green: 0.2352941176, blue: 0.1882352941, alpha: 1)
+            #endif
             default:
+            #if canImport(Combine)
                 if #available(iOS 13.0, *) {
                     actionBackgroundColor = UIColor.systemGray3
                 } else {
                     actionBackgroundColor = #colorLiteral(red: 0.7803494334, green: 0.7761332393, blue: 0.7967314124, alpha: 1)
                 }
+            #else
+                actionBackgroundColor = #colorLiteral(red: 0.7803494334, green: 0.7761332393, blue: 0.7967314124, alpha: 1)
+            #endif
             }
         }
     }

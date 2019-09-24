@@ -198,11 +198,15 @@ extension MailTableViewController: SwipeTableViewCellDelegate {
             options.buttonSpacing = 4
         case .circular:
             options.buttonSpacing = 4
+        #if canImport(Combine)
             if #available(iOS 13.0, *) {
                 options.backgroundColor = UIColor.systemGray6
             } else {
                 options.backgroundColor = #colorLiteral(red: 0.9467939734, green: 0.9468161464, blue: 0.9468042254, alpha: 1)
             }
+        #else
+            options.backgroundColor = #colorLiteral(red: 0.9467939734, green: 0.9468161464, blue: 0.9468042254, alpha: 1)
+        #endif
         }
         
         return options
