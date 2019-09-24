@@ -37,6 +37,16 @@ enum ActionDescriptor {
     func image(forStyle style: ButtonStyle, displayMode: ButtonDisplayMode) -> UIImage? {
         guard displayMode != .titleOnly else { return nil }
         
+        let name: String
+        switch self {
+        case .read: name = "Read"
+        case .unread: name = "Unread"
+        case .more: name = "More"
+        case .flag: name = "Flag"
+        case .trash: name = "Trash"
+        }
+        
+    #if canImport(Combine)
         if #available(iOS 13.0, *) {
             let name: String
             switch self {
@@ -56,20 +66,15 @@ enum ActionDescriptor {
                 return circularIcon(with: color(forStyle: style), size: CGSize(width: 50, height: 50), icon: image)
             }
         } else {
-            let name: String
-            switch self {
-            case .read: name = "Read"
-            case .unread: name = "Unread"
-            case .more: name = "More"
-            case .flag: name = "Flag"
-            case .trash: name = "Trash"
-            }
-            
             return UIImage(named: style == .backgroundColor ? name : name + "-circle")
         }
+    #else
+        return UIImage(named: style == .backgroundColor ? name : name + "-circle")
+    #endif
     }
     
     func color(forStyle style: ButtonStyle) -> UIColor {
+    #if canImport(Combine)
         switch self {
         case .read, .unread: return UIColor.systemBlue
         case .more:
@@ -84,6 +89,14 @@ enum ActionDescriptor {
         case .flag: return UIColor.systemOrange
         case .trash: return UIColor.systemRed
         }
+    #else
+        switch self {
+        case .read, .unread: return #colorLiteral(red: 0, green: 0.4577052593, blue: 1, alpha: 1)
+        case .more: return #colorLiteral(red: 0.7803494334, green: 0.7761332393, blue: 0.7967314124, alpha: 1)
+        case .flag: return #colorLiteral(red: 1, green: 0.5803921569, blue: 0, alpha: 1)
+        case .trash: return #colorLiteral(red: 1, green: 0.2352941176, blue: 0.1882352941, alpha: 1)
+        }
+    #endif
     }
     
     func circularIcon(with color: UIColor, size: CGSize, icon: UIImage? = nil) -> UIImage? {

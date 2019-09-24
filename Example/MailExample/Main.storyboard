@@ -4,7 +4,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
-        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -39,7 +38,7 @@
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:16 AM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MgJ-f3-Qel">
                                                             <rect key="frame" x="81.666666666666657" y="1.3333333333333339" width="264.33333333333337" height="18"/>
                                                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                                            <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Disclosure" translatesAutoresizingMaskIntoConstraints="NO" id="UNG-rq-ulh">
@@ -61,7 +60,7 @@
                                                     <rect key="frame" x="0.0" y="42.333333333333336" width="360" height="38.000000000000007"/>
                                                     <string key="text">Sra. Mendez - Thank you so MUCH for this.  We know you do not have to do this and we are so grateful to you.  Please let us know if there's anything else we can do.</string>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                                    <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -244,7 +243,7 @@
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" reuseIdentifier="MailCell" id="9DJ-7v-dYG" customClass="MailCollectionViewCell" customModule="MailExample" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="98"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="0id-LL-Laa">
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="98"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
@@ -263,7 +262,7 @@
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:16 AM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="krw-3d-vsj">
                                                             <rect key="frame" x="81.666666666666657" y="0.33333333333333393" width="264.33333333333337" height="19.666666666666664"/>
                                                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                                            <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Disclosure" translatesAutoresizingMaskIntoConstraints="NO" id="wgb-e1-RIb">
@@ -288,7 +287,7 @@
                                                     <rect key="frame" x="0.0" y="42.333333333333336" width="360" height="38.000000000000007"/>
                                                     <string key="text">Sra. Mendez - Thank you so MUCH for this.  We know you do not have to do this and we are so grateful to you.  Please let us know if there's anything else we can do.</string>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                                    <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -298,22 +297,22 @@
                                         </stackView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rbe-ZQ-d8Z">
                                             <rect key="frame" x="32" y="97.666666666666671" width="382" height="0.3333333333333286"/>
-                                            <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="backgroundColor" systemColor="separatorColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="0.5" id="ED0-wW-eNH"/>
                                             </constraints>
                                         </view>
                                     </subviews>
-                                    <constraints>
-                                        <constraint firstItem="ysl-94-klK" firstAttribute="top" secondItem="0id-LL-Laa" secondAttribute="topMargin" id="0cR-Od-8t4"/>
-                                        <constraint firstItem="ysl-94-klK" firstAttribute="leading" secondItem="0id-LL-Laa" secondAttribute="leadingMargin" constant="24" id="Gfx-hY-UaS"/>
-                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ysl-94-klK" secondAttribute="bottom" id="XNo-iJ-0HZ"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="ysl-94-klK" secondAttribute="trailing" constant="8" id="XyZ-Be-mik"/>
-                                        <constraint firstAttribute="trailing" secondItem="Rbe-ZQ-d8Z" secondAttribute="trailing" id="cwL-i9-n6p"/>
-                                        <constraint firstAttribute="bottom" secondItem="Rbe-ZQ-d8Z" secondAttribute="bottom" id="uJ7-sj-VcD"/>
-                                        <constraint firstItem="Rbe-ZQ-d8Z" firstAttribute="leading" secondItem="0id-LL-Laa" secondAttribute="leadingMargin" constant="24" id="w8V-bZ-FcZ"/>
-                                    </constraints>
-                                </collectionViewCellContentView>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="ysl-94-klK" firstAttribute="top" secondItem="9DJ-7v-dYG" secondAttribute="topMargin" id="0cR-Od-8t4"/>
+                                    <constraint firstItem="ysl-94-klK" firstAttribute="leading" secondItem="9DJ-7v-dYG" secondAttribute="leadingMargin" constant="24" id="Gfx-hY-UaS"/>
+                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ysl-94-klK" secondAttribute="bottom" id="XNo-iJ-0HZ"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="ysl-94-klK" secondAttribute="trailing" constant="8" id="XyZ-Be-mik"/>
+                                    <constraint firstAttribute="trailing" secondItem="Rbe-ZQ-d8Z" secondAttribute="trailing" id="cwL-i9-n6p"/>
+                                    <constraint firstAttribute="bottom" secondItem="Rbe-ZQ-d8Z" secondAttribute="bottom" id="uJ7-sj-VcD"/>
+                                    <constraint firstItem="Rbe-ZQ-d8Z" firstAttribute="leading" secondItem="9DJ-7v-dYG" secondAttribute="leadingMargin" constant="24" id="w8V-bZ-FcZ"/>
+                                </constraints>
                                 <connections>
                                     <outlet property="bodyLabel" destination="pNK-Lz-z8w" id="ECM-z4-aIJ"/>
                                     <outlet property="dateLabel" destination="krw-3d-vsj" id="F3G-ps-YmO"/>
