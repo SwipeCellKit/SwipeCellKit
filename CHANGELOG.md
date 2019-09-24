@@ -2,6 +2,14 @@
 
 `SwipeCellKit` adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.7.1](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.7.1)
+
+#### Added
+
+- Support for Xcode 10.3+ (#353)
+
+---
+
 ## [2.7.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.7.0)
 
 #### Added
@@ -15,6 +23,8 @@
 - Fixed cell reuse layout issue (#335)
 - Fixed issue where a deleted cell that was being cell reused has the contentView offset incorrectly. (#355)
 - Fixed issue where on iOS 13 UICollectionViewCell does not perform swipe animation. (#333)
+
+---
 
 ## [2.6.0](https://github.com/jerkoch/SwipeCellKit/releases/tag/2.6.0)
 
