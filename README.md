@@ -108,7 +108,7 @@ pod 'SwipeCellKit', '2.4.3'
 github "SwipeCellKit/SwipeCellKit"
 ````
 
-#### [Swift Package Manager(SPM)](https://swift.org/package-manager/)
+#### [Swift Package Manager](https://swift.org/package-manager/)
 
 ```swift
 import PackageDescription
