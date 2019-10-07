@@ -108,6 +108,14 @@ pod 'SwipeCellKit', '2.4.3'
 github "SwipeCellKit/SwipeCellKit"
 ````
 
+#### [Swift Package Manager](https://swift.org/package-manager/)
+
+```swift
+dependencies: [
+    .package(url: "git@github.com:SwipeCellKit/SwipeCellKit.git", from: "2.7.1")
+]
+```
+
 ## Documentation
 
 Read the [docs][docsLink]. Generated with [jazzy](https://github.com/realm/jazzy). Hosted by [GitHub Pages](https://pages.github.com).
