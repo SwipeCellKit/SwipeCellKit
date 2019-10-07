@@ -111,15 +111,9 @@ github "SwipeCellKit/SwipeCellKit"
 #### [Swift Package Manager](https://swift.org/package-manager/)
 
 ```swift
-import PackageDescription
-
-let package = Package(
-    name: "YOUR_PROJECT_NAME",
-    products: [],
-    dependencies: [
-        .package(url: "https://github.com/swipecellkit/swipecellkit.git", from: "2.7.1")
-    ]
-)
+dependencies: [
+    .package(url: "git@github.com:SwipeCellKit/SwipeCellKit.git", from: "2.7.1")
+]
 ```
 
 ## Documentation
