@@ -7,6 +7,126 @@
 
 import UIKit
 
+//class SwipeActionView: UIControl {
+//    weak var titleLabel: UILabel!
+//    weak var imageView: UIImageView!
+//
+//    weak var stackView: UIStackView!
+//
+//    var shouldHighlight = true
+//    var highlightedBackgroundColor: UIColor?
+//
+//    var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
+//    var maximumImageHeight: CGFloat = 0 {
+//        didSet {
+//            self.imageView.heightAnchor.constraint(equalToConstant: oldValue).isActive = false
+//            self.imageView.heightAnchor.constraint(equalToConstant: self.maximumImageHeight).isActive = true
+//        }
+//    }
+//
+//    var spacing: CGFloat {
+//        get {
+//            return self.stackView.spacing
+//        }
+//
+//        set {
+//            self.stackView.spacing = newValue
+//        }
+//    }
+//
+//    var contentEdgeInsets: UIEdgeInsets = UIEdgeInsets.zero {
+//        didSet {
+//            let stackView = self.stackView!
+//            stackView.removeFromSuperview()
+//            self.addSubview(stackView)
+//
+//            stackView.topAnchor.constraint(greaterThanOrEqualTo: self.topAnchor, constant: self.contentEdgeInsets.top).isActive = true
+//            stackView.bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor, constant: self.contentEdgeInsets.bottom).isActive = true
+//            stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: self.contentEdgeInsets.left).isActive = true
+//            stackView.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: self.contentEdgeInsets.right).isActive = true
+//        }
+//    }
+//
+//    func preferredWidth(maximum: CGFloat) -> CGFloat {
+//        return self.sizeThatFits(.init(width: maximum, height: UIView.noIntrinsicMetric)).width
+//    }
+//
+//    convenience init(action: SwipeAction) {
+//        self.init(frame: .zero)
+//
+//        self.prepareSV()
+//        let imageView = self.createImageView()
+//        let titleLabel = self.createTitleLabel()
+//
+//        imageView.tintColor = action.textColor ?? .white
+//        let highlightedTextColor = action.highlightedTextColor ?? tintColor
+//        highlightedBackgroundColor = action.highlightedBackgroundColor ?? UIColor.black.withAlphaComponent(0.1)
+//
+//        titleLabel.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
+//
+//        accessibilityLabel = action.accessibilityLabel
+//
+//        titleLabel.text = action.title
+//        titleLabel.textColor = action.textColor ?? .white
+//        titleLabel.highlightedTextColor = highlightedTextColor
+//
+//        if let image = action.image {
+//            imageView.image = action.image
+//            imageView.highlightedImage = action.highlightedImage ?? action.image
+//        } else {
+//            imageView.isHidden = true
+//        }
+//    }
+//
+//    override var isHighlighted: Bool {
+//        didSet {
+//            guard shouldHighlight else { return }
+//
+//            backgroundColor = isHighlighted ? highlightedBackgroundColor : .clear
+//        }
+//    }
+//
+//}
+//
+//private extension SwipeActionView {
+//    func prepareSV() {
+//        let stackView = UIStackView()
+//        stackView.axis = .vertical
+//
+//        self.addSubview(stackView)
+//        stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+//        stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+//        stackView.bottomAnchor.constraint(greaterThanOrEqualTo: self.bottomAnchor).isActive = true
+//        stackView.topAnchor.constraint(greaterThanOrEqualTo: self.topAnchor).isActive = true
+//
+//        self.stackView = stackView
+//    }
+//
+//    func createTitleLabel() -> UILabel {
+//        let titleLabel = UILabel()
+//        titleLabel.textAlignment = .center
+//        titleLabel.lineBreakMode = .byWordWrapping
+//        titleLabel.numberOfLines = 0
+//
+//        self.stackView.addArrangedSubview(titleLabel)
+//
+//        titleLabel.setContentHuggingPriority(.required, for: .vertical)
+//        titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+//
+//        self.titleLabel = titleLabel
+//        return titleLabel
+//    }
+//
+//    func createImageView() -> UIImageView {
+//        let imageView = UIImageView()
+//        self.stackView.addArrangedSubview(imageView)
+//        self.imageView = imageView
+//        return imageView
+//    }
+//}
+
+import UIKit
+
 class SwipeActionButton: UIButton {
     var spacing: CGFloat = 8
     var shouldHighlight = true
@@ -14,12 +134,12 @@ class SwipeActionButton: UIButton {
 
     var maximumImageHeight: CGFloat = 0
     var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
-    
-    
+
+
     var currentSpacing: CGFloat {
         return (currentTitle?.isEmpty == false && imageHeight > 0) ? spacing : 0
     }
-    
+
     var alignmentRect: CGRect {
         let contentRect = self.contentRect(forBounds: bounds)
         let titleHeight = titleBoundingRect(with: verticalAlignment == .centerFirstBaseline ? CGRect.infinite.size : contentRect.size).integral.height
@@ -27,22 +147,22 @@ class SwipeActionButton: UIButton {
 
         return contentRect.center(size: CGSize(width: contentRect.width, height: totalHeight))
     }
-    
+
     private var imageHeight: CGFloat {
         get {
             return currentImage == nil ? 0 : maximumImageHeight
         }
     }
-    
+
     override var intrinsicContentSize: CGSize {
         return CGSize(width: UIView.noIntrinsicMetric, height: contentEdgeInsets.top + alignmentRect.height + contentEdgeInsets.bottom)
     }
-    
+
     convenience init(action: SwipeAction) {
         self.init(frame: .zero)
 
         contentHorizontalAlignment = .center
-        
+
         tintColor = action.textColor ?? .white
         let highlightedTextColor = action.highlightedTextColor ?? tintColor
         highlightedBackgroundColor = action.highlightedBackgroundColor ?? UIColor.black.withAlphaComponent(0.1)
@@ -51,47 +171,47 @@ class SwipeActionButton: UIButton {
         titleLabel?.textAlignment = .center
         titleLabel?.lineBreakMode = .byWordWrapping
         titleLabel?.numberOfLines = 0
-        
+
         accessibilityLabel = action.accessibilityLabel
-        
+
         setTitle(action.title, for: .normal)
         setTitleColor(tintColor, for: .normal)
         setTitleColor(highlightedTextColor, for: .highlighted)
         setImage(action.image, for: .normal)
         setImage(action.highlightedImage ?? action.image, for: .highlighted)
     }
-    
+
     override var isHighlighted: Bool {
         didSet {
             guard shouldHighlight else { return }
-            
+
             backgroundColor = isHighlighted ? highlightedBackgroundColor : .clear
         }
     }
-    
+
     func preferredWidth(maximum: CGFloat) -> CGFloat {
         let width = maximum > 0 ? maximum : CGFloat.greatestFiniteMagnitude
         let textWidth = titleBoundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)).width
         let imageWidth = currentImage?.size.width ?? 0
-        
+
         return min(width, max(textWidth, imageWidth) + contentEdgeInsets.left + contentEdgeInsets.right)
     }
-    
+
     func titleBoundingRect(with size: CGSize) -> CGRect {
         guard let title = currentTitle, let font = titleLabel?.font else { return .zero }
-        
+
         return title.boundingRect(with: size,
                                   options: [.usesLineFragmentOrigin],
                                   attributes: [NSAttributedString.Key.font: font],
                                   context: nil).integral
     }
-    
+
     override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
         var rect = contentRect.center(size: titleBoundingRect(with: contentRect.size).size)
         rect.origin.y = alignmentRect.minY + imageHeight + currentSpacing
         return rect.integral
     }
-    
+
     override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
         var rect = contentRect.center(size: currentImage?.size ?? .zero)
         rect.origin.y = alignmentRect.minY + (imageHeight - rect.height) / 2
