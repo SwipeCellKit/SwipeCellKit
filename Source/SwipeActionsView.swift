@@ -32,7 +32,7 @@ class SwipeActionsView: UIView {
 
     var views: [UIView] = []
     
-    var minimumButtonWidth: CGFloat = 0
+//    var minimumButtonWidth: CGFloat = 0
     var maximumImageHeight: CGFloat {
         return actions.reduce(0, { initial, next in max(initial, next.image?.size.height ?? 0) })
     }
@@ -63,7 +63,7 @@ class SwipeActionsView: UIView {
     }
 
     var preferredWidth: CGFloat {
-        return minimumButtonWidth * CGFloat(actions.count) + safeAreaMargin
+        return self.views.reduce(0) { $0 + $1.frame.width } + safeAreaMargin
     }
 
     var contentSize: CGSize {
@@ -102,7 +102,7 @@ class SwipeActionsView: UIView {
             transitionLayout = DragTransitionLayout()
         }
         
-        self.layoutContext = ActionsViewLayoutContext(numberOfActions: actions.count, orientation: orientation)
+        self.layoutContext = ActionsViewLayoutContext(numberOfActions: actions.count, orientation: orientation, widths: self.views.map { $0.frame.width })
         
         feedbackGenerator = SwipeFeedback(style: .light)
         feedbackGenerator.prepare()
@@ -149,16 +149,16 @@ class SwipeActionsView: UIView {
                 actionButton.addTarget(self, action: #selector(actionTapped(view:)), for: .touchUpInside)
                 actionButton.spacing = options.buttonSpacing ?? 8
                 actionButton.contentEdgeInsets = buttonEdgeInsets(fromOptions: options)
+                actionButton.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
                 return actionButton
             }()
 
-            actionView.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
             return actionView
         })
         
         let maximum = options.maximumButtonWidth ?? (size.width - 30) / CGFloat(actions.count)
         let minimum = options.minimumButtonWidth ?? min(maximum, 74)
-        minimumButtonWidth = views.reduce(minimum, { initial, next in
+        let minimumButtonWidth = views.reduce(minimum, { initial, next in
             if let button = next as? SwipeActionButton {
                 return max(initial, button.preferredWidth(maximum: maximum))
             }
@@ -207,9 +207,6 @@ class SwipeActionsView: UIView {
             }
         }
 
-        self.minimumButtonWidth = views.reduce(self.minimumButtonWidth) {
-            min($0, $1.systemLayoutSizeFitting(size).width)
-        }
         return views
     }
 
@@ -280,12 +277,13 @@ class SwipeActionsView: UIView {
     func notifyVisibleWidthChanged(oldWidths: [CGFloat], newWidths: [CGFloat]) {
         DispatchQueue.main.async {
             oldWidths.enumerated().forEach { index, oldWidth in
+                let view = self.views[index]
                 let newWidth = newWidths[index]
                 if oldWidth != newWidth {
                     let context = SwipeActionTransitioningContext(actionIdentifier: self.actions[index].identifier,
                                                                   view: self.views[index],
-                                                                  newPercentVisible: newWidth / self.minimumButtonWidth,
-                                                                  oldPercentVisible: oldWidth / self.minimumButtonWidth,
+                                                                  newPercentVisible: newWidth / view.frame.width,
+                                                                  oldPercentVisible: oldWidth / view.frame.width,
                                                                   wrapperView: self.subviews[index])
                     
                     self.actions[index].transitionDelegate?.didTransition(with: context)
@@ -305,7 +303,8 @@ class SwipeActionsView: UIView {
         mask.backgroundColor = UIColor.white
         return mask
     }
-    
+
+    var lastFrame: CGRect?
     override func layoutSubviews() {
         super.layoutSubviews()
         
