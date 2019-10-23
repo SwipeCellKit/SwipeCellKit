@@ -142,7 +142,7 @@ class SwipeActionsView: UIView {
         let views: [UIView] = actions.map({ action in
             let actionView: UIView = {
                 let customView = action.customView
-                customView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(actionTapped(view:))))
+                customView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(actionTapped(_:))))
                 return customView
             }() ?? {
                 let actionButton = SwipeActionButton(action: action)
@@ -169,9 +169,8 @@ class SwipeActionsView: UIView {
         views.enumerated().forEach { (index, button) in
             let action = actions[index]
             let frame = CGRect(origin: .zero, size: CGSize(width: bounds.width, height: bounds.height))
-            let wrapperView = SwipeActionButtonWrapperView(frame: frame, action: action, orientation: orientation, contentWidth: minimumButtonWidth)
+            let wrapperView = SwipeActionButtonWrapperView(frame: frame, action: action, orientation: orientation, view: button)
             wrapperView.translatesAutoresizingMaskIntoConstraints = false
-            wrapperView.addSubview(button)
             
             if let effect = action.backgroundEffect {
                 let effectView = UIVisualEffectView(effect: effect)
@@ -182,14 +181,14 @@ class SwipeActionsView: UIView {
             } else {
                 addSubview(wrapperView)
             }
-            
-            button.frame = wrapperView.contentRect
+
             if let actionButton = button as? SwipeActionButton {
+                button.widthAnchor.constraint(equalToConstant: minimumButtonWidth).isActive = true
                 actionButton.maximumImageHeight = maximumImageHeight
                 actionButton.verticalAlignment = options.buttonVerticalAlignment
                 actionButton.shouldHighlight = action.hasBackgroundColor
             }
-            
+
             wrapperView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
             wrapperView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
             
@@ -207,13 +206,36 @@ class SwipeActionsView: UIView {
                 heightConstraint.isActive = true
             }
         }
+
+        self.minimumButtonWidth = views.reduce(self.minimumButtonWidth) {
+            min($0, $1.systemLayoutSizeFitting(size).width)
+        }
         return views
     }
-    
+
     @objc func actionTapped(view: UIView) {
         guard let index = views.firstIndex(of: view) else { return }
 
         delegate?.swipeActionsView(self, didSelect: actions[index])
+    }
+
+    @objc func actionTapped(_ sender: UITapGestureRecognizer) {
+        guard case .ended = sender.state else {
+            return
+        }
+
+        if let view = sender.view {
+            self.actionTapped(view: view)
+            return
+        }
+        
+        for view in self.views {
+            let touchPoint = sender.location(in: view)
+            if view.frame.contains(touchPoint) {
+                self.actionTapped(view: view)
+                break
+            }
+        }
     }
     
     func buttonEdgeInsets(fromOptions options: SwipeOptions) -> UIEdgeInsets {
@@ -298,18 +320,21 @@ class SwipeActionsView: UIView {
 }
 
 class SwipeActionButtonWrapperView: UIView {
-    let contentRect: CGRect
+//    let contentRect: CGRect
     var actionBackgroundColor: UIColor?
     
-    init(frame: CGRect, action: SwipeAction, orientation: SwipeActionsOrientation, contentWidth: CGFloat) {
+    init(frame: CGRect, action: SwipeAction, orientation: SwipeActionsOrientation, view: UIView) {
+        super.init(frame: frame)
+        self.addSubview(view)
+        view.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        view.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+
         switch orientation {
         case .left:
-            contentRect = CGRect(x: frame.width - contentWidth, y: 0, width: contentWidth, height: frame.height)
+            view.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         case .right:
-            contentRect = CGRect(x: 0, y: 0, width: contentWidth, height: frame.height)
+            view.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         }
-        
-        super.init(frame: frame)
         
         configureBackgroundColor(with: action)
     }
