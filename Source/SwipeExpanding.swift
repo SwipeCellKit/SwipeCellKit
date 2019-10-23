@@ -22,7 +22,7 @@ public protocol SwipeExpanding {
      - parameter otherActionButtons: The other action buttons in the view, not including the action button being expanded.
      */
 
-    func animationTimingParameters(buttons: [UIButton], expanding: Bool) -> SwipeExpansionAnimationTimingParameters
+    func animationTimingParameters(views: [UIView], expanding: Bool) -> SwipeExpansionAnimationTimingParameters
     
     /**
      Tells your object when the expansion state is changing.
@@ -33,7 +33,7 @@ public protocol SwipeExpanding {
 
      - parameter otherActionButtons: The other action buttons in the view, not including the action button being expanded.
      */
-    func actionButton(_ button: UIButton, didChange expanding: Bool, otherActionButtons: [UIButton])
+    func actionButton(_ view: UIView, didChange expanding: Bool, otherActionViews: [UIView])
 }
 
 /**
@@ -100,20 +100,20 @@ public struct ScaleAndAlphaExpansion: SwipeExpanding {
     }
 
     /// :nodoc:    
-    public func animationTimingParameters(buttons: [UIButton], expanding: Bool) -> SwipeExpansionAnimationTimingParameters {
+    public func animationTimingParameters(views: [UIView], expanding: Bool) -> SwipeExpansionAnimationTimingParameters {
         var timingParameters = SwipeExpansionAnimationTimingParameters.default
         timingParameters.delay = expanding ? interButtonDelay : 0
         return timingParameters
     }
     
     /// :nodoc:
-    public func actionButton(_ button: UIButton, didChange expanding: Bool, otherActionButtons: [UIButton]) {
-        let buttons = expanding ? otherActionButtons : otherActionButtons.reversed()
+    public func actionButton(_ view: UIView, didChange expanding: Bool, otherActionViews: [UIView]) {
+        let views = expanding ? otherActionViews : otherActionViews.reversed()
         
-        buttons.enumerated().forEach { index, button in
+        views.enumerated().forEach { index, views in
             UIView.animate(withDuration: duration, delay: interButtonDelay * Double(expanding ? index : index + 1), options: [], animations: {
-                button.transform = expanding ? .init(scaleX: self.scale, y: self.scale) : .identity
-                button.alpha = expanding ? 0.0 : 1.0
+                view.transform = expanding ? .init(scaleX: self.scale, y: self.scale) : .identity
+                view.alpha = expanding ? 0.0 : 1.0
             }, completion: nil)
         }
     }

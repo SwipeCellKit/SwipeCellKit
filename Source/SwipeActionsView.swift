@@ -29,8 +29,8 @@ class SwipeActionsView: UIView {
     let orientation: SwipeActionsOrientation
     let actions: [SwipeAction]
     let options: SwipeOptions
-    
-    var buttons: [SwipeActionButton] = []
+
+    var views: [UIView] = []
     
     var minimumButtonWidth: CGFloat = 0
     var maximumImageHeight: CGFloat {
@@ -131,29 +131,42 @@ class SwipeActionsView: UIView {
         }
     #endif
         
-        buttons = addButtons(for: self.actions, withMaximum: maxSize, contentEdgeInsets: contentEdgeInsets)
+        views = addViews(for: self.actions, withMaximum: maxSize, contentEdgeInsets: contentEdgeInsets)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addButtons(for actions: [SwipeAction], withMaximum size: CGSize, contentEdgeInsets: UIEdgeInsets) -> [SwipeActionButton] {
-        let buttons: [SwipeActionButton] = actions.map({ action in
-            let actionButton = SwipeActionButton(action: action)
-            actionButton.addTarget(self, action: #selector(actionTapped(button:)), for: .touchUpInside)
-            actionButton.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
-            actionButton.spacing = options.buttonSpacing ?? 8
-            actionButton.contentEdgeInsets = buttonEdgeInsets(fromOptions: options)
-            return actionButton
+    func addViews(for actions: [SwipeAction], withMaximum size: CGSize, contentEdgeInsets: UIEdgeInsets) -> [UIView] {
+        let views: [UIView] = actions.map({ action in
+            let actionView: UIView = {
+                let customView = action.customView
+                customView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(actionTapped(view:))))
+                return customView
+            }() ?? {
+                let actionButton = SwipeActionButton(action: action)
+                actionButton.addTarget(self, action: #selector(actionTapped(view:)), for: .touchUpInside)
+                actionButton.spacing = options.buttonSpacing ?? 8
+                actionButton.contentEdgeInsets = buttonEdgeInsets(fromOptions: options)
+                return actionButton
+            }()
+
+            actionView.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
+            return actionView
         })
         
         let maximum = options.maximumButtonWidth ?? (size.width - 30) / CGFloat(actions.count)
         let minimum = options.minimumButtonWidth ?? min(maximum, 74)
-        minimumButtonWidth = buttons.reduce(minimum, { initial, next in max(initial, next.preferredWidth(maximum: maximum)) })
+        minimumButtonWidth = views.reduce(minimum, { initial, next in
+            if let button = next as? SwipeActionButton {
+                return max(initial, button.preferredWidth(maximum: maximum))
+            }
+
+            return max(initial, minimum)
+        })
         
-        
-        buttons.enumerated().forEach { (index, button) in
+        views.enumerated().forEach { (index, button) in
             let action = actions[index]
             let frame = CGRect(origin: .zero, size: CGSize(width: bounds.width, height: bounds.height))
             let wrapperView = SwipeActionButtonWrapperView(frame: frame, action: action, orientation: orientation, contentWidth: minimumButtonWidth)
@@ -171,9 +184,11 @@ class SwipeActionsView: UIView {
             }
             
             button.frame = wrapperView.contentRect
-            button.maximumImageHeight = maximumImageHeight
-            button.verticalAlignment = options.buttonVerticalAlignment
-            button.shouldHighlight = action.hasBackgroundColor
+            if let actionButton = button as? SwipeActionButton {
+                actionButton.maximumImageHeight = maximumImageHeight
+                actionButton.verticalAlignment = options.buttonVerticalAlignment
+                actionButton.shouldHighlight = action.hasBackgroundColor
+            }
             
             wrapperView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
             wrapperView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
@@ -192,11 +207,11 @@ class SwipeActionsView: UIView {
                 heightConstraint.isActive = true
             }
         }
-        return buttons
+        return views
     }
     
-    @objc func actionTapped(button: SwipeActionButton) {
-        guard let index = buttons.firstIndex(of: button) else { return }
+    @objc func actionTapped(view: UIView) {
+        guard let index = views.firstIndex(of: view) else { return }
 
         delegate?.swipeActionsView(self, didSelect: actions[index])
     }
@@ -216,7 +231,7 @@ class SwipeActionsView: UIView {
             feedbackGenerator.prepare()
         }
         
-        let timingParameters = expansionDelegate?.animationTimingParameters(buttons: buttons.reversed(), expanding: expanded)
+        let timingParameters = expansionDelegate?.animationTimingParameters(views: views.reversed(), expanding: expanded)
         
         if expansionAnimator?.isRunning == true {
             expansionAnimator?.stopAnimation(true)
@@ -246,7 +261,7 @@ class SwipeActionsView: UIView {
                 let newWidth = newWidths[index]
                 if oldWidth != newWidth {
                     let context = SwipeActionTransitioningContext(actionIdentifier: self.actions[index].identifier,
-                                                                  button: self.buttons[index],
+                                                                  view: self.views[index],
                                                                   newPercentVisible: newWidth / self.minimumButtonWidth,
                                                                   oldPercentVisible: oldWidth / self.minimumButtonWidth,
                                                                   wrapperView: self.subviews[index])
@@ -258,9 +273,9 @@ class SwipeActionsView: UIView {
     }
     
     func notifyExpansion(expanded: Bool) {
-        guard let expandedButton = buttons.last else { return }
+        guard let expandedView = views.last else { return }
 
-        expansionDelegate?.actionButton(expandedButton, didChange: expanded, otherActionButtons: buttons.dropLast().reversed())
+        expansionDelegate?.actionButton(expandedView, didChange: expanded, otherActionViews: views.dropLast().reversed())
     }
     
     func createDeletionMask() -> UIView {

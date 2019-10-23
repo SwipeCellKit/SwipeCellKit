@@ -25,7 +25,7 @@ public struct SwipeActionTransitioningContext {
     public let actionIdentifier: String?
     
     /// The button that is changing.
-    public let button: UIButton
+    public let view: UIView
     
     /// The old visibility percentage between 0.0 and 1.0.
     public let newPercentVisible: CGFloat
@@ -35,9 +35,9 @@ public struct SwipeActionTransitioningContext {
     
     internal let wrapperView: UIView
     
-    internal init(actionIdentifier: String?, button: UIButton, newPercentVisible: CGFloat, oldPercentVisible: CGFloat, wrapperView: UIView) {
+    internal init(actionIdentifier: String?, view: UIView, newPercentVisible: CGFloat, oldPercentVisible: CGFloat, wrapperView: UIView) {
         self.actionIdentifier = actionIdentifier
-        self.button = button
+        self.view = view
         self.newPercentVisible = newPercentVisible
         self.oldPercentVisible = oldPercentVisible
         self.wrapperView = wrapperView
@@ -90,16 +90,16 @@ public struct ScaleTransition: SwipeActionTransitioning {
     /// :nodoc:
     public func didTransition(with context: SwipeActionTransitioningContext) -> Void {
         if context.oldPercentVisible == 0 {
-            context.button.transform = .init(scaleX: initialScale, y: initialScale)
+            context.view.transform = .init(scaleX: initialScale, y: initialScale)
         }
         
         if context.oldPercentVisible < threshold && context.newPercentVisible >= threshold {
             UIView.animate(withDuration: duration) {
-                context.button.transform = .identity
+                context.view.transform = .identity
             }
         } else if context.oldPercentVisible >= threshold && context.newPercentVisible < threshold {
             UIView.animate(withDuration: duration) {
-                context.button.transform = .init(scaleX: self.initialScale, y: self.initialScale)
+                context.view.transform = .init(scaleX: self.initialScale, y: self.initialScale)
             }
         }
     }
