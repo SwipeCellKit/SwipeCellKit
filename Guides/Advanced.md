@@ -13,7 +13,7 @@ action.transitionDelegate = ScaleTransition.default
 
 The `ScaleTransition` type provides a static `default` configuration, but it can also be initiantiated with custom parameters to suit your needs.
 
-You can also easily provide your own completely custom transition behavior by adopting the `SwipeActionTransitioning` protocol.  The supplied `SwipeActionTransitioningContext` to the delegate methods reflect the current swipe state as the gesture is performed.
+You can also easily provide your own completely custom transition behavior by adopting the `SwipeActionTransitioning` protocol. The supplied `SwipeActionTransitioningContext` to the delegate methods reflect the current swipe state as the gesture is performed.
 
 ## Customizing Expansion
 
@@ -138,12 +138,12 @@ On earlier iOS versions you will need to calculate this rectangle yourself. In t
 
 ```swift
 func visibleRect(for tableView: UITableView) -> CGRect? {
-        let topInset = navigationController?.navigationBar.frame.height ?? 0
-        let bottomInset = navigationController?.toolbar?.frame.height ?? 0
-        let bounds = tableView.bounds
+    let topInset = navigationController?.navigationBar.frame.height ?? 0
+    let bottomInset = navigationController?.toolbar?.frame.height ?? 0
+    let bounds = tableView.bounds
 
-        return CGRect(x: bounds.origin.x, y: bounds.origin.y + topInset, width: bounds.width, height: bounds.height - bottomInset)
-    }
+    return CGRect(x: bounds.origin.x, y: bounds.origin.y + topInset, width: bounds.width, height: bounds.height - bottomInset)
+}
 ```
 
 Refer to the included Mail app sample to see a working example.
