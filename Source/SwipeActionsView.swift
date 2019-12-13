@@ -29,10 +29,10 @@ class SwipeActionsView: UIView {
     let orientation: SwipeActionsOrientation
     let actions: [SwipeAction]
     let options: SwipeOptions
+
+    var views: [UIView] = []
     
-    var buttons: [SwipeActionButton] = []
-    
-    var minimumButtonWidth: CGFloat = 0
+//    var minimumButtonWidth: CGFloat = 0
     var maximumImageHeight: CGFloat {
         return actions.reduce(0, { initial, next in max(initial, next.image?.size.height ?? 0) })
     }
@@ -63,7 +63,7 @@ class SwipeActionsView: UIView {
     }
 
     var preferredWidth: CGFloat {
-        return minimumButtonWidth * CGFloat(actions.count) + safeAreaMargin
+        return self.views.reduce(0) { $0 + $1.frame.width } + safeAreaMargin
     }
 
     var contentSize: CGSize {
@@ -102,7 +102,7 @@ class SwipeActionsView: UIView {
             transitionLayout = DragTransitionLayout()
         }
         
-        self.layoutContext = ActionsViewLayoutContext(numberOfActions: actions.count, orientation: orientation)
+        self.layoutContext = ActionsViewLayoutContext(numberOfActions: actions.count, orientation: orientation, widths: self.views.map { $0.frame.width })
         
         feedbackGenerator = SwipeFeedback(style: .light)
         feedbackGenerator.prepare()
@@ -131,34 +131,58 @@ class SwipeActionsView: UIView {
         }
     #endif
         
-        buttons = addButtons(for: self.actions, withMaximum: maxSize, contentEdgeInsets: contentEdgeInsets)
+        views = addViews(for: self.actions, withMaximum: maxSize, contentEdgeInsets: contentEdgeInsets)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addButtons(for actions: [SwipeAction], withMaximum size: CGSize, contentEdgeInsets: UIEdgeInsets) -> [SwipeActionButton] {
-        let buttons: [SwipeActionButton] = actions.map({ action in
-            let actionButton = SwipeActionButton(action: action)
-            actionButton.addTarget(self, action: #selector(actionTapped(button:)), for: .touchUpInside)
-            actionButton.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
-            actionButton.spacing = options.buttonSpacing ?? 8
-            actionButton.contentEdgeInsets = buttonEdgeInsets(fromOptions: options)
-            return actionButton
+    func addViews(for actions: [SwipeAction], withMaximum size: CGSize, contentEdgeInsets: UIEdgeInsets) -> [UIView] {
+        let views: [UIView] = actions.map({ action in
+            let actionView: UIView = {
+                let customView = action.customView
+                customView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(actionTapped(_:))))
+                return customView
+            }() ?? {
+                let actionButton = SwipeActionButton(action: action)
+                actionButton.addTarget(self, action: #selector(actionTapped(view:)), for: .touchUpInside)
+                actionButton.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
+                actionButton.spacing = options.buttonSpacing ?? 8
+                actionButton.contentEdgeInsets = buttonEdgeInsets(fromOptions: options)
+                return actionButton
+            }()
+
+            return actionView
         })
         
         let maximum = options.maximumButtonWidth ?? (size.width - 30) / CGFloat(actions.count)
         let minimum = options.minimumButtonWidth ?? min(maximum, 74)
-        minimumButtonWidth = buttons.reduce(minimum, { initial, next in max(initial, next.preferredWidth(maximum: maximum)) })
+        let minimumButtonWidth = views.reduce(minimum, { initial, next in
+            if let button = next as? SwipeActionButton {
+                return max(initial, button.preferredWidth(maximum: maximum))
+            }
+
+            return max(initial, initial)
+        })
         
-        
-        buttons.enumerated().forEach { (index, button) in
+        views.enumerated().forEach { (index, view) in
             let action = actions[index]
             let frame = CGRect(origin: .zero, size: CGSize(width: bounds.width, height: bounds.height))
-            let wrapperView = SwipeActionButtonWrapperView(frame: frame, action: action, orientation: orientation, contentWidth: minimumButtonWidth)
+            let wrapperView = SwipeActionButtonWrapperView(frame: frame, action: action, orientation: orientation, view: {
+                guard let button = view as? SwipeActionButton else {
+                    return view
+                }
+
+                let view = UIView()
+                view.translatesAutoresizingMaskIntoConstraints = false
+                view.widthAnchor.constraint(equalToConstant: minimumButtonWidth).isActive = true
+                view.addSubview(button)
+                button.frame = .init(x: 0, y: 0, width: minimumButtonWidth, height: frame.height)
+                return view
+            }())
+
             wrapperView.translatesAutoresizingMaskIntoConstraints = false
-            wrapperView.addSubview(button)
             
             if let effect = action.backgroundEffect {
                 let effectView = UIVisualEffectView(effect: effect)
@@ -169,12 +193,13 @@ class SwipeActionsView: UIView {
             } else {
                 addSubview(wrapperView)
             }
-            
-            button.frame = wrapperView.contentRect
-            button.maximumImageHeight = maximumImageHeight
-            button.verticalAlignment = options.buttonVerticalAlignment
-            button.shouldHighlight = action.hasBackgroundColor
-            
+
+            if let actionButton = view as? SwipeActionButton {
+                actionButton.maximumImageHeight = maximumImageHeight
+                actionButton.verticalAlignment = options.buttonVerticalAlignment
+                actionButton.shouldHighlight = action.hasBackgroundColor
+            }
+
             wrapperView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
             wrapperView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
             
@@ -187,18 +212,38 @@ class SwipeActionsView: UIView {
             bottomConstraint.isActive = true
             
             if contentEdgeInsets != .zero {
-                let heightConstraint = wrapperView.heightAnchor.constraint(greaterThanOrEqualToConstant: button.intrinsicContentSize.height)
+                let heightConstraint = wrapperView.heightAnchor.constraint(greaterThanOrEqualToConstant: view.intrinsicContentSize.height)
                 heightConstraint.priority = .required
                 heightConstraint.isActive = true
             }
         }
-        return buttons
+
+        return views
     }
-    
-    @objc func actionTapped(button: SwipeActionButton) {
-        guard let index = buttons.firstIndex(of: button) else { return }
+
+    @objc func actionTapped(view: UIView) {
+        guard let index = views.firstIndex(of: view) else { return }
 
         delegate?.swipeActionsView(self, didSelect: actions[index])
+    }
+
+    @objc func actionTapped(_ sender: UITapGestureRecognizer) {
+        guard case .ended = sender.state else {
+            return
+        }
+
+        if let view = sender.view {
+            self.actionTapped(view: view)
+            return
+        }
+        
+        for view in self.views {
+            let touchPoint = sender.location(in: view)
+            if view.frame.contains(touchPoint) {
+                self.actionTapped(view: view)
+                break
+            }
+        }
     }
     
     func buttonEdgeInsets(fromOptions options: SwipeOptions) -> UIEdgeInsets {
@@ -216,7 +261,7 @@ class SwipeActionsView: UIView {
             feedbackGenerator.prepare()
         }
         
-        let timingParameters = expansionDelegate?.animationTimingParameters(buttons: buttons.reversed(), expanding: expanded)
+        let timingParameters = expansionDelegate?.animationTimingParameters(views: views.reversed(), expanding: expanded)
         
         if expansionAnimator?.isRunning == true {
             expansionAnimator?.stopAnimation(true)
@@ -243,12 +288,13 @@ class SwipeActionsView: UIView {
     func notifyVisibleWidthChanged(oldWidths: [CGFloat], newWidths: [CGFloat]) {
         DispatchQueue.main.async {
             oldWidths.enumerated().forEach { index, oldWidth in
+                let view = self.views[index]
                 let newWidth = newWidths[index]
                 if oldWidth != newWidth {
                     let context = SwipeActionTransitioningContext(actionIdentifier: self.actions[index].identifier,
-                                                                  button: self.buttons[index],
-                                                                  newPercentVisible: newWidth / self.minimumButtonWidth,
-                                                                  oldPercentVisible: oldWidth / self.minimumButtonWidth,
+                                                                  view: self.views[index],
+                                                                  newPercentVisible: newWidth / view.frame.width,
+                                                                  oldPercentVisible: oldWidth / view.frame.width,
                                                                   wrapperView: self.subviews[index])
                     
                     self.actions[index].transitionDelegate?.didTransition(with: context)
@@ -258,9 +304,9 @@ class SwipeActionsView: UIView {
     }
     
     func notifyExpansion(expanded: Bool) {
-        guard let expandedButton = buttons.last else { return }
+        guard let expandedView = views.last else { return }
 
-        expansionDelegate?.actionButton(expandedButton, didChange: expanded, otherActionButtons: buttons.dropLast().reversed())
+        expansionDelegate?.actionButton(expandedView, didChange: expanded, otherActionViews: views.dropLast().reversed())
     }
     
     func createDeletionMask() -> UIView {
@@ -268,7 +314,8 @@ class SwipeActionsView: UIView {
         mask.backgroundColor = UIColor.white
         return mask
     }
-    
+
+    var lastFrame: CGRect?
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -283,18 +330,21 @@ class SwipeActionsView: UIView {
 }
 
 class SwipeActionButtonWrapperView: UIView {
-    let contentRect: CGRect
+//    let contentRect: CGRect
     var actionBackgroundColor: UIColor?
     
-    init(frame: CGRect, action: SwipeAction, orientation: SwipeActionsOrientation, contentWidth: CGFloat) {
+    init(frame: CGRect, action: SwipeAction, orientation: SwipeActionsOrientation, view: UIView) {
+        super.init(frame: frame)
+        self.addSubview(view)
+        view.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        view.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+
         switch orientation {
         case .left:
-            contentRect = CGRect(x: frame.width - contentWidth, y: 0, width: contentWidth, height: frame.height)
+            view.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         case .right:
-            contentRect = CGRect(x: 0, y: 0, width: contentWidth, height: frame.height)
+            view.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         }
-        
-        super.init(frame: frame)
         
         configureBackgroundColor(with: action)
     }

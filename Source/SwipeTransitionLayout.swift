@@ -22,14 +22,14 @@ struct ActionsViewLayoutContext {
     let orientation: SwipeActionsOrientation
     let contentSize: CGSize
     let visibleWidth: CGFloat
-    let minimumButtonWidth: CGFloat
+    let widths: [CGFloat]
     
-    init(numberOfActions: Int, orientation: SwipeActionsOrientation, contentSize: CGSize = .zero, visibleWidth: CGFloat = 0, minimumButtonWidth: CGFloat = 0) {
+    init(numberOfActions: Int, orientation: SwipeActionsOrientation, contentSize: CGSize = .zero, visibleWidth: CGFloat = 0, widths: [CGFloat]) {
         self.numberOfActions = numberOfActions
         self.orientation = orientation
         self.contentSize = contentSize
         self.visibleWidth = visibleWidth
-        self.minimumButtonWidth = minimumButtonWidth
+        self.widths = widths
     }
     
     static func newContext(for actionsView: SwipeActionsView) -> ActionsViewLayoutContext {
@@ -37,7 +37,7 @@ struct ActionsViewLayoutContext {
                                         orientation: actionsView.orientation,
                                         contentSize: actionsView.contentSize,
                                         visibleWidth: actionsView.visibleWidth,
-                                        minimumButtonWidth: actionsView.minimumButtonWidth)
+                                        widths: actionsView.views.map { $0.frame.width })
     }
 }
 
@@ -67,18 +67,19 @@ class DragTransitionLayout: SwipeTransitionLayout {
     }
     
     func layout(view: UIView, atIndex index: Int, with context: ActionsViewLayoutContext) {
-        view.frame.origin.x = (CGFloat(index) * context.minimumButtonWidth) * context.orientation.scale
+        view.frame.origin.x = (context.widths[0..<index].reduce(0) { $0 + $1 }) * context.orientation.scale
     }
     
     func visibleWidthsForViews(with context: ActionsViewLayoutContext) -> [CGFloat] {
-        return (0..<context.numberOfActions)
-            .map({ max(0, min(context.minimumButtonWidth, context.visibleWidth - (CGFloat($0) * context.minimumButtonWidth))) })
+        return context.widths.enumerated().map {
+            max(0, $0.element, context.visibleWidth - context.widths[0...$0.offset].reduce(0) { $0 + $1 })
+        }
     }
 }
 
 class RevealTransitionLayout: DragTransitionLayout {
     override func container(view: UIView, didChangeVisibleWidthWithContext context: ActionsViewLayoutContext) {
-        let width = context.minimumButtonWidth * CGFloat(context.numberOfActions)
+        let width = context.widths.reduce(0) { $0 + $1 }
         view.bounds.origin.x = (width - context.visibleWidth) * context.orientation.scale
     }
     

@@ -405,8 +405,9 @@ extension SwipeController: SwipeActionsViewDelegate {
     func performFillAction(action: SwipeAction, fillOption: SwipeExpansionStyle.FillOptions) {
         guard let swipeable = self.swipeable, let actionsContainerView = self.actionsContainerView else { return }
         guard let actionsView = swipeable.actionsView, let indexPath = swipeable.indexPath else { return }
+        guard let index = actionsView.actions.index(of: action) else { return }
 
-        let newCenter = swipeable.bounds.midX - (swipeable.bounds.width + actionsView.minimumButtonWidth) * actionsView.orientation.scale
+        let newCenter = swipeable.bounds.midX - (swipeable.bounds.width + actionsView.views[index].frame.width) * actionsView.orientation.scale
         
         action.completionHandler = { [weak self] style in
             guard let `self` = self else { return }
