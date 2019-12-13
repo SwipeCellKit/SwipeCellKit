@@ -112,7 +112,7 @@ github "SwipeCellKit/SwipeCellKit"
 
 ```swift
 dependencies: [
-    .package(url: "git@github.com:SwipeCellKit/SwipeCellKit.git", from: "2.7.1")
+    .package(url: "https://github.com/SwipeCellKit/SwipeCellKit", from: "2.7.1")
 ]
 ```
 
