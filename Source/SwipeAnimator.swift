@@ -23,7 +23,7 @@ protocol SwipeAnimator {
      
      - parameter completion: The closure to be execute on completion of the animator
      */
-    func addCompletion(completion: @escaping (Bool) -> Void)
+    func addSwipeCompletion(completion: @escaping (Bool) -> Void)
     
     /**
      Starts the defined animation
@@ -47,7 +47,7 @@ protocol SwipeAnimator {
 
 @available(iOS 10.0, *)
 extension UIViewPropertyAnimator: SwipeAnimator {
-    func addCompletion(completion: @escaping (Bool) -> Void) {
+    internal func addSwipeCompletion(completion: @escaping (Bool) -> Void) {
         addCompletion { position in
             completion(position == .end)
         }
@@ -76,7 +76,7 @@ class UIViewSpringAnimator: SwipeAnimator {
         self.animations = animations
     }
     
-    func addCompletion(completion: @escaping (Bool) -> Void) {
+    func addSwipeCompletion(completion: @escaping (Bool) -> Void) {
         self.completion = { [weak self] finished in
             guard self?.isRunning == true else { return }
             

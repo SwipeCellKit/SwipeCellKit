@@ -200,7 +200,7 @@ class SwipeController: NSObject {
         swipeable.actionsView?.removeFromSuperview()
         swipeable.actionsView = nil
         
-        var contentEdgeInsets = UIEdgeInsets.zero
+        var contentEdgeInsets = options.buttonEdgeInset ?? UIEdgeInsets.zero
         if let visibleTableViewRect = delegate?.swipeController(self, visibleRectFor: scrollView) {
             
             let frame = (swipeable as Swipeable).frame
@@ -271,7 +271,7 @@ class SwipeController: NSObject {
         })
         
         if let completion = completion {
-            animator.addCompletion(completion: completion)
+            animator.addSwipeCompletion(completion: completion)
         }
         
         self.animator = animator

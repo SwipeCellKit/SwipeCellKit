@@ -11,6 +11,7 @@ class SwipeActionButton: UIButton {
     var spacing: CGFloat = 8
     var shouldHighlight = true
     var highlightedBackgroundColor: UIColor?
+    var buttonBackgroundColor: UIColor = .clear
 
     var maximumImageHeight: CGFloat = 0
     var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
@@ -48,6 +49,7 @@ class SwipeActionButton: UIButton {
         highlightedBackgroundColor = action.highlightedBackgroundColor ?? UIColor.black.withAlphaComponent(0.1)
 
         titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
+        titleLabel?.baselineAdjustment = .alignCenters
         titleLabel?.textAlignment = .center
         titleLabel?.lineBreakMode = .byWordWrapping
         titleLabel?.numberOfLines = 0
@@ -59,13 +61,19 @@ class SwipeActionButton: UIButton {
         setTitleColor(highlightedTextColor, for: .highlighted)
         setImage(action.image, for: .normal)
         setImage(action.highlightedImage ?? action.image, for: .highlighted)
+      
+        layer.cornerRadius = action.buttonCornerRadius ?? 0.0
+        layer.borderWidth = action.buttonBorderWidth ?? 0.0
+        layer.borderColor = action.buttonBorderColor
+        buttonBackgroundColor = action.buttonBackgroundColor ?? .clear
+        clipsToBounds = buttonBackgroundColor != .clear
+        backgroundColor = buttonBackgroundColor
     }
     
     override var isHighlighted: Bool {
         didSet {
             guard shouldHighlight else { return }
-            
-            backgroundColor = isHighlighted ? highlightedBackgroundColor : .clear
+            backgroundColor = isHighlighted ? highlightedBackgroundColor : buttonBackgroundColor
         }
     }
     
@@ -88,7 +96,9 @@ class SwipeActionButton: UIButton {
     
     override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
         var rect = contentRect.center(size: titleBoundingRect(with: contentRect.size).size)
-        rect.origin.y = alignmentRect.minY + imageHeight + currentSpacing
+        if imageView?.image != nil {
+          rect.origin.y = alignmentRect.minY + imageHeight + currentSpacing
+        }
         return rect.integral
     }
     
