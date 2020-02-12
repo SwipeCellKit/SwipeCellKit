@@ -362,7 +362,22 @@ extension SwipeController: UIGestureRecognizerDelegate {
             let view = gestureRecognizer.view,
             let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
             let translation = gestureRecognizer.translation(in: view)
-            return abs(translation.y) <= abs(translation.x)
+
+            let canSwipeLeft = (delegate?.swipeController(self, editActionsForSwipeableFor: .right)?.count ?? 0) > 0
+            let canSwipeRight = (delegate?.swipeController(self, editActionsForSwipeableFor: .left)?.count ?? 0) > 0
+
+            switch (canSwipeLeft, canSwipeRight) {
+            case (true, true):
+                return abs(translation.y) <= abs(translation.x)
+            case (false, false):
+                return false
+            case (true, false):
+                // only if swipe is horizontal and either to the left or to the right but menu is already open (so it gets dismissed)
+                return abs(translation.y) <= abs(translation.x) && (translation.x < 0 || swipeable?.state == .right)
+            case (false, true):
+                // only if swipe is horizontal and either to the right or to the left but menu is already open (so it gets dismissed)
+                return abs(translation.y) <= abs(translation.x) && (translation.x > 0 || swipeable?.state == .left)
+            }
         }
         
         return true
