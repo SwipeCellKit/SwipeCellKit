@@ -367,6 +367,15 @@ extension SwipeController: UIGestureRecognizerDelegate {
         
         return true
     }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let topmost = UIApplication.topmostViewController() as? UINavigationController {
+            if gestureRecognizer == self.panGestureRecognizer && otherGestureRecognizer == topmost.interactivePopGestureRecognizer {
+                return true
+            }
+        }
+        return false
+    }
 }
 
 extension SwipeController: SwipeActionsViewDelegate {
