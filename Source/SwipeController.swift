@@ -23,7 +23,6 @@ protocol SwipeControllerDelegate: class {
     func swipeController(_ controller: SwipeController, didDeleteSwipeableAt indexPath: IndexPath)
     
     func swipeController(_ controller: SwipeController, visibleRectFor scrollView: UIScrollView) -> CGRect?
-    
 }
 
 class SwipeController: NSObject {
@@ -343,6 +342,7 @@ class SwipeController: NSObject {
 }
 
 extension SwipeController: UIGestureRecognizerDelegate {
+
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer == tapGestureRecognizer {
             if UIAccessibility.isVoiceOverRunning {
@@ -361,8 +361,26 @@ extension SwipeController: UIGestureRecognizerDelegate {
         if gestureRecognizer == panGestureRecognizer,
             let view = gestureRecognizer.view,
             let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
-            let translation = gestureRecognizer.translation(in: view)
-            return abs(translation.y) <= abs(translation.x)
+            let translation = gestureRecognizer.velocity(in: view)
+            // Only consider swipes of less than 22.5° from horizontal
+            guard atan2(abs(translation.y), abs(translation.x)) < .pi / 8 else { return false }
+
+            let direction: SwipeActionsOrientation = translation.x < 0 ? .right : .left
+            let hasActions =
+                (delegate?.swipeController(self, editActionsForSwipeableFor: direction)?.count ?? 0) > 0
+
+            switch( swipeable?.state ?? .center, direction, hasActions ) {
+            // Allow: Swipe to reveal actions
+            case (.center, .left, true), (.center, .right, true): return true
+            // Allow: Unswipe visible actions
+            case (.right, .left, _), (.left, .right, _): return true
+            // Allow: Swipes in direction that's already revealed, may trigger default actions.
+            case (.left, .left, _), (.right, .right, _): return true
+
+            // Disallow: Swipes that reveal no actions
+            case (.center, _, false): return false
+            case (.dragging, _, _), (.animatingToCenter, _, _): return false
+            }
         }
         
         return true
