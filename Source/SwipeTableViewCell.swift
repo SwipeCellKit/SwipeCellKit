@@ -18,6 +18,9 @@ open class SwipeTableViewCell: UITableViewCell {
     /// The object that acts as the delegate of the `SwipeTableViewCell`.
     public weak var delegate: SwipeTableViewCellDelegate?
     
+    /// Whether swiping is enabled or not. Swiping is enabled by default if the table is in editing or non-editing mode.
+    public var isSwipingEnabled = true
+    
     var state = SwipeState.center
     var actionsView: SwipeActionsView?
     var scrollView: UIScrollView? {
@@ -33,7 +36,6 @@ open class SwipeTableViewCell: UITableViewCell {
     
     var swipeController: SwipeController!
     var isPreviouslySelected = false
-    var isSwipingEnabled = true
     
     weak var tableView: UITableView?
     
