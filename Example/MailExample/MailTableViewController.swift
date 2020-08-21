@@ -33,6 +33,11 @@ class MailTableViewController: UITableViewController {
         resetData()
     }
     
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        tableView.reloadData()
+    }
+    
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
