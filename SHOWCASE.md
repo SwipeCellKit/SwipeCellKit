@@ -6,4 +6,5 @@ Please submit a [pull request](https://github.com/jerkoch/SwipeCellKit/compare) 
 
 * [Regent College Summer](https://github.com/RegentCollege/summer-swift)
 * [Berkanan Messenger](https://berkanan.chat)
+* [GrabGroceries](https://apps.apple.com/app/id1517316201)
 
