@@ -324,6 +324,10 @@ class SwipeController: NSObject {
     func targetCenter(active: Bool) -> CGFloat {
         guard let swipeable = self.swipeable else { return 0 }
         guard let actionsView = swipeable.actionsView, active == true else { return swipeable.bounds.midX }
+
+        if actionsView.options.autoShrink {
+            return swipeable.bounds.midX
+        }
         
         return swipeable.bounds.midX - actionsView.preferredWidth * actionsView.orientation.scale
     }

@@ -17,6 +17,9 @@ public struct SwipeOptions {
     
     /// The expansion style. Expansion is the behavior when the cell is swiped past a defined threshold.
     public var expansionStyle: SwipeExpansionStyle?
+
+    /// If set true, whenever user let go, the actionsView will shrink to 0 width
+    public var autoShrink: Bool = false
     
     /// The object that is notified when expansion changes.
     ///
