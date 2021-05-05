@@ -166,6 +166,7 @@ open class SwipeTableViewCell: UITableViewCell {
     
     func reset() {
         swipeController.reset()
+        swipeController.resetSwipe()
         clipsToBounds = false
     }
     
