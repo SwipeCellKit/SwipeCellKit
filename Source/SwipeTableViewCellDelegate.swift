@@ -61,6 +61,16 @@ public protocol SwipeTableViewCellDelegate: class {
      - parameter orientation: The side of the cell.
      */
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?, for orientation: SwipeActionsOrientation)
+
+
+    /**
+     Tells the delegate that the table view should delete a row following a swipe action.
+
+     - parameter tableView: The table view object providing this information.
+
+     - parameter indexPath: The index path of the row.
+     */
+    func tableView(_ tableView: UITableView, shouldDeleteRowAt indexPath: IndexPath)
     
     /**
      Asks the delegate for visibile rectangle of the table view, which is used to ensure swipe actions are vertically centered within the visible portion of the cell.
@@ -85,6 +95,10 @@ public extension SwipeTableViewCellDelegate {
     func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) {}
     
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?, for orientation: SwipeActionsOrientation) {}
+
+    func tableView(_ tableView: UITableView, shouldDeleteRowAt indexPath: IndexPath) {
+        tableView.deleteRows(at: [indexPath], with: .none)
+    }
     
     func visibleRect(for tableView: UITableView) -> CGRect? {
         return nil

@@ -60,6 +60,15 @@ public protocol SwipeCollectionViewCellDelegate: class {
      - parameter orientation: The side of the item.
      */
     func collectionView(_ collectionView: UICollectionView, didEndEditingItemAt indexPath: IndexPath?, for orientation: SwipeActionsOrientation)
+
+    /**
+     Tells the delegate that the collection view should delete an item following a swipe action.
+
+     - parameter collectionView: The collection view object providing this information.
+
+     - parameter indexPath: The index path of the item.
+     */
+    func collectionView(_ collectionView: UICollectionView, shouldDeleteItemAt indexPath: IndexPath)
     
     /**
      Asks the delegate for visibile rectangle of the collection view, which is used to ensure swipe actions are vertically centered within the visible portion of the item.
@@ -84,6 +93,10 @@ public extension SwipeCollectionViewCellDelegate {
     func collectionView(_ collectionView: UICollectionView, willBeginEditingItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) {}
     
     func collectionView(_ collectionView: UICollectionView, didEndEditingItemAt indexPath: IndexPath?, for orientation: SwipeActionsOrientation) {}
+
+    func collectionView(_ collectionView: UICollectionView, shouldDeleteItemAt indexPath: IndexPath) {
+        collectionView.deleteItems(at: [indexPath])
+    }
     
     func visibleRect(for collectionView: UICollectionView) -> CGRect? {
         return nil
