@@ -166,6 +166,7 @@ open class SwipeTableViewCell: UITableViewCell {
     
     func reset() {
         swipeController.reset()
+        swipeController.resetSwipe()
         clipsToBounds = false
     }
     
@@ -222,6 +223,8 @@ extension SwipeTableViewCell: SwipeControllerDelegate {
     }
     
     func swipeController(_ controller: SwipeController, didDeleteSwipeableAt indexPath: IndexPath) {
-        tableView?.deleteRows(at: [indexPath], with: .none)
+        guard let tableView = tableView, let indexPath = tableView.indexPath(for: self) else { return }
+
+        delegate?.tableView(tableView, shouldDeleteRowAt: indexPath)
     }
 }

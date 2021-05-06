@@ -194,6 +194,7 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
     func reset() {
         contentView.clipsToBounds = false
         swipeController.reset()
+        swipeController.resetSwipe()
         collectionView?.setGestureEnabled(true)
     }
     
@@ -250,7 +251,9 @@ extension SwipeCollectionViewCell: SwipeControllerDelegate {
     }
     
     func swipeController(_ controller: SwipeController, didDeleteSwipeableAt indexPath: IndexPath) {
-        collectionView?.deleteItems(at: [indexPath])
+        guard let collectionView = collectionView, let indexPath = collectionView.indexPath(for: self) else { return }
+
+        delegate?.collectionView(collectionView, shouldDeleteItemAt: indexPath)
     }
 }
 
