@@ -7,6 +7,9 @@
 
 import UIKit
 
+public protocol SwipeCollectionViewCellDataSource: class {
+    func collectionView(_ collectionView: UICollectionView, shouldManuallyDeleteCellAt indexPath: IndexPath) -> Bool
+}
 /**
  The `SwipeCollectionViewCellDelegate` protocol is adopted by an object that manages the display of action buttons when the item is swiped.
  */
@@ -71,6 +74,8 @@ public protocol SwipeCollectionViewCellDelegate: class {
      - note: The returned rectange should be in the collection view's own coordinate system. Returning `nil` will result in no vertical offset to be be calculated.
      */
     func visibleRect(for collectionView: UICollectionView) -> CGRect?
+    
+    func collectionView(_ collectionView: UICollectionView, deleteCellAt indexPath: IndexPath?)
 }
 
 /**
@@ -88,4 +93,6 @@ public extension SwipeCollectionViewCellDelegate {
     func visibleRect(for collectionView: UICollectionView) -> CGRect? {
         return nil
     }
+    
+    func collectionView(_ collectionView: UICollectionView, deleteCellAt indexPath: IndexPath?) {}
 }

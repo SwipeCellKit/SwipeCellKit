@@ -7,6 +7,10 @@
 
 import UIKit
 
+public protocol SwipeTableViewCellDataSource: class {
+    func tableView(_ tableView: UITableView, shouldManuallyDeleteCellAt indexPath: IndexPath) -> Bool
+}
+
 /**
  The `SwipeTableViewCellDelegate` protocol is adopted by an object that manages the display of action buttons when the cell is swiped.
  */
@@ -72,6 +76,8 @@ public protocol SwipeTableViewCellDelegate: class {
      - note: The returned rectange should be in the table view's own coordinate system. Returning `nil` will result in no vertical offset to be be calculated.
      */
     func visibleRect(for tableView: UITableView) -> CGRect?
+    
+    func tableView(_ tableView: UITableView, deleteCellAt indexPath: IndexPath?)
 }
 
 /**
@@ -89,4 +95,6 @@ public extension SwipeTableViewCellDelegate {
     func visibleRect(for tableView: UITableView) -> CGRect? {
         return nil
     }
+    
+    func tableView(_ tableView: UITableView, deleteCellAt indexPath: IndexPath?) {}
 }

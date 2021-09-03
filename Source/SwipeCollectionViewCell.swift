@@ -15,8 +15,14 @@ import UIKit
  The default behavior closely matches the stock Mail.app. If you want to customize the transition style (ie. how the action buttons are exposed), or the expansion style (the behavior when the row is swiped passes a defined threshold), you can return the appropriately configured `SwipeOptions` via the `SwipeCollectionViewCellDelegate` delegate.
  */
 open class SwipeCollectionViewCell: UICollectionViewCell {
+    /// The object that acts as the dataSource of the `SwipeTableViewCell`.
+    public weak var dataSource: SwipeCollectionViewCellDataSource?
+
     /// The object that acts as the delegate of the `SwipeCollectionViewCell`.
     public weak var delegate: SwipeCollectionViewCellDelegate?
+    
+    /// Whether swiping is enabled or not. Swiping is enabled by default if the table is in editing or non-editing mode.
+    public var isSwipingEnabled = true
     
     var state = SwipeState.center
     var actionsView: SwipeActionsView?
@@ -250,7 +256,11 @@ extension SwipeCollectionViewCell: SwipeControllerDelegate {
     }
     
     func swipeController(_ controller: SwipeController, didDeleteSwipeableAt indexPath: IndexPath) {
-        collectionView?.deleteItems(at: [indexPath])
+        guard let collectionView = collectionView else { return }
+        if let shouldManuallyDelete = dataSource?.collectionView(collectionView, shouldManuallyDeleteCellAt: indexPath), shouldManuallyDelete {
+            delegate?.collectionView(collectionView, deleteCellAt: indexPath)
+        } else {
+            collectionView.deleteItems(at: [indexPath])
+        }
     }
 }
-
