@@ -17,6 +17,7 @@ import UIKit
 open class SwipeCollectionViewCell: UICollectionViewCell {
     /// The object that acts as the delegate of the `SwipeCollectionViewCell`.
     public weak var delegate: SwipeCollectionViewCellDelegate?
+    open var customContentView: UIView? { nil }
     
     var state = SwipeState.center
     var actionsView: SwipeActionsView?
@@ -80,20 +81,25 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
     }
     
     func configure() {
-        contentView.clipsToBounds = false
-        
-        if contentView.translatesAutoresizingMaskIntoConstraints == true {
-            contentView.translatesAutoresizingMaskIntoConstraints = false
+        if let contentView = customContentView {
+            swipeController = SwipeController(swipeable: self, actionsContainerView: contentView)
+    
+        } else {
+            contentView.clipsToBounds = false
             
-            NSLayoutConstraint.activate([
-                contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-                contentView.topAnchor.constraint(equalTo: self.topAnchor),
-                contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-                contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            ])
+            if contentView.translatesAutoresizingMaskIntoConstraints == true {
+                contentView.translatesAutoresizingMaskIntoConstraints = false
+                
+                NSLayoutConstraint.activate([
+                    contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                    contentView.topAnchor.constraint(equalTo: self.topAnchor),
+                    contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+                    contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+                ])
+            }
+            swipeController = SwipeController(swipeable: self, actionsContainerView: contentView)
         }
         
-        swipeController = SwipeController(swipeable: self, actionsContainerView: contentView)
         swipeController.delegate = self
     }
     
@@ -192,7 +198,10 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
     }
     
     func reset() {
-        contentView.clipsToBounds = false
+        if customContentView == nil {
+            contentView.clipsToBounds = false
+        }
+        
         swipeController.reset()
         collectionView?.setGestureEnabled(true)
     }
