@@ -512,8 +512,6 @@ extension SwipeController: SwipeActionsViewDelegate {
             guard showActionsView(for: orientation) else { return }
             
             scrollView?.hideSwipeables()
-            
-            swipeable.state = targetState
         }
         
         let maxOffset = min(swipeable.bounds.width, abs(offset)) * orientation.scale * -1
@@ -521,9 +519,11 @@ extension SwipeController: SwipeActionsViewDelegate {
         
         if animated {
             animate(toOffset: targetCenter) { complete in
+                swipeable.state = targetState
                 completion?(complete)
             }
         } else {
+            swipeable.state = targetState
             actionsContainerView.center.x = targetCenter
             swipeable.actionsView?.visibleWidth = abs(actionsContainerView.frame.minX)
         }
