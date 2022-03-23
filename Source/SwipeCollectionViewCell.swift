@@ -205,6 +205,20 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
         }
         isPreviouslySelected = false
     }
+
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        if state.isActive {
+            switch state {
+            case .left:
+                swipeController.showSwipe(orientation: .left, animated: false)
+            case .right:
+                swipeController.showSwipe(orientation: .right, animated: false)
+            case .animatingToCenter, .center, .dragging:
+                break
+            }
+        }
+    }
 }
 
 extension SwipeCollectionViewCell: SwipeControllerDelegate {
