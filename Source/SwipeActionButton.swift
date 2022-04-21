@@ -42,7 +42,8 @@ class SwipeActionButton: UIButton {
         self.init(frame: .zero)
 
         contentHorizontalAlignment = .center
-        
+        action.delegate = self
+        action.dataSource = self
         tintColor = action.textColor ?? .white
         let highlightedTextColor = action.highlightedTextColor ?? tintColor
         highlightedBackgroundColor = action.highlightedBackgroundColor ?? UIColor.black.withAlphaComponent(0.1)
@@ -104,5 +105,17 @@ extension CGRect {
         let dx = width - size.width
         let dy = height - size.height
         return CGRect(x: origin.x + dx * 0.5, y: origin.y + dy * 0.5, width: size.width, height: size.height)
+    }
+}
+
+extension SwipeActionButton: SwipeActionDelegate {
+    func setActionImage(image: UIImage) {
+        self.setImage(image, for: .normal)
+    }
+}
+
+extension SwipeActionButton: SwipeActionDataSource {
+    func getActionImage() -> UIImage {
+        return self.image(for: .normal) ?? UIImage()
     }
 }

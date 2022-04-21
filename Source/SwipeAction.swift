@@ -7,6 +7,14 @@
 
 import UIKit
 
+protocol SwipeActionDelegate: AnyObject {
+    func setActionImage(image: UIImage)
+}
+
+protocol SwipeActionDataSource: AnyObject {
+    func getActionImage() -> UIImage
+}
+
 /// Constants that help define the appearance of action buttons.
 public enum SwipeActionStyle: Int {
     /// Apply a style that reflects standard non-destructive actions.
@@ -22,6 +30,9 @@ public enum SwipeActionStyle: Int {
  This class lets you define one or more custom actions to display for a given item in your table/collection. Each instance of this class represents a single action to perform and includes the text, formatting information, and behavior for the corresponding button.
  */
 public class SwipeAction: NSObject {
+    var delegate: SwipeActionDelegate?
+    var dataSource: SwipeActionDataSource?
+    
     /// An optional unique action identifier.
     public var identifier: String?
     
@@ -54,7 +65,11 @@ public class SwipeAction: NSObject {
     /// The image used for the action button.
     ///
     /// - note: You must specify a title or an image.
-    public var image: UIImage?
+    public var image: UIImage? {
+        didSet {
+            delegate?.setActionImage(image: image ?? UIImage())
+        }
+    }
     
     /// The highlighted image used for the action button.
     ///
