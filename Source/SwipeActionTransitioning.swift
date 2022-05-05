@@ -25,7 +25,7 @@ public struct SwipeActionTransitioningContext {
     public let actionIdentifier: String?
     
     /// The button that is changing.
-    public let button: UIButton
+    public let button: UIView
     
     /// The old visibility percentage between 0.0 and 1.0.
     public let newPercentVisible: CGFloat
@@ -35,7 +35,7 @@ public struct SwipeActionTransitioningContext {
     
     internal let wrapperView: UIView
     
-    internal init(actionIdentifier: String?, button: UIButton, newPercentVisible: CGFloat, oldPercentVisible: CGFloat, wrapperView: UIView) {
+    internal init(actionIdentifier: String?, button: UIView, newPercentVisible: CGFloat, oldPercentVisible: CGFloat, wrapperView: UIView) {
         self.actionIdentifier = actionIdentifier
         self.button = button
         self.newPercentVisible = newPercentVisible

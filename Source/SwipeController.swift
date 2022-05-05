@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol SwipeControllerDelegate: class {
+protocol SwipeControllerDelegate: AnyObject {
     
     func swipeController(_ controller: SwipeController, canBeginEditingSwipeableFor orientation: SwipeActionsOrientation) -> Bool
     
@@ -23,7 +23,8 @@ protocol SwipeControllerDelegate: class {
     func swipeController(_ controller: SwipeController, didDeleteSwipeableAt indexPath: IndexPath)
     
     func swipeController(_ controller: SwipeController, visibleRectFor scrollView: UIScrollView) -> CGRect?
-    
+
+    func actionContentView(_ controller: SwipeController, for action: SwipeAction) -> ActionContentView
 }
 
 class SwipeController: NSObject {
@@ -122,7 +123,10 @@ class SwipeController: NSObject {
                 if expanded && !actionsView.expanded && targetOffset > currentOffset {
                     let centerForTranslationToEdge = swipeable.bounds.midX - targetOffset * actionsView.orientation.scale
                     let delta = centerForTranslationToEdge - originalCenter
-                    
+
+                    if let wrapper = actionsView.buttons.last?.superview as? SwipeActionButtonWrapperView {
+                        wrapper.resetBackgroundColor(with: actionsView.actions.last!)
+                    }
                     animate(toOffset: centerForTranslationToEdge)
                     gesture.setTranslation(CGPoint(x: delta, y: 0), in: swipeable.superview!)
                 } else {
@@ -131,6 +135,11 @@ class SwipeController: NSObject {
                                                                  fromOriginalCenter: CGPoint(x: originalCenter, y: 0),
                                                                  applyingRatio: expansionStyle.targetOverscrollElasticity).x
                     swipeable.actionsView?.visibleWidth = abs(actionsContainerView.frame.minX)
+
+                    if currentOffset/targetOffset > 1.0,
+                        let wrapper = actionsView.buttons.last?.superview as? SwipeActionButtonWrapperView {
+                        wrapper.resetBackgroundColor(with: actionsView.actions.last!)
+                    }
                 }
                 
                 actionsView.setExpanded(expanded: expanded, feedback: true)
@@ -156,6 +165,9 @@ class SwipeController: NSObject {
             if actionsView.expanded == true, let expandedAction = actionsView.expandableAction  {
                 perform(action: expandedAction)
             } else {
+                if let wrapper = actionsView.buttons.last?.superview as? SwipeActionButtonWrapperView {
+                    wrapper.cleanBackground()
+                }
                 let targetOffset = targetCenter(active: swipeable.state.isActive)
                 let distance = targetOffset - actionsContainerView.center.x
                 let normalizedVelocity = velocity.x * scrollRatio / distance
@@ -212,12 +224,20 @@ class SwipeController: NSObject {
             }
         }
         
-        let actionsView = SwipeActionsView(contentEdgeInsets: contentEdgeInsets,
-                                           maxSize: swipeable.bounds.size,
-                                           safeAreaInsetView: scrollView,
-                                           options: options,
-                                           orientation: orientation,
-                                           actions: actions)
+        let actionsView = SwipeActionsView(
+            contentEdgeInsets: contentEdgeInsets,
+            maxSize: swipeable.bounds.size,
+            safeAreaInsetView: scrollView,
+            options: options,
+            orientation: orientation,
+            actions: actions,
+            actionContentViewBuilder: { action in
+                guard let delegate = self.delegate else {
+                    fatalError("Internal inconsistency: delegate should be set before request actions")
+                }
+                return delegate.actionContentView(self, for: action)
+            }
+        )
         actionsView.delegate = self
         
         actionsContainerView.addSubview(actionsView)

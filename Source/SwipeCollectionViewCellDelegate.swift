@@ -10,7 +10,7 @@ import UIKit
 /**
  The `SwipeCollectionViewCellDelegate` protocol is adopted by an object that manages the display of action buttons when the item is swiped.
  */
-public protocol SwipeCollectionViewCellDelegate: class {
+public protocol SwipeCollectionViewCellDelegate: AnyObject {
     /**
      Asks the delegate for the actions to display in response to a swipe in the specified item.
      
@@ -23,7 +23,19 @@ public protocol SwipeCollectionViewCellDelegate: class {
      - returns: An array of `SwipeAction` objects representing the actions for the item. Each action you provide is used to create a button that the user can tap.  Returning `nil` will prevent swiping for the supplied orientation.
      */
     func collectionView(_ collectionView: UICollectionView, editActionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]?
-    
+
+    /**
+     Asks the delegate to build specific view for given SwipeAction.
+     - parameter collectionView: The collection view object which owns the item requesting this information.
+     - parameter action: SwipeAction which required a view reperesentation.
+
+     - returns: Intialised view conformed ActionContentView protocol.
+     */
+    func collectionView(
+        _ collectionView: UICollectionView,
+        contentViewForAction action: SwipeAction
+    ) -> ActionContentView
+
     /**
      Asks the delegate for the display options to be used while presenting the action buttons.
      
@@ -87,5 +99,12 @@ public extension SwipeCollectionViewCellDelegate {
     
     func visibleRect(for collectionView: UICollectionView) -> CGRect? {
         return nil
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        contentViewForAction action: SwipeAction
+    ) -> ActionContentView {
+        DefaultActionContentView(action: action)
     }
 }

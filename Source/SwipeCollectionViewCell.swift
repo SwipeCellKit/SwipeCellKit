@@ -208,6 +208,14 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
 }
 
 extension SwipeCollectionViewCell: SwipeControllerDelegate {
+    func actionContentView(_ controller: SwipeController, for action: SwipeAction) -> ActionContentView {
+        guard let delegate = delegate,
+            let collectionView = collectionView else {
+                fatalError("Delegate should be not nil when request content view for action")
+        }
+        return delegate.collectionView(collectionView, contentViewForAction: action)
+    }
+
     func swipeController(_ controller: SwipeController, canBeginEditingSwipeableFor orientation: SwipeActionsOrientation) -> Bool {
         return true
     }

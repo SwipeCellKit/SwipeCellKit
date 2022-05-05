@@ -22,7 +22,7 @@ public protocol SwipeExpanding {
      - parameter otherActionButtons: The other action buttons in the view, not including the action button being expanded.
      */
 
-    func animationTimingParameters(buttons: [UIButton], expanding: Bool) -> SwipeExpansionAnimationTimingParameters
+    func animationTimingParameters(buttons: [UIView], expanding: Bool) -> SwipeExpansionAnimationTimingParameters
     
     /**
      Tells your object when the expansion state is changing.
@@ -33,7 +33,7 @@ public protocol SwipeExpanding {
 
      - parameter otherActionButtons: The other action buttons in the view, not including the action button being expanded.
      */
-    func actionButton(_ button: UIButton, didChange expanding: Bool, otherActionButtons: [UIButton])
+    func actionButton(_ button: UIView, didChange expanding: Bool, otherActionButtons: [UIView])
 }
 
 /**
@@ -100,14 +100,14 @@ public struct ScaleAndAlphaExpansion: SwipeExpanding {
     }
 
     /// :nodoc:    
-    public func animationTimingParameters(buttons: [UIButton], expanding: Bool) -> SwipeExpansionAnimationTimingParameters {
+    public func animationTimingParameters(buttons: [UIView], expanding: Bool) -> SwipeExpansionAnimationTimingParameters {
         var timingParameters = SwipeExpansionAnimationTimingParameters.default
         timingParameters.delay = expanding ? interButtonDelay : 0
         return timingParameters
     }
     
     /// :nodoc:
-    public func actionButton(_ button: UIButton, didChange expanding: Bool, otherActionButtons: [UIButton]) {
+    public func actionButton(_ button: UIView, didChange expanding: Bool, otherActionButtons: [UIView]) {
         let buttons = expanding ? otherActionButtons : otherActionButtons.reversed()
         
         buttons.enumerated().forEach { index, button in

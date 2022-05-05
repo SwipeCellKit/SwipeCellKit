@@ -10,7 +10,7 @@ import UIKit
 /**
  The `SwipeTableViewCellDelegate` protocol is adopted by an object that manages the display of action buttons when the cell is swiped.
  */
-public protocol SwipeTableViewCellDelegate: class {
+public protocol SwipeTableViewCellDelegate: AnyObject {
     
     /**
      Asks the delegate for the actions to display in response to a swipe in the specified row.
@@ -24,7 +24,19 @@ public protocol SwipeTableViewCellDelegate: class {
      - returns: An array of `SwipeAction` objects representing the actions for the row. Each action you provide is used to create a button that the user can tap.  Returning `nil` will prevent swiping for the supplied orientation.
      */
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]?
-    
+
+    /**
+     Asks the delegate for the content view for action button.
+     - parameter tableView: The table view object wich owns the cell requsted this information.
+     - parameter action: SwipeAction model
+
+     - returns: An action content view
+     */
+    func tableView(
+        _ tableView: UITableView,
+        contentViewForAction action: SwipeAction
+    ) -> ActionContentView
+
     /**
      Asks the delegate for the display options to be used while presenting the action buttons.
      
@@ -88,5 +100,12 @@ public extension SwipeTableViewCellDelegate {
     
     func visibleRect(for tableView: UITableView) -> CGRect? {
         return nil
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        contentViewForAction action: SwipeAction
+    ) -> ActionContentView {
+        DefaultActionContentView(action: action)
     }
 }

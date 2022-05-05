@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol SwipeActionsViewDelegate: class {
+protocol SwipeActionsViewDelegate: AnyObject {
     func swipeActionsView(_ swipeActionsView: SwipeActionsView, didSelect action: SwipeAction)
 }
 
@@ -76,6 +76,7 @@ class SwipeActionsView: UIView {
     }
     
     private(set) var expanded: Bool = false
+    private let actionContentViewBuilder: (SwipeAction) -> ActionContentView
     
     var expandableAction: SwipeAction? {
         return options.expansionStyle != nil ? actions.last : nil
@@ -86,12 +87,14 @@ class SwipeActionsView: UIView {
          safeAreaInsetView: UIView,
          options: SwipeOptions,
          orientation: SwipeActionsOrientation,
-         actions: [SwipeAction]) {
-        
+         actions: [SwipeAction],
+         actionContentViewBuilder: @escaping (SwipeAction) -> ActionContentView
+    ) {
         self.safeAreaInsetView = safeAreaInsetView
         self.options = options
         self.orientation = orientation
         self.actions = actions.reversed()
+        self.actionContentViewBuilder = actionContentViewBuilder
         
         switch options.transitionStyle {
         case .border:
@@ -140,11 +143,12 @@ class SwipeActionsView: UIView {
     
     func addButtons(for actions: [SwipeAction], withMaximum size: CGSize, contentEdgeInsets: UIEdgeInsets) -> [SwipeActionButton] {
         let buttons: [SwipeActionButton] = actions.map({ action in
-            let actionButton = SwipeActionButton(action: action)
+            let actionButton = SwipeActionButton(
+                action: action,
+                contentViewBuilder: actionContentViewBuilder
+            )
             actionButton.addTarget(self, action: #selector(actionTapped(button:)), for: .touchUpInside)
             actionButton.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
-            actionButton.spacing = options.buttonSpacing ?? 8
-            actionButton.contentEdgeInsets = buttonEdgeInsets(fromOptions: options)
             return actionButton
         })
         
@@ -156,7 +160,13 @@ class SwipeActionsView: UIView {
         buttons.enumerated().forEach { (index, button) in
             let action = actions[index]
             let frame = CGRect(origin: .zero, size: CGSize(width: bounds.width, height: bounds.height))
-            let wrapperView = SwipeActionButtonWrapperView(frame: frame, action: action, orientation: orientation, contentWidth: minimumButtonWidth)
+            let wrapperView = SwipeActionButtonWrapperView(
+                frame: frame,
+                action: action,
+                orientation: orientation,
+                contentWidth: minimumButtonWidth,
+                options: options
+            )
             wrapperView.translatesAutoresizingMaskIntoConstraints = false
             wrapperView.addSubview(button)
             
@@ -171,8 +181,6 @@ class SwipeActionsView: UIView {
             }
             
             button.frame = wrapperView.contentRect
-            button.maximumImageHeight = maximumImageHeight
-            button.verticalAlignment = options.buttonVerticalAlignment
             button.shouldHighlight = action.hasBackgroundColor
             
             wrapperView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
@@ -245,11 +253,12 @@ class SwipeActionsView: UIView {
             oldWidths.enumerated().forEach { index, oldWidth in
                 let newWidth = newWidths[index]
                 if oldWidth != newWidth {
-                    let context = SwipeActionTransitioningContext(actionIdentifier: self.actions[index].identifier,
-                                                                  button: self.buttons[index],
-                                                                  newPercentVisible: newWidth / self.minimumButtonWidth,
-                                                                  oldPercentVisible: oldWidth / self.minimumButtonWidth,
-                                                                  wrapperView: self.subviews[index])
+                    let context = SwipeActionTransitioningContext(
+                        actionIdentifier: self.actions[index].identifier,
+                        button: self.buttons[index],
+                        newPercentVisible: newWidth / self.minimumButtonWidth,
+                        oldPercentVisible: oldWidth / self.minimumButtonWidth,
+                        wrapperView: self.subviews[index])
                     
                     self.actions[index].transitionDelegate?.didTransition(with: context)
                 }
@@ -260,7 +269,11 @@ class SwipeActionsView: UIView {
     func notifyExpansion(expanded: Bool) {
         guard let expandedButton = buttons.last else { return }
 
-        expansionDelegate?.actionButton(expandedButton, didChange: expanded, otherActionButtons: buttons.dropLast().reversed())
+        expansionDelegate?.actionButton(
+            expandedButton,
+            didChange: expanded,
+            otherActionButtons: buttons.dropLast().reversed()
+        )
     }
     
     func createDeletionMask() -> UIView {
@@ -285,35 +298,53 @@ class SwipeActionsView: UIView {
 class SwipeActionButtonWrapperView: UIView {
     let contentRect: CGRect
     var actionBackgroundColor: UIColor?
+    private let cleanBackgroundToClear: Bool
     
-    init(frame: CGRect, action: SwipeAction, orientation: SwipeActionsOrientation, contentWidth: CGFloat) {
+    init(
+        frame: CGRect,
+        action: SwipeAction,
+        orientation: SwipeActionsOrientation,
+        contentWidth: CGFloat,
+        options: SwipeOptions
+    ) {
         switch orientation {
         case .left:
             contentRect = CGRect(x: frame.width - contentWidth, y: 0, width: contentWidth, height: frame.height)
         case .right:
             contentRect = CGRect(x: 0, y: 0, width: contentWidth, height: frame.height)
         }
-        
+
+        cleanBackgroundToClear = options.backgroundColor == .clear
         super.init(frame: frame)
-        
+
         configureBackgroundColor(with: action)
-    }
-    
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        
-        if let actionBackgroundColor = self.actionBackgroundColor, let context = UIGraphicsGetCurrentContext() {
-            actionBackgroundColor.setFill()
-            context.fill(rect);
+        if cleanBackgroundToClear {
+            backgroundColor = .clear
+        } else {
+            backgroundColor = actionBackgroundColor
         }
     }
+
+    func cleanBackground() {
+        guard cleanBackgroundToClear else { return }
+
+        UIViewPropertyAnimator(duration: 0.3, dampingRatio: 0.75) {
+            self.backgroundColor = .clear
+        }.startAnimation()
+    }
     
-    func configureBackgroundColor(with action: SwipeAction) {
+    func resetBackgroundColor(with action: SwipeAction) {
         guard action.hasBackgroundColor else {
             isOpaque = false
             return
         }
-        
+
+        UIViewPropertyAnimator(duration: 0.3, dampingRatio: 2.0) {
+            self.backgroundColor = self.actionBackgroundColor
+        }.startAnimation()
+    }
+
+    private func configureBackgroundColor(with action: SwipeAction) {
         if let backgroundColor = action.backgroundColor {
             actionBackgroundColor = backgroundColor
         } else {

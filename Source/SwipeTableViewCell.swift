@@ -189,6 +189,13 @@ extension SwipeTableViewCell: SwipeControllerDelegate {
         
         return delegate?.tableView(tableView, editActionsForRowAt: indexPath, for: orientation)
     }
+
+    func actionContentView(_ controller: SwipeController, for action: SwipeAction) -> ActionContentView {
+        guard let tableView = tableView, let delegate = delegate else {
+            fatalError("Delegate should be not nil when request content view for action")
+        }
+        return delegate.tableView(tableView, contentViewForAction: action)
+    }
     
     func swipeController(_ controller: SwipeController, editActionsOptionsForSwipeableFor orientation: SwipeActionsOrientation) -> SwipeOptions {
         guard let tableView = tableView, let indexPath = tableView.indexPath(for: self) else { return SwipeOptions() }

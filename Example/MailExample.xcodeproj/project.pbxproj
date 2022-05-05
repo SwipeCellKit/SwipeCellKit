@@ -7,43 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		290FF0C12823EB0300212EAE /* SwipeCellKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 290FF0C02823EB0300212EAE /* SwipeCellKit.framework */; };
+		290FF0C22823EB0300212EAE /* SwipeCellKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 290FF0C02823EB0300212EAE /* SwipeCellKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		290FF0C72823EBC200212EAE /* RoundedCornersActionContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 290FF0C62823EBC200212EAE /* RoundedCornersActionContentView.swift */; };
+		290FF0C92823EC6000212EAE /* UIColor+Highlighted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 290FF0C82823EC6000212EAE /* UIColor+Highlighted.swift */; };
+		29FC1CF62822AD2A00F48AA8 /* CustomMailCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29FC1CF52822AD2A00F48AA8 /* CustomMailCollectionViewController.swift */; };
 		3F234B0A1E44AC2600E22A38 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F234B041E44AC2600E22A38 /* AppDelegate.swift */; };
 		3F234B0B1E44AC2600E22A38 /* MailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F234B051E44AC2600E22A38 /* MailTableViewController.swift */; };
 		3F234B0C1E44AC2600E22A38 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F234B061E44AC2600E22A38 /* Data.swift */; };
 		3F234B0D1E44AC2600E22A38 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F234B071E44AC2600E22A38 /* Main.storyboard */; };
 		3F234B0E1E44AC2600E22A38 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F234B081E44AC2600E22A38 /* LaunchScreen.storyboard */; };
 		3F234B0F1E44AC2600E22A38 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F234B091E44AC2600E22A38 /* Assets.xcassets */; };
-		3F234B171E44B29B00E22A38 /* SwipeCellKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F234B031E44AB7A00E22A38 /* SwipeCellKit.framework */; };
-		3F234B181E44B29B00E22A38 /* SwipeCellKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F234B031E44AB7A00E22A38 /* SwipeCellKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B93ECA9D1EDEF1EA00AE05AD /* MailCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93ECA9C1EDEF1EA00AE05AD /* MailCollectionViewController.swift */; };
 		B93ECA9F1EDEF56300AE05AD /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93ECA9E1EDEF56300AE05AD /* Shared.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		3F234B021E44AB7A00E22A38 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3F234AFE1E44AB7A00E22A38 /* SwipeCellKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3F234AC31E44A7A400E22A38;
-			remoteInfo = SwipeCellKit;
-		};
-		3F234B191E44B29B00E22A38 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3F234AFE1E44AB7A00E22A38 /* SwipeCellKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 3F234AC21E44A7A400E22A38;
-			remoteInfo = SwipeCellKit;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
-		3F234B1B1E44B29B00E22A38 /* Embed Frameworks */ = {
+		290FF0C32823EB0300212EAE /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				3F234B181E44B29B00E22A38 /* SwipeCellKit.framework in Embed Frameworks */,
+				290FF0C22823EB0300212EAE /* SwipeCellKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -51,11 +37,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		290FF0B42823EA1500212EAE /* SwipeCellKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SwipeCellKit; path = ..; sourceTree = "<group>"; };
+		290FF0C02823EB0300212EAE /* SwipeCellKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwipeCellKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		290FF0C62823EBC200212EAE /* RoundedCornersActionContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornersActionContentView.swift; sourceTree = "<group>"; };
+		290FF0C82823EC6000212EAE /* UIColor+Highlighted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Highlighted.swift"; sourceTree = "<group>"; };
+		29FC1CF52822AD2A00F48AA8 /* CustomMailCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMailCollectionViewController.swift; sourceTree = "<group>"; };
 		3F234AE31E44AA5E00E22A38 /* MailExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MailExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F234AF21E44AA5E00E22A38 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3F234AFE1E44AB7A00E22A38 /* SwipeCellKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwipeCellKit.xcodeproj; path = ../SwipeCellKit.xcodeproj; sourceTree = "<group>"; };
 		3F234B041E44AC2600E22A38 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3F234B051E44AC2600E22A38 /* MailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MailTableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		3F234B051E44AC2600E22A38 /* MailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MailTableViewController.swift; sourceTree = "<group>"; };
 		3F234B061E44AC2600E22A38 /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		3F234B071E44AC2600E22A38 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		3F234B081E44AC2600E22A38 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -69,19 +59,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F234B171E44B29B00E22A38 /* SwipeCellKit.framework in Frameworks */,
+				290FF0C12823EB0300212EAE /* SwipeCellKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		290FF0B32823EA1500212EAE /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				290FF0B42823EA1500212EAE /* SwipeCellKit */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		290FF0B72823EA5F00212EAE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				290FF0C02823EB0300212EAE /* SwipeCellKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		3F234ADA1E44AA5E00E22A38 = {
 			isa = PBXGroup;
 			children = (
+				290FF0B32823EA1500212EAE /* Packages */,
 				3F234AE51E44AA5E00E22A38 /* Source */,
 				3F234AE41E44AA5E00E22A38 /* Products */,
-				3F234AFE1E44AB7A00E22A38 /* SwipeCellKit.xcodeproj */,
+				290FF0B72823EA5F00212EAE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,20 +106,15 @@
 				3F234B041E44AC2600E22A38 /* AppDelegate.swift */,
 				3F234B051E44AC2600E22A38 /* MailTableViewController.swift */,
 				B93ECA9C1EDEF1EA00AE05AD /* MailCollectionViewController.swift */,
+				29FC1CF52822AD2A00F48AA8 /* CustomMailCollectionViewController.swift */,
+				290FF0C62823EBC200212EAE /* RoundedCornersActionContentView.swift */,
+				290FF0C82823EC6000212EAE /* UIColor+Highlighted.swift */,
 				B93ECA9E1EDEF56300AE05AD /* Shared.swift */,
 				3F234B061E44AC2600E22A38 /* Data.swift */,
 				3F234B101E44AC3400E22A38 /* Supporting Files */,
 			);
 			name = Source;
 			path = MailExample;
-			sourceTree = "<group>";
-		};
-		3F234AFF1E44AB7A00E22A38 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3F234B031E44AB7A00E22A38 /* SwipeCellKit.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		3F234B101E44AC3400E22A38 /* Supporting Files */ = {
@@ -136,14 +138,15 @@
 				3F234ADF1E44AA5E00E22A38 /* Sources */,
 				3F234AE01E44AA5E00E22A38 /* Frameworks */,
 				3F234AE11E44AA5E00E22A38 /* Resources */,
-				3F234B1B1E44B29B00E22A38 /* Embed Frameworks */,
+				290FF0C32823EB0300212EAE /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				3F234B1A1E44B29B00E22A38 /* PBXTargetDependency */,
 			);
 			name = MailExample;
+			packageProductDependencies = (
+			);
 			productName = MailExample;
 			productReference = 3F234AE31E44AA5E00E22A38 /* MailExample.app */;
 			productType = "com.apple.product-type.application";
@@ -176,28 +179,12 @@
 			mainGroup = 3F234ADA1E44AA5E00E22A38;
 			productRefGroup = 3F234AE41E44AA5E00E22A38 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 3F234AFF1E44AB7A00E22A38 /* Products */;
-					ProjectRef = 3F234AFE1E44AB7A00E22A38 /* SwipeCellKit.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				3F234AE21E44AA5E00E22A38 /* MailExample */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		3F234B031E44AB7A00E22A38 /* SwipeCellKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SwipeCellKit.framework;
-			remoteRef = 3F234B021E44AB7A00E22A38 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		3F234AE11E44AA5E00E22A38 /* Resources */ = {
@@ -217,23 +204,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				290FF0C72823EBC200212EAE /* RoundedCornersActionContentView.swift in Sources */,
+				29FC1CF62822AD2A00F48AA8 /* CustomMailCollectionViewController.swift in Sources */,
 				B93ECA9F1EDEF56300AE05AD /* Shared.swift in Sources */,
 				3F234B0A1E44AC2600E22A38 /* AppDelegate.swift in Sources */,
 				3F234B0C1E44AC2600E22A38 /* Data.swift in Sources */,
+				290FF0C92823EC6000212EAE /* UIColor+Highlighted.swift in Sources */,
 				3F234B0B1E44AC2600E22A38 /* MailTableViewController.swift in Sources */,
 				B93ECA9D1EDEF1EA00AE05AD /* MailCollectionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		3F234B1A1E44B29B00E22A38 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = SwipeCellKit;
-			targetProxy = 3F234B191E44B29B00E22A38 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		3F234AF31E44AA5E00E22A38 /* Debug */ = {
@@ -284,7 +266,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -337,7 +319,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -350,12 +332,11 @@
 		3F234AF61E44AA5E00E22A38 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 8XNJ93W9ZP;
 				INFOPLIST_FILE = MailExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jerkoch.MailExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -366,12 +347,11 @@
 		3F234AF71E44AA5E00E22A38 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 8XNJ93W9ZP;
 				INFOPLIST_FILE = MailExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jerkoch.MailExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
