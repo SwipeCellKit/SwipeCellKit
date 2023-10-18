@@ -36,6 +36,11 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
     
     weak var collectionView: UICollectionView?
     
+    /// Used to resolve conflicts with screen side swipe gestures.
+    open var swipeOneOrientation: SwipeActionsOrientation? {
+        return nil
+    }
+    
     /// :nodoc:
     open override var frame: CGRect {
         set { super.frame = state.isActive ? CGRect(origin: CGPoint(x: frame.minX, y: newValue.minY), size: newValue.size) : newValue }
@@ -94,6 +99,7 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
         }
         
         swipeController = SwipeController(swipeable: self, actionsContainerView: contentView)
+        swipeController.gestureOrientation = swipeOneOrientation
         swipeController.delegate = self
     }
     
