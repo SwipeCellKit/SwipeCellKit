@@ -42,6 +42,8 @@ class SwipeController: NSObject {
     var scrollRatio: CGFloat = 1.0
     var originalLayoutMargins: UIEdgeInsets = .zero
     
+    var gestureOrientation: SwipeActionsOrientation?
+    
     lazy var panGestureRecognizer: UIPanGestureRecognizer = {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(gesture:)))
         gesture.delegate = self
@@ -362,7 +364,24 @@ extension SwipeController: UIGestureRecognizerDelegate {
             let view = gestureRecognizer.view,
             let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
             let translation = gestureRecognizer.translation(in: view)
-            return abs(translation.y) <= abs(translation.x)
+            let defaultFlag = abs(translation.y) <= abs(translation.x)
+            if let orientation = gestureOrientation {
+                if let swipedCell = scrollView?.swipeables.first(where: {
+                    $0.state.isActive
+                }), swipedCell.state.isActive {
+                    return defaultFlag
+                } else {
+                    let velocity = gestureRecognizer.velocity(in: view)
+                    switch orientation {
+                    case .left:
+                        return (velocity.x > .zero) && (abs(velocity.x) > abs(velocity.y))
+                    case .right:
+                        return (velocity.x < .zero) && (abs(velocity.x) > abs(velocity.y))
+                    }
+                }
+            } else {
+                return defaultFlag
+            }
         }
         
         return true
