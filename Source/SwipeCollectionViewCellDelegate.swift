@@ -10,7 +10,7 @@ import UIKit
 /**
  The `SwipeCollectionViewCellDelegate` protocol is adopted by an object that manages the display of action buttons when the item is swiped.
  */
-public protocol SwipeCollectionViewCellDelegate: class {
+public protocol SwipeCollectionViewCellDelegate: AnyObject {
     /**
      Asks the delegate for the actions to display in response to a swipe in the specified item.
      
