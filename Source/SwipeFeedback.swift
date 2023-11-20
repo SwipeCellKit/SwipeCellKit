@@ -7,6 +7,7 @@
 
 import UIKit
 
+@available(visionOS, unavailable)
 final class SwipeFeedback {
     enum Style {
         case light

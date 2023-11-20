@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol SwipeActionsViewDelegate: class {
+protocol SwipeActionsViewDelegate: AnyObject {
     func swipeActionsView(_ swipeActionsView: SwipeActionsView, didSelect action: SwipeAction)
 }
 
@@ -16,9 +16,11 @@ class SwipeActionsView: UIView {
     
     let transitionLayout: SwipeTransitionLayout
     var layoutContext: ActionsViewLayoutContext
-    
+
+    #if !os(visionOS)
     var feedbackGenerator: SwipeFeedback
-    
+    #endif
+
     var expansionAnimator: SwipeAnimator?
     
     var expansionDelegate: SwipeExpanding? {
@@ -104,9 +106,11 @@ class SwipeActionsView: UIView {
         
         self.layoutContext = ActionsViewLayoutContext(numberOfActions: actions.count, orientation: orientation)
         
+        #if !os(visionOS)
         feedbackGenerator = SwipeFeedback(style: .light)
         feedbackGenerator.prepare()
-        
+        #endif
+
         super.init(frame: .zero)
         
         clipsToBounds = true
@@ -211,11 +215,13 @@ class SwipeActionsView: UIView {
         
         self.expanded = expanded
         
+        #if !os(visionOS)
         if feedback {
             feedbackGenerator.impactOccurred()
             feedbackGenerator.prepare()
         }
-        
+        #endif
+
         let timingParameters = expansionDelegate?.animationTimingParameters(buttons: buttons.reversed(), expanding: expanded)
         
         if expansionAnimator?.isRunning == true {
